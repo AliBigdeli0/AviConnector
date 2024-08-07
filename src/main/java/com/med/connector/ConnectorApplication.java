@@ -28,5 +28,4 @@ public class ConnectorApplication {
 			executorService.submit(consumer);
 		};
 	}
-
 }

@@ -55,24 +55,3 @@ tasks.withType<Test> {
 	useJUnitPlatform()
 }
 
-tasks {
-	val fatJar by creating(Jar::class) {
-		archiveBaseName.set("${project.name}-all")
-
-		archiveVersion.set(project.version.toString())
-
-		from(sourceSets.main.get().output)
-
-		dependsOn(configurations.runtimeClasspath)
-		from({
-			configurations.runtimeClasspath.get().filter {it.name.endsWith("jar")}
-		})
-
-		manifest {
-			attributes["Main-Class"] = "com.med.Main"
-		}
-	}
-	build {
-		dependsOn(fatJar)
-	}
-}
