@@ -1,10 +1,11 @@
 package com.med.connector.queue;
 
+import com.med.connector.utility.EnvironmentVariables;
 import jakarta.jms.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQStreamMessage;
-import org.springframework.beans.factory.annotation.Value;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 
 import java.io.Closeable;
@@ -13,13 +14,6 @@ import java.io.IOException;
 @Slf4j
 @Service
 public class Consumer implements Runnable, MessageListener, Closeable {
-
-	@Value("${MED_MAX_REATTEMPT:0xffffff}")
-	private long MaxReconnectAttempt;
-
-	@Value("${MED_RECONNECT_WAIT:5000}")
-	private long ReconnectWaitTimeInMilliSeconds;
-
 
 	private long numberOfAttempts = 0x0;
 
@@ -31,11 +25,13 @@ public class Consumer implements Runnable, MessageListener, Closeable {
 	private Session session;
 
 	private final MessageParser messageParser;
+	private final EnvironmentVariables environmentVariables;
 
-	public Consumer(String queueName, String queueAddress, MessageParser msgParser) throws JMSException {
+	public Consumer(String queueName, String queueAddress, MessageParser msgParser, EnvironmentVariables environmentVariables) throws Exception {
 		this.queueName = queueName;
 		messageParser = msgParser;
 		this.queueAddress = queueAddress;
+		this.environmentVariables = environmentVariables;
 	}
 
 	private void ReinitConnection(String queueAddress) throws Exception {
@@ -47,32 +43,26 @@ public class Consumer implements Runnable, MessageListener, Closeable {
 		session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		var destination = session.createQueue(this.queueName);
 		consumer = session.createConsumer(destination);
-		// consumer.setMessageListener(this);
 	}
 
 	@Override
 	public void run() {
 		try {
-			while (numberOfAttempts < MaxReconnectAttempt) {
+			while (numberOfAttempts < environmentVariables.MaxReconnectAttempt) {
 				try {
 					numberOfAttempts++;
 					ReinitConnection(this.queueAddress);
 
 					log.info("the consumer '{}' is established!", this.queueName);
 
-					while (true) {
-						var msg = consumer.receive();
-						if (msg == null)  break;
-
-						this.onMessage(msg);
-					}
+					receiveMessageWait();
 				} catch (Exception ex) {
 					log.error(ex.getMessage());
 				} finally {
 					log.info("WARNING => Connection to '{}' is closed. going to reset it!", this.queueAddress);
 
 					try {
-						Thread.sleep(ReconnectWaitTimeInMilliSeconds, 0);
+						Thread.sleep(environmentVariables.ReconnectWaitTimeInMilliSeconds, 0);
 					} catch (Exception ex) {
 						log.error("error in sleep time for consumer reconnect: {}", ex.getMessage());
 					}
@@ -81,6 +71,15 @@ public class Consumer implements Runnable, MessageListener, Closeable {
 			log.error("DANGER=> the JMS connection closed for no reason");
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
+		}
+	}
+
+	private void receiveMessageWait() throws Exception {
+		while (true) {
+			var msg = consumer.receive();
+			if (msg == null)  break;
+
+			this.onMessage(msg);
 		}
 	}
 
