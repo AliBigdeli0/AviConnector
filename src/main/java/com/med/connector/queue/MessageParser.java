@@ -13,10 +13,11 @@ import java.util.ArrayList;
 @NoArgsConstructor
 @Service
 public class MessageParser {
-
+	static int counter=0;
 	public void ParseQueue(byte[] msg) {
 		var msgStr = new String(msg);
-		log.info("the message is : {}", msgStr);
+
+		System.out.printf("\rthe counter is: %d", counter++);
 	}
 
 	public void ParseMessageStream(ActiveMQStreamMessage stream) throws JMSException {
