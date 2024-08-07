@@ -13,4 +13,7 @@ public class EnvironmentVariables {
 
 	@Value("${MED_WELL_ID}")
 	public String wellID;
+
+	@Value("${MED_LOG_NAME:'well_test'}")
+	public String logName;
 }

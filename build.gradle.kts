@@ -37,7 +37,7 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 
 	// logger
-//	implementation("ch.qos.logback:logback-classic")
+	implementation("ch.qos.logback:logback-classic")
 
 	//tests
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -53,5 +53,10 @@ dependencyManagement {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+tasks.named<JavaExec>("bootRun") {
+	val wd = file("${projectDir}/build/")
+	workingDir(wd);
 }
 
