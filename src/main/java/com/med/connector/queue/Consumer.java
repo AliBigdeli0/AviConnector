@@ -5,7 +5,6 @@ import jakarta.jms.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQStreamMessage;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 
 import java.io.Closeable;
@@ -48,7 +47,7 @@ public class Consumer implements Runnable, MessageListener, Closeable {
 	@Override
 	public void run() {
 		try {
-			while (numberOfAttempts < environmentVariables.MaxReconnectAttempt) {
+			while (numberOfAttempts < environmentVariables.MaxReconnectAttempt && !Thread.currentThread().isInterrupted()) {
 				try {
 					numberOfAttempts++;
 					ReinitConnection(this.queueAddress);
@@ -75,7 +74,7 @@ public class Consumer implements Runnable, MessageListener, Closeable {
 	}
 
 	private void receiveMessageWait() throws Exception {
-		while (true) {
+		while (!Thread.currentThread().isInterrupted()) {
 			var msg = consumer.receive();
 			if (msg == null)  break;
 
