@@ -1,3 +1,29 @@
+# Steps To Complete This Project
+- [x] Connect To ActiveMQ
+  - [x] Reinitialize after disconnection
+- [x] Deploy Fat Jar File
+- [ ] Message Serialization
+  - [ ] Deserialize Message
+  - [ ] Serialize Message to Mongodb
+- [ ] Live Message Handler (Ignite)
+  - [ ] Send Live Message
+  - [ ] Calculate Last Message's Time
+- [x] Logger Into File
+  - [x] File Rolling  
+- [ ] Mongodb Database
+  - [ ] Reinitialize After Disconnection
+- [ ] Zookeeper Handler 
+  - [ ] Is it useful?
+    - [ ] Handle Process Using Zookeeper 
+  - [ ] Test Zookeeper On Server
+    - [ ] Test Balance Process after One Server Is Unavailable
+  - [ ] Can I Handle the Process (close/open/manipulate) From Zookeeper
+- [ ] Write a Process Manager In AVIData
+  - [ ] Add the Connector Process 
+  - [ ] Manage to Read the Latest Status From Ignite
+  - [ ] Add Handler To The Web Configuration
+
+
 # General Notes
 ## Compile Project
 go generate jar file run this code : 
