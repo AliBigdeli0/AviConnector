@@ -14,6 +14,12 @@ public class EnvironmentVariables {
 	@Value("${MED_WELL_ID}")
 	public String wellID;
 
-	@Value("${MED_LOG_NAME:'well_test'}")
+	@Value("${MED_LOG_NAME:'test'}")
 	public String logName;
+
+	@Value("${MED_QUEUE_NAME:'A_MF_DATA_VALUE'}")
+	public String QueueName;
+
+	@Value("${MED_QUEUE_ADDRESS:'tcp://localhost:61616'}")
+	public String QueueAddress;
 }

@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Configuration
-public class ApConfig {
+public class AppConfig {
 
 	@Autowired
 	MessageParser messageParser;
@@ -26,6 +26,6 @@ public class ApConfig {
 
 	@Bean
 	public Consumer consumer() throws Exception {
-		return new Consumer("A_MF_DATA_VALUE", "tcp://localhost:61616", messageParser, environmentVariables);
+		return new Consumer(messageParser, environmentVariables);
 	}
 }

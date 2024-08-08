@@ -13,11 +13,7 @@ import java.io.IOException;
 @Slf4j
 @Service
 public class Consumer implements Runnable, MessageListener, Closeable {
-
 	private long numberOfAttempts = 0x0;
-
-	private final String queueName;
-	private final String queueAddress;
 
 	private MessageConsumer consumer;
 	private Connection conn;
@@ -26,10 +22,8 @@ public class Consumer implements Runnable, MessageListener, Closeable {
 	private final MessageParser messageParser;
 	private final EnvironmentVariables environmentVariables;
 
-	public Consumer(String queueName, String queueAddress, MessageParser msgParser, EnvironmentVariables environmentVariables) throws Exception {
-		this.queueName = queueName;
+	public Consumer(MessageParser msgParser, EnvironmentVariables environmentVariables) throws Exception {
 		messageParser = msgParser;
-		this.queueAddress = queueAddress;
 		this.environmentVariables = environmentVariables;
 	}
 
@@ -40,7 +34,7 @@ public class Consumer implements Runnable, MessageListener, Closeable {
 		this.conn.start();
 
 		session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
-		var destination = session.createQueue(this.queueName);
+		var destination = session.createQueue(this.environmentVariables.QueueName);
 		consumer = session.createConsumer(destination);
 	}
 
@@ -50,15 +44,15 @@ public class Consumer implements Runnable, MessageListener, Closeable {
 			while (numberOfAttempts < environmentVariables.MaxReconnectAttempt && !Thread.currentThread().isInterrupted()) {
 				try {
 					numberOfAttempts++;
-					ReinitConnection(this.queueAddress);
+					ReinitConnection(this.environmentVariables.QueueAddress);
 
-					log.info("the consumer '{}' is established!", this.queueName);
+					log.info("the consumer '{}' is established!", this.environmentVariables.QueueName);
 
 					receiveMessageWait();
 				} catch (Exception ex) {
 					log.error(ex.getMessage());
 				} finally {
-					log.info("WARNING => Connection to '{}' is closed. going to reset it!", this.queueAddress);
+					log.info("WARNING => Connection to '{}' is closed. going to reset it!", this.environmentVariables.QueueAddress);
 
 					try {
 						Thread.sleep(environmentVariables.ReconnectWaitTimeInMilliSeconds, 0);
