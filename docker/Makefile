@@ -5,12 +5,13 @@ DEPLOY_PATH=~/Desktop/share/update_med/updates
 BUILD_PATH=$(PWD)/../build
 TASK_RUN_FILE_PATH=$(BUILD_PATH)/../docker/task_run.sh
 RUN_DOCKER_FILE_PATH=$(BUILD_PATH)/../docker/run_docker.bat
+RUN_FILE_PATH=$(BUILD_PATH)/../docker/run.bat
 ##########################
 ## deploy package
 
 deploy_container:: deploy_jar
 	@docker save -o $(BUILD_PATH)/$(CONTAINER_NAME).tar $(CONTAINER_NAME):latest
-	@cd $(BUILD_PATH); 7z a -t7z -mx=9 all_$(CONTAINER_NAME).7z  $(CONTAINER_NAME).tar $(BUILD_PATH)/libs/$(JAR_NAME) $(TASK_RUN_FILE_PATH) $(RUN_DOCKER_FILE_PATH); \
+	@cd $(BUILD_PATH); 7z a -t7z -mx=9 all_$(CONTAINER_NAME).7z  $(CONTAINER_NAME).tar $(BUILD_PATH)/libs/$(JAR_NAME) $(TASK_RUN_FILE_PATH) $(RUN_DOCKER_FILE_PATH) $(RUN_FILE_PATH); \
 		7z a -t7z -mx=9 $(CONTAINER_NAME).7z  $(CONTAINER_NAME).tar; \
 		rm -rf $(DEPLOY_PATH)/all_$(CONTAINER_NAME).7z  $(DEPLOY_PATH)/$(CONTAINER_NAME).tar $(CONTAINER_NAME).tar  ; \
 		mv all_$(CONTAINER_NAME).7z $(CONTAINER_NAME).7z  $(DEPLOY_PATH) \
