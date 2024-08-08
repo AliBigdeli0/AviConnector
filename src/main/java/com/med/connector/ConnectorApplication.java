@@ -1,6 +1,8 @@
 package com.med.connector;
 
 import com.med.connector.queue.Consumer;
+import com.med.connector.utility.Executor;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,13 +15,20 @@ import java.util.concurrent.ExecutorService;
 public class ConnectorApplication {
 
 	@Autowired
-	ExecutorService executorService;
+	Executor executorService;
 
 	@Autowired
 	Consumer consumer;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ConnectorApplication.class, args);
+	}
+
+	@PostConstruct
+	public void init() {
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+			executorService.shutdown();
+		}));
 	}
 
 	@Bean

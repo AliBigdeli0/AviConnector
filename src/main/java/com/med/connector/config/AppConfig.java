@@ -20,11 +20,6 @@ public class AppConfig {
 	EnvironmentVariables environmentVariables;
 
 	@Bean
-	public ExecutorService executorService() {
-		return Executors.newFixedThreadPool(10);
-	}
-
-	@Bean
 	public Consumer consumer() throws Exception {
 		return new Consumer(messageParser, environmentVariables);
 	}
