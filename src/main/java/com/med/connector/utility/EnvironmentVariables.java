@@ -17,9 +17,9 @@ public class EnvironmentVariables {
 	@Value("${MED_LOG_NAME:'test'}")
 	public String logName;
 
-	@Value("${MED_QUEUE_NAME:'A_MF_DATA_VALUE'}")
+	@Value("${MED_QUEUE_NAME}")
 	public String QueueName;
 
-	@Value("${MED_QUEUE_ADDRESS:'tcp://localhost:61616'}")
+	@Value("${MED_QUEUE_ADDRESS}")
 	public String QueueAddress;
 }
