@@ -1,3 +1,3 @@
 #!/bin/bash 
 
-java  -jar /app/connector-1.0.0.jar
+$JAVA_HOME/java -jar connector-1.0.0.jar

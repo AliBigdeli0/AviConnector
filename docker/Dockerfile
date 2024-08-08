@@ -23,8 +23,4 @@ RUN mkdir /app
 WORKDIR /app
 VOLUME [ "/app" ]
 
-# executor
-COPY ["./task_run.sh", "/"]
-RUN chmod +x /task_run.sh
-
-CMD ["/task_run.sh"]
+CMD ["task_run.sh"]
