@@ -2,6 +2,7 @@ FROM ubuntu:22.04
 
 # install  java
 RUN apt update -y 
+RUN apt install iputils-ping -y
 
 # install java
 RUN mkdir /java 
