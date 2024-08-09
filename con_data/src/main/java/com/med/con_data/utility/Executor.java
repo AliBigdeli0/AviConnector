@@ -1,4 +1,4 @@
-package com.med.connector.utility;
+package com.med.con_data.utility;
 
 import org.springframework.stereotype.Service;
 

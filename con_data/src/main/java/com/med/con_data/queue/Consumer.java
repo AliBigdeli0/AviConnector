@@ -1,6 +1,6 @@
-package com.med.connector.queue;
+package com.med.con_data.queue;
 
-import com.med.connector.utility.EnvironmentVariables;
+import com.med.con_data.utility.EnvironmentVariables;
 import jakarta.jms.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.activemq.ActiveMQConnectionFactory;

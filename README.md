@@ -23,15 +23,16 @@
   - [ ] Add the Connector Process
   - [ ] Manage to Read the Latest Status From Ignite
   - [ ] Add Handler To The Web Configuration
+- [x] Separate Project in Different Path
 
 # General Notes
 
-## Compile Project
+## Compile Projects 
 
-go generate jar file run this code :
+to compile and run jar file :
 
 ```shell
-./gradlew clean build jar
+./gradlew  :con_data:build :con_data:jar
 ```
 
 the files will be in the path `${project folder}/build/libs`.

@@ -23,4 +23,4 @@ RUN mkdir /app
 WORKDIR /app
 VOLUME [ "/app" ]
 
-CMD ["task_run.sh"]
+CMD ["./task_run.sh"]

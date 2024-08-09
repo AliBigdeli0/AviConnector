@@ -1,4 +1,4 @@
-package com.med.connector.queue;
+package com.med.con_data.queue;
 
 import jakarta.jms.JMSException;
 import lombok.NoArgsConstructor;
@@ -7,7 +7,6 @@ import org.apache.activemq.command.ActiveMQStreamMessage;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 
 @Slf4j
 @NoArgsConstructor

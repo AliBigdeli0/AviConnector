@@ -1,11 +1,11 @@
 
 CONTAINER_NAME=ubuntu_avi_connector
-JAR_NAME=connector-1.0.0.jar
+JAR_NAME=con_data-1.0.0.jar
 DEPLOY_PATH=~/Desktop/share/update_med/updates
-BUILD_PATH=$(PWD)/../build
-TASK_RUN_FILE_PATH=$(BUILD_PATH)/../docker/task_run.sh
-RUN_DOCKER_FILE_PATH=$(BUILD_PATH)/../docker/run_docker.bat
-RUN_FILE_PATH=$(BUILD_PATH)/../docker/run.bat
+BUILD_PATH=$(PWD)/../con_data/build
+TASK_RUN_FILE_PATH=$(PWD)/task_run.sh
+RUN_DOCKER_FILE_PATH=$(PWD)/run_docker.bat
+RUN_FILE_PATH=$(PWD)/run.bat
 ##########################
 ## deploy package
 
@@ -18,7 +18,7 @@ deploy_container:: deploy_jar
 		
 
 deploy_jar:: 
-	@cd $(BUILD_PATH)/..; sudo rm -rf build; ./gradlew build jar; rm -rf $(DEPLOY_PATH)/$(JAR_NAME) ; \
+	@cd $(BUILD_PATH)/..; sudo rm -rf build; ../gradlew build jar; rm -rf $(DEPLOY_PATH)/$(JAR_NAME) ; \
 	cp ./build/libs/$(JAR_NAME)  $(DEPLOY_PATH)
 
 copy_task_run::
@@ -33,7 +33,7 @@ docker_rm::
 	@docker rmi $(CONTAINER_NAME) -f 
 
 docker_run:: copy_task_run
-	@docker run -it --rm --privileged -v "$(BUILD_PATH)/libs/:/app" \
+	docker run -it --rm --privileged -v "$(BUILD_PATH)/libs/:/app" \
 	-e MED_LOG_NAME=test  \
 	-e MED_WELL_ID=2345415781  \
 	-e MED_QUEUE_NAME=A_MF_DATA_VALUE  \
