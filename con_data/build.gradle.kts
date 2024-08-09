@@ -41,6 +41,9 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    //common
+    implementation(project(":con_common"))
 }
 
 tasks.named<JavaExec>("bootRun") {
