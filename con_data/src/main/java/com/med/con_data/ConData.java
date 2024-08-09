@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class ConnectorApplication {
+public class ConData {
 
 	@Autowired
 	Executor executorService;
@@ -19,7 +19,7 @@ public class ConnectorApplication {
 	Consumer consumer;
 
 	public static void main(String[] args) {
-		SpringApplication.run(ConnectorApplication.class, args);
+		SpringApplication.run(ConData.class, args);
 	}
 
 	@PostConstruct
