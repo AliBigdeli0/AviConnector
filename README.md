@@ -41,4 +41,12 @@ the files will be in the path `${project folder}/build/libs`.
 
 ## Test Well ID
 
-to run system, the variable `MED_WELL_ID` should be initialized. The test value for that is equal to `2345415781` , `MED_QUEUE_NAME` is equal to `A_MF_DATA_VALUE`, and `MED_QUEUE_ADDRESS` is `tcp://localhost:61616`
+to run system, the variable `MED_WELL_ID` should be initialized. The test value for that is equal to `2345415781` , `MED_QUEUE_NAME` is equal to `A_MF_DATA_VALUE`, and `MED_QUEUE_ADDRESS` is `tcp://localhost:61616`.
+
+some environment variables for idea: 
+```shell
+MED_QUEUE_NAME=A_MF_DATA_VALUE ;
+MED_QUEUE_ADDRESS=tcp://127.0.0.1:61616 ;
+MED_WELL_ID=2345415781 ;
+MED_LOG_NAME=test
+```
