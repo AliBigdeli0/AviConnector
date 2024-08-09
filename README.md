@@ -13,17 +13,14 @@
   - [x] File Rolling
 - [ ] Mongodb Database
   - [ ] Reinitialize After Disconnection
-- [ ] Zookeeper Handler
-  - [ ] Is it useful?
-    - [ ] Handle Process Using Zookeeper
-  - [ ] Test Zookeeper On Server
-    - [ ] Test Balance Process after One Server Is Unavailable
-  - [ ] Can I Handle the Process (close/open/manipulate) From Zookeeper
 - [ ] Write a Process Manager In AVIData
   - [ ] Add the Connector Process
   - [ ] Manage to Read the Latest Status From Ignite
   - [ ] Add Handler To The Web Configuration
 - [x] Separate Project in Different Path
+-  [ ] Kubernetes Manager
+  - [ ] Install Kubernetes 
+  - [ ] Deploy Con Manager to send commands to kubernetes via API Calls
 
 # General Notes
 
