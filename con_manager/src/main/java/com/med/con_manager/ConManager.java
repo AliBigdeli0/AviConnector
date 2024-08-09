@@ -29,6 +29,7 @@ public class ConManager {
 	@Bean
 	public CommandLineRunner run() {
 		return args -> {
+
 			zKeeperManage.init();
 		};
 	}
