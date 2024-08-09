@@ -6,20 +6,50 @@ import org.springframework.stereotype.Service;
 @Service
 public class EnvironmentVariables {
 	@Value("${MED_MAX_REATTEMPT:0xffffff}")
-	public  long MaxReconnectAttempt;
+	private long maxReconnectAttempt;
 
 	@Value("${MED_RECONNECT_WAIT:5000}")
-	public  long ReconnectWaitTimeInMilliSeconds;
+	private long reconnectWaitTimeInMilliSeconds;
 
 	@Value("${MED_WELL_ID}")
-	public String wellID;
+	private String wellID;
 
 	@Value("${MED_LOG_NAME:'test'}")
-	public String logName;
+	private String logName;
 
 	@Value("${MED_QUEUE_NAME}")
-	public String QueueName;
+	private String QueueName;
 
 	@Value("${MED_QUEUE_ADDRESS}")
-	public String QueueAddress;
+	private String QueueAddress;
+
+	public long getMaxReconnectAttempt() {
+		if (maxReconnectAttempt < 0)
+			return 0xfffff;
+
+		return maxReconnectAttempt;
+	}
+
+	public long getReconnectWaitTimeInMilliSeconds() {
+		if (reconnectWaitTimeInMilliSeconds < 0)
+			return 5000;
+
+		return reconnectWaitTimeInMilliSeconds;
+	}
+
+	public String getWellID() {
+		return wellID.trim();
+	}
+
+	public String getLogName() {
+		return logName.trim();
+	}
+
+	public String getQueueName() {
+		return QueueName.trim();
+	}
+
+	public String getQueueAddress() {
+		return QueueAddress.trim();
+	}
 }

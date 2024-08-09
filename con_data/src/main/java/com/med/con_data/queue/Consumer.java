@@ -34,28 +34,28 @@ public class Consumer implements Runnable, MessageListener, Closeable {
 		this.conn.start();
 
 		session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
-		var destination = session.createQueue(this.environmentVariables.QueueName);
+		var destination = session.createQueue(this.environmentVariables.getQueueName());
 		consumer = session.createConsumer(destination);
 	}
 
 	@Override
 	public void run() {
 		try {
-			while (numberOfAttempts < environmentVariables.MaxReconnectAttempt && !Thread.currentThread().isInterrupted()) {
+			while (numberOfAttempts < environmentVariables.getMaxReconnectAttempt() && !Thread.currentThread().isInterrupted()) {
 				try {
 					numberOfAttempts++;
-					ReinitConnection(this.environmentVariables.QueueAddress);
+					ReinitConnection(this.environmentVariables.getQueueAddress());
 
-					log.info("the consumer '{}' is established!", this.environmentVariables.QueueName);
+					log.info("the consumer '{}' is established!", this.environmentVariables.getQueueName());
 
 					receiveMessageWait();
 				} catch (Exception ex) {
 					log.error(ex.getMessage());
 				} finally {
-					log.info("WARNING => Connection to '{}' is closed. going to reset it!", this.environmentVariables.QueueAddress);
+					log.info("WARNING => Connection to '{}' is closed. going to reset it!", this.environmentVariables.getQueueAddress());
 
 					try {
-						Thread.sleep(environmentVariables.ReconnectWaitTimeInMilliSeconds, 0);
+						Thread.sleep(environmentVariables.getReconnectWaitTimeInMilliSeconds(), 0);
 					} catch (Exception ex) {
 						log.error("error in sleep time for consumer reconnect: {}", ex.getMessage());
 					}
