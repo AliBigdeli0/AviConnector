@@ -24,7 +24,11 @@ dependencyManagement {
 }
 
 dependencies {
+    // spring
     implementation("org.springframework.boot:spring-boot-starter")
+
+    // zookeeper
+    implementation("org.apache.zookeeper:zookeeper:3.9.2")
 
     // lombok
     compileOnly("org.projectlombok:lombok")
@@ -33,12 +37,12 @@ dependencies {
     // logger
     implementation("ch.qos.logback:logback-classic")
 
-    //tests
+    // tests
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    //common
+    // common
     implementation(project(":con_common"))
 }
 
