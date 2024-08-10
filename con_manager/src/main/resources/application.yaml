@@ -1,0 +1,6 @@
+application:
+  app: med_con_manager
+
+
+server:
+  port: ${MED_CON_MANAGER_PORT:12000}

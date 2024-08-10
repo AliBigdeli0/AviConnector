@@ -26,10 +26,9 @@ public class ConManager {
 		log.info("the common version is : {}", Info.Version);
 	}
 
-	@Bean
+	// @Bean
 	public CommandLineRunner run() {
 		return args -> {
-
 			zKeeperManage.init();
 		};
 	}

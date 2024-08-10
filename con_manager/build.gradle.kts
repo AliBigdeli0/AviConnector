@@ -26,6 +26,8 @@ dependencyManagement {
 dependencies {
     // spring
     implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
 
     // zookeeper
     implementation("org.apache.zookeeper:zookeeper:3.9.2")
@@ -44,6 +46,12 @@ dependencies {
 
     // common
     implementation(project(":con_common"))
+
+    // job scheduler
+    implementation("org.jobrunr:jobrunr:7.2.3")
+//    implementation("com.fasterxml.jackson.core:jackson-databind:2.11.0")
+    implementation ("com.google.code.gson:gson:2.8.6")
+    implementation ("org.eclipse:yasson:1.0.8")
 }
 
 tasks.named<JavaExec>("bootRun") {

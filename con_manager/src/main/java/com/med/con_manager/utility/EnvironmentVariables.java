@@ -11,6 +11,9 @@ public class EnvironmentVariables {
 	@Value("${MED_ZOOKEEPER_TIMEOUT:5000}")
 	private int zookeeperSessionTimeout;
 
+	@Value("${MED_DASHBOARD_PORT:12001}")
+	public int dashboardPort;
+
 	public String getZookeeperAddress() {
 		return zookeeperAddress.trim();
 	}
