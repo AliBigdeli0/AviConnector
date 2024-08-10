@@ -13,7 +13,11 @@
   - [x] File Rolling
 - [ ] Mongodb Database
   - [ ] Reinitialize After Disconnection
-- [ ] Write a Process Manager In AVIData
+- [ ] Adding an embedded job scheduler to program
+  - [x] install and run it
+  - [ ] check for api call to kill the process
+  - [ ] add java process manager to handle and run connector.jar file
+- [ ]  Process Manager In AVIData
   - [ ] Add the Connector Process
   - [ ] Manage to Read the Latest Status From Ignite
   - [ ] Add Handler To The Web Configuration

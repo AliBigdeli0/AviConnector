@@ -23,7 +23,7 @@ public class Runner {
 		return new JobActivator() {
 			@Override
 			public <T> T activateJob(Class<T> type) {
-				return type.cast(new Job());
+				return type.cast(new JobManager());
 			}
 		};
 	}
