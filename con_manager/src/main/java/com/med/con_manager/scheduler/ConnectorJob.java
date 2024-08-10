@@ -2,14 +2,20 @@ package com.med.con_manager.scheduler;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.UUID;
-
 @Slf4j
 public class ConnectorJob {
 	private final Thread executionThread;
 
-	public ConnectorJob(Runnable run) {
-		this.executionThread = new Thread(run);
+	public ConnectorJob() {
+		this.executionThread = new Thread(() -> {
+			log.info("============> here is my job");
+			try {
+				Thread.sleep(30000);
+			} catch (InterruptedException e) {
+				log.error(e.getMessage());
+			}
+			log.info("============> job finished");
+		});
 	}
 
 	public void execute() {

@@ -49,7 +49,6 @@ dependencies {
 
     // job scheduler
     implementation("org.jobrunr:jobrunr:7.2.3")
-//    implementation("com.fasterxml.jackson.core:jackson-databind:2.11.0")
     implementation ("com.google.code.gson:gson:2.8.6")
     implementation ("org.eclipse:yasson:1.0.8")
 }

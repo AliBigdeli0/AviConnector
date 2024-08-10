@@ -11,3 +11,12 @@ configurations {
     }
 }
 
+dependencies {
+    // Gson
+    implementation ("com.google.code.gson:gson:2.8.6")
+
+    // lombok
+    compileOnly("org.projectlombok:lombok")
+    annotationProcessor("org.projectlombok:lombok")
+}
+
