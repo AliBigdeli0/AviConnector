@@ -1,27 +1,26 @@
 package com.med.con_manager.scheduler;
 
 import lombok.extern.slf4j.Slf4j;
-import org.jobrunr.jobs.annotations.Job;
 
 import java.util.UUID;
 
 @Slf4j
 public class ConnectorJob {
+	private final Thread executionThread;
 
-	public final UUID id = UUID.randomUUID();
-	private final Thread executionThread = new Thread(() -> {
-		log.info("============> here is my job");
-		try {
-			Thread.sleep(600000);
-		} catch (InterruptedException e) {
-			log.error(e.getMessage());
-		}
-		log.info("============> job finished");
-	});
+	public ConnectorJob(Runnable run) {
+		this.executionThread = new Thread(run);
+	}
 
-	@Job(name = "connector job")
 	public void execute() {
-		executionThread.start();
+		try {
+			executionThread.start();
+			executionThread.join();
+		} catch (Exception ex) {
+			log.error(ex.getMessage());
+		} finally {
+			cancel();
+		}
 	}
 
 	public void cancel() {

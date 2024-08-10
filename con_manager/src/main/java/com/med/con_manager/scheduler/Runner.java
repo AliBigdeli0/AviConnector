@@ -23,7 +23,15 @@ public class Runner {
 		return new JobActivator() {
 			@Override
 			public <T> T activateJob(Class<T> type) {
-				return type.cast(new JobManager());
+				return type.cast(new ConnectorJob(() -> {
+					log.info("============> here is my job");
+					try {
+						Thread.sleep(30000);
+					} catch (InterruptedException e) {
+						log.error(e.getMessage());
+					}
+					log.info("============> job finished");
+				}));
 			}
 		};
 	}
