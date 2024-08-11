@@ -2,3 +2,5 @@ spring:
   application:
     name: connector
 
+server:
+  shutdown: graceful

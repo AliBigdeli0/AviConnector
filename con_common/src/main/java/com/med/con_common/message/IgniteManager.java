@@ -19,13 +19,13 @@ public class IgniteManager implements Closeable {
 	IgniteClient igniteClient;
 	Ignite ignite;
 	public void init() throws IgniteException {
-		var cfgClient = new ClientConfiguration().setAddresses(CommonEnvironmentVariables.getIgniteAddress());
+		var cfgClient = new ClientConfiguration().setAddresses(getIgniteAddress());
 		igniteClient = Ignition.startClient(cfgClient);
 
 		var cfg = new IgniteConfiguration();
 		ignite = Ignition.start(cfg);
 	}
-	
+
 	public <K, V> void putCache(String cacheName, K key, V value) throws CacheException {
 		ClientCache<K, V> cache = igniteClient.getOrCreateCache(cacheName);
 		cache.put(key, value);
@@ -34,6 +34,10 @@ public class IgniteManager implements Closeable {
 	public <K, V> V getCache(String cacheName, K key) {
 		ClientCache<K, V> cache = igniteClient.getOrCreateCache(cacheName);
 		return cache.get(key);
+	}
+
+	public String getIgniteAddress() {
+		return CommonEnvironmentVariables.getIgniteAddress();
 	}
 
 	@Override

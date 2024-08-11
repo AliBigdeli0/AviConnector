@@ -15,7 +15,7 @@ public class AMQPublisherSubscriber implements Closeable {
 	}
 
 	public void init() throws JMSException {
-		var amqConFactory = new ActiveMQConnectionFactory(CommonEnvironmentVariables.getAMQPublisherSubscriberAddress());
+		var amqConFactory = new ActiveMQConnectionFactory(getMQAddress());
 		con = amqConFactory.createConnection();
 		con.start();
 
@@ -36,7 +36,15 @@ public class AMQPublisherSubscriber implements Closeable {
 	}
 
 	private Destination getTopic() {
-		return new ActiveMQTopic(CommonEnvironmentVariables.getAMQPublisherSubscriberName());
+		return new ActiveMQTopic(getMQTopicName());
+	}
+
+	public String getMQAddress() {
+		return CommonEnvironmentVariables.getAMQPublisherSubscriberAddress();
+	}
+
+	public String getMQTopicName() {
+		return CommonEnvironmentVariables.getAMQPublisherSubscriberName();
 	}
 
 	@Override

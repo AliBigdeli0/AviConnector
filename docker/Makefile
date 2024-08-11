@@ -23,6 +23,7 @@ deploy_jar::
 
 copy_task_run::
 	@cp $(TASK_RUN_FILE_PATH) $(BUILD_PATH)/libs
+	@chmod +x $(BUILD_PATH)/libs/task_run.sh
 
 ##########################
 ## build container
@@ -38,4 +39,5 @@ docker_run:: copy_task_run
 	-e MED_WELL_ID=2345415781  \
 	-e MED_QUEUE_NAME=A_MF_DATA_VALUE  \
 	-e MED_QUEUE_ADDRESS=tcp://10.10.10.101:61616  \
+	-e MED_AMQ_PUB_SUB_ADDRESS=tcp://10.10.10.101:61616 \
 	--name $(CONTAINER_NAME)_run $(CONTAINER_NAME)
