@@ -1,7 +1,9 @@
 package com.med.con_common.model;
 
 import com.google.gson.Gson;
+import org.springframework.core.serializer.Deserializer;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 public class ActionMessage {

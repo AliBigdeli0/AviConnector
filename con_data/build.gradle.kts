@@ -44,6 +44,9 @@ dependencies {
 
     //common
     implementation(project(":con_common"))
+
+    // AMQ
+    implementation("org.apache.activemq:activemq-client:6.1.3")
 }
 
 tasks.named<JavaExec>("bootRun") {

@@ -18,5 +18,8 @@ dependencies {
     // ignite
     implementation("org.apache.ignite:ignite-core:2.16.0")
     implementation("org.apache.ignite:ignite-spring:2.16.0")
+
+    // AMQ
+    implementation("org.apache.activemq:activemq-client:6.1.3")
 }
 

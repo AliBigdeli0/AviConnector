@@ -18,10 +18,10 @@ public class EnvironmentVariables {
 	private String logName;
 
 	@Value("${MED_QUEUE_NAME}")
-	private String QueueName;
+	private String queueName;
 
 	@Value("${MED_QUEUE_ADDRESS}")
-	private String QueueAddress;
+	private String queueAddress;
 
 	public long getMaxReconnectAttempt() {
 		if (maxReconnectAttempt < 0)
@@ -46,10 +46,10 @@ public class EnvironmentVariables {
 	}
 
 	public String getQueueName() {
-		return QueueName.trim();
+		return queueName.trim();
 	}
 
 	public String getQueueAddress() {
-		return QueueAddress.trim();
+		return queueAddress.trim();
 	}
 }
