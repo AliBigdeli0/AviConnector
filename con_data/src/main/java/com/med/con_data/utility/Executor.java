@@ -17,13 +17,5 @@ public class Executor {
 
 	public void shutdown() {
 		executorService.shutdown();
-//		try {
-//			if (!executorService.awaitTermination(60, java.util.concurrent.TimeUnit.SECONDS)) {
-//				executorService.shutdownNow();
-//			}
-//		} catch (InterruptedException e) {
-//			executorService.shutdownNow();
-//			Thread.currentThread().interrupt();
-//		}
 	}
 }

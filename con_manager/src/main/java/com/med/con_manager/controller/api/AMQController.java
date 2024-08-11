@@ -6,6 +6,7 @@ import jakarta.jms.JMSException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
@@ -15,14 +16,13 @@ import java.util.UUID;
 @Slf4j
 public class AMQController {
 
-
-	@GetMapping("test")
-	void produce() throws JMSException {
+	@GetMapping("kill")
+	void sendKillRequestToMsgBus(@RequestParam("well_id") String wellId) throws JMSException {
 		AMQPublisherSubscriber amqPublisherSubscriber = null;
 		try {
 			amqPublisherSubscriber = new AMQPublisherSubscriber();
 			amqPublisherSubscriber.init();
-			amqPublisherSubscriber.produce(new ActionMessage(ActionMessage.ActionType.StopMachine, UUID.randomUUID()));
+			amqPublisherSubscriber.produce(new ActionMessage(ActionMessage.ActionType.StopMachine, UUID.randomUUID().toString(), wellId));
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
 			throw ex;

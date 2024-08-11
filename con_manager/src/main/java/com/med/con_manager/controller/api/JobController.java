@@ -12,8 +12,8 @@ public class JobController {
 	JobManager jobManager;
 
 	@GetMapping()
-	public Mono<String> createJob() {
-		return Mono.just(jobManager.newJob());
+	public Mono<String> createJob(@RequestParam("well_id") String wellId) {
+		return Mono.just(jobManager.newJob(wellId));
 	}
 
 	@DeleteMapping("/{id}")

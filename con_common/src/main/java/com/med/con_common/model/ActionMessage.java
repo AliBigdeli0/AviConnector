@@ -1,9 +1,7 @@
 package com.med.con_common.model;
 
 import com.google.gson.Gson;
-import org.springframework.core.serializer.Deserializer;
 
-import java.io.Serializable;
 import java.util.UUID;
 
 public class ActionMessage {
@@ -13,10 +11,12 @@ public class ActionMessage {
 
 	private ActionType type;
 	private UUID uid;
+	private String wellId;
 
-	public ActionMessage(ActionType type, String uidStr) {
+	public ActionMessage(ActionType type, String uidStr, String WellId) {
 		this.type = type;
 		this.uid = UUID.fromString(uidStr);
+		this.wellId = WellId;
 	}
 
 	public ActionMessage(ActionType type, UUID uid) {
@@ -46,5 +46,13 @@ public class ActionMessage {
 
 	public void setUid(UUID uid) {
 		this.uid = uid;
+	}
+
+	public String getWellId() {
+		return wellId;
+	}
+
+	public void setWellId(String wellId) {
+		this.wellId = wellId;
 	}
 }

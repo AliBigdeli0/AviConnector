@@ -49,6 +49,8 @@ public class ServerSubscriber implements Runnable, MessageListener {
 
 	private void parseMessage(ActionMessage actionMsg) {
 		if (Objects.requireNonNull(actionMsg.getType()) == ActionMessage.ActionType.StopMachine) {
+			if (!Objects.equals(environmentVariables.getWellID(), actionMsg.getWellId())) return;
+
 			closeables.forEach(c -> {
 				try {
 					c.close();

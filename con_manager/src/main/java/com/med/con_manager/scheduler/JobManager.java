@@ -15,9 +15,11 @@ public class JobManager {
 
 	private final Object lock = new Object();
 
-	public String newJob() {
+	public String newJob(String wellId) {
 		synchronized (lock) {
 			var uid = UUID.randomUUID();
+			ConnectorJobActivator.WellIdStack.push(wellId);
+			ConnectorJobActivator.WellIdStack.push(wellId);
 			jobScheduler.enqueue(uid, ConnectorJob::execute);
 			return uid.toString();
 		}

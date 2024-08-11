@@ -19,15 +19,6 @@ public class Runner {
 	@Autowired
 	EnvironmentVariables environmentVariables;
 
-	@Bean
-	public JobActivator jobActivator() {
-		return new JobActivator() {
-			@Override
-			public <T> T activateJob(Class<T> type) {
-				return type.cast(new ConnectorJob());
-			}
-		};
-	}
 
 	@Bean
 	public StorageProvider storageProvider() {
