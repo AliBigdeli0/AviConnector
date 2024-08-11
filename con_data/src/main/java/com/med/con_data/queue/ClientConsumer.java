@@ -12,7 +12,7 @@ import java.io.IOException;
 
 @Slf4j
 @Service
-public class Consumer implements Runnable, MessageListener, Closeable {
+public class ClientConsumer implements Runnable, MessageListener, Closeable {
 	private long numberOfAttempts = 0x0;
 
 	private MessageConsumer consumer;
@@ -22,7 +22,7 @@ public class Consumer implements Runnable, MessageListener, Closeable {
 	private final MessageParser messageParser;
 	private final EnvironmentVariables environmentVariables;
 
-	public Consumer(MessageParser msgParser, EnvironmentVariables environmentVariables) throws Exception {
+	public ClientConsumer(MessageParser msgParser, EnvironmentVariables environmentVariables) throws Exception {
 		messageParser = msgParser;
 		this.environmentVariables = environmentVariables;
 	}

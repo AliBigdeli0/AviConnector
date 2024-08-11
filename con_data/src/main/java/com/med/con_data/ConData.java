@@ -1,7 +1,7 @@
 package com.med.con_data;
 
 import com.med.con_common.Info;
-import com.med.con_data.queue.Consumer;
+import com.med.con_data.queue.ClientConsumer;
 import com.med.con_data.utility.Executor;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ public class ConData {
 	Executor executorService;
 
 	@Autowired
-	Consumer consumer;
+	ClientConsumer consumer;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ConData.class, args);

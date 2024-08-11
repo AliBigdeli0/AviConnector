@@ -1,6 +1,6 @@
 package com.med.con_data.config;
 
-import com.med.con_data.queue.Consumer;
+import com.med.con_data.queue.ClientConsumer;
 import com.med.con_data.queue.MessageParser;
 import com.med.con_data.utility.EnvironmentVariables;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class AppConfig {
 	EnvironmentVariables environmentVariables;
 
 	@Bean
-	public Consumer consumer() throws Exception {
-		return new Consumer(messageParser, environmentVariables);
+	public ClientConsumer consumer() throws Exception {
+		return new ClientConsumer(messageParser, environmentVariables);
 	}
 }
