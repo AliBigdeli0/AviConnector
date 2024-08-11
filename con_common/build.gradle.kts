@@ -15,8 +15,8 @@ dependencies {
     // Gson
     implementation ("com.google.code.gson:gson:2.8.6")
 
-    // lombok
-    compileOnly("org.projectlombok:lombok")
-    annotationProcessor("org.projectlombok:lombok")
+    // ignite
+    implementation("org.apache.ignite:ignite-core:2.16.0")
+    implementation("org.apache.ignite:ignite-spring:2.16.0")
 }
 

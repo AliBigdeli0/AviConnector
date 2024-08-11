@@ -1,12 +1,9 @@
 package com.med.con_common.model;
 
-
 import com.google.gson.Gson;
-import lombok.Data;
 
 import java.util.UUID;
 
-@Data
 public class ActionMessage {
 	public enum ActionType {
 		StopMachine,
@@ -31,5 +28,21 @@ public class ActionMessage {
 
 	public static ActionMessage fromJson(String jsonStr) {
 		return new Gson().fromJson(jsonStr, ActionMessage.class);
+	}
+
+	public ActionType getType() {
+		return type;
+	}
+
+	public void setType(ActionType type) {
+		this.type = type;
+	}
+
+	public UUID getUid() {
+		return uid;
+	}
+
+	public void setUid(UUID uid) {
+		this.uid = uid;
 	}
 }

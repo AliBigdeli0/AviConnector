@@ -51,9 +51,18 @@ dependencies {
     implementation("org.jobrunr:jobrunr:7.2.3")
     implementation ("com.google.code.gson:gson:2.8.6")
     implementation ("org.eclipse:yasson:1.0.8")
+
+    // ignite
+    implementation("org.apache.ignite:ignite-core:2.16.0")
+    implementation("org.apache.ignite:ignite-spring:2.16.0")
 }
 
 tasks.named<JavaExec>("bootRun") {
     val wd = file("${projectDir}/build/")
     workingDir(wd);
+    jvmArgs("--add-opens", "java.base/java.nio=ALL-UNNAMED")
+}
+
+tasks.withType<Test> {
+    jvmArgs("--add-opens", "java.base/java.nio=ALL-UNNAMED")
 }

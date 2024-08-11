@@ -14,6 +14,9 @@ public class EnvironmentVariables {
 	@Value("${MED_DASHBOARD_PORT:12001}")
 	public int dashboardPort;
 
+	@Value("${MED_IGNITE_ADDRESS:localhost:10800}")
+	public String igniteAddress;
+
 	public String getZookeeperAddress() {
 		return zookeeperAddress.trim();
 	}

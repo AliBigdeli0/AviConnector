@@ -16,4 +16,5 @@ public class AppConfig {
 	public ZKeeperManage zKeeperManage() {
 		return new ZKeeperManage(environmentVariables);
 	}
+
 }
