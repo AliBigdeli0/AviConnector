@@ -50,6 +50,7 @@ public class ServerSubscriber implements Runnable, MessageListener {
 	private void parseMessage(ActionMessage actionMsg) {
 		if (Objects.requireNonNull(actionMsg.getType()) == ActionMessage.ActionType.StopMachine) {
 			if (!Objects.equals(environmentVariables.getWellID(), actionMsg.getWellId())) return;
+			log.info("WARNING ===> going to kill well id : '{}'", actionMsg.getWellId());
 
 			closeables.forEach(c -> {
 				try {

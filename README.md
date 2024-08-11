@@ -6,21 +6,22 @@
 - [ ] Message Serialization
   - [ ] Deserialize Message
   - [ ] Serialize Message to Mongodb
-- [ ] Live Message Handler (Ignite)
-  - [ ] Send Live Message
+- [ ] Live Message Handler (ActiveMQ Topics)
+  - [x] Send Live Message
   - [ ] Calculate Last Message's Time
 - [x] Logger Into File
   - [x] File Rolling
 - [ ] Mongodb Database
   - [ ] Reinitialize After Disconnection
-- [ ] Adding an embedded job scheduler to program
+- [x] Adding an embedded job scheduler to program
   - [x] install and run it
   - [x] check for api call to kill the process
-  - [ ] add java process manager to handle and run connector.jar file
+  - [x] add java process manager to handle and run connector.jar file
 - [ ]  Process Manager In AVIData
-  - [ ] Add the Connector Process
-  - [ ] Manage to Read the Latest Status From Ignite
-  - [ ] Add Handler To The Web Configuration
+   - [ ] Add the Connector Process
+   - [ ] Manage to Read the Latest Status From Ignite
+   - [ ] Add Handler To The Web Configuration
+   - [ ] Check Live Data by Send Health Check
 - [x] Separate Project in Different Path
 
 
