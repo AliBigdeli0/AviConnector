@@ -2,10 +2,8 @@ package com.med.con_data.queue;
 
 import com.med.con_common.message.AMQPublisherSubscriber;
 import com.med.con_common.model.ActionMessage;
-import jakarta.jms.JMSException;
-import jakarta.jms.Message;
-import jakarta.jms.MessageListener;
-import jakarta.jms.TextMessage;
+import com.med.con_data.utility.EnvironmentVariables;
+import jakarta.jms.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -17,13 +15,12 @@ import java.util.Objects;
 @Service
 @Slf4j
 public class ServerSubscriber implements Runnable, MessageListener {
-	private final AMQPublisherSubscriber amqPublisherSubscriber;
+	private AMQPublisherSubscriber amqPublisherSubscriber;
 	private final ArrayList<Closeable> closeables = new ArrayList<>();
+	private final EnvironmentVariables environmentVariables;
 
-	public ServerSubscriber(AMQPublisherSubscriber amqPublisherSubscriber) {
-		this.amqPublisherSubscriber = amqPublisherSubscriber;
-		log.info("the subscriber address is '{}', topic name: '{}'",
-				amqPublisherSubscriber.getMQAddress(), amqPublisherSubscriber.getMQTopicName());
+	public ServerSubscriber(EnvironmentVariables environmentVariables) {
+		this.environmentVariables = environmentVariables;
 	}
 
 	@Override
@@ -39,13 +36,19 @@ public class ServerSubscriber implements Runnable, MessageListener {
 		}
 	}
 
+	private void reinitConnection() throws JMSException {
+		if (amqPublisherSubscriber != null)
+			amqPublisherSubscriber.close();
+		amqPublisherSubscriber = new AMQPublisherSubscriber();
+		amqPublisherSubscriber.init();
+	}
+
 	public void pushCloseable(Closeable closeable) {
 		closeables.add(closeable);
 	}
 
 	private void parseMessage(ActionMessage actionMsg) {
 		if (Objects.requireNonNull(actionMsg.getType()) == ActionMessage.ActionType.StopMachine) {
-			log.info("WARNING=> program killed by subscriber message");
 			closeables.forEach(c -> {
 				try {
 					c.close();
@@ -58,10 +61,35 @@ public class ServerSubscriber implements Runnable, MessageListener {
 
 	@Override
 	public void run() {
-		try {
-			amqPublisherSubscriber.consumer(this);
-		} catch (JMSException e) {
-			log.error(e.getMessage());
+		while (!Thread.currentThread().isInterrupted()) {
+			try {
+				reinitConnection();
+				log.info("the subscriber address is '{}', topic name: '{}'",
+						amqPublisherSubscriber.getMQAddress(), amqPublisherSubscriber.getMQTopicName());
+				try (var consumer = amqPublisherSubscriber.consumer(this)) {
+					receiveMessageWait(consumer);
+				}
+			} catch (Exception e) {
+				log.error(e.getMessage());
+			} finally {
+				log.info("WARNING => topic with name '{}' is closed. going to reset it!", this.amqPublisherSubscriber.getMQTopicName());
+
+				try {
+					Thread.sleep(environmentVariables.getReconnectWaitTimeInMilliSeconds(), 0);
+				} catch (Exception ex) {
+					log.error("error in sleep time for consumer reconnect: {}", ex.getMessage());
+				}
+			}
+			log.error("DANGER=> the topic connection closed for no reason");
+		}
+	}
+
+	private void receiveMessageWait(MessageConsumer consumer) throws Exception {
+		while (!Thread.currentThread().isInterrupted()) {
+			var msg = consumer.receive();
+			if (msg == null) break;
+
+			this.onMessage(msg);
 		}
 	}
 }

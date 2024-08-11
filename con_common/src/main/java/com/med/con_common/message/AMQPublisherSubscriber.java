@@ -20,7 +20,6 @@ public class AMQPublisherSubscriber implements Closeable {
 		con.start();
 
 		session = con.createSession(false, Session.AUTO_ACKNOWLEDGE);
-
 	}
 
 	public void produce(ActionMessage msg) throws JMSException {
@@ -30,9 +29,8 @@ public class AMQPublisherSubscriber implements Closeable {
 		producer.send(msgTxt);
 	}
 
-	public void consumer(MessageListener msg) throws JMSException {
-		var consumer = session.createConsumer(getTopic());
-		consumer.setMessageListener(msg);
+	public MessageConsumer consumer(MessageListener msg) throws JMSException {
+		return session.createConsumer(getTopic());
 	}
 
 	private Destination getTopic() {

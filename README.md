@@ -15,7 +15,7 @@
   - [ ] Reinitialize After Disconnection
 - [ ] Adding an embedded job scheduler to program
   - [x] install and run it
-  - [ ] check for api call to kill the process
+  - [x] check for api call to kill the process
   - [ ] add java process manager to handle and run connector.jar file
 - [ ]  Process Manager In AVIData
   - [ ] Add the Connector Process

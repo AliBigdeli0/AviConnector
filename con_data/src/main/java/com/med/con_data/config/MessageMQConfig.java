@@ -25,12 +25,4 @@ public class MessageMQConfig {
 	public ClientConsumer consumer() throws Exception {
 		return new ClientConsumer(messageParser, environmentVariables);
 	}
-
-	@Bean
-	public AMQPublisherSubscriber amqPublisherSubscriber() throws JMSException {
-		var mq = new AMQPublisherSubscriber();
-		mq.init();
-		return mq;
-	}
-
 }
