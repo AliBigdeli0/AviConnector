@@ -7,6 +7,8 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.Closeable;
 import org.apache.activemq.command.ActiveMQTopic;
 
+import java.util.UUID;
+
 public class AMQPublisherSubscriber implements Closeable {
 	Connection con;
 	Session session;
@@ -49,5 +51,18 @@ public class AMQPublisherSubscriber implements Closeable {
 	public void close() throws JMSException {
 		if (con != null) con.close();
 		if (session != null) session.close();
+	}
+
+	public static void sendMessage(ActionMessage.ActionType type, String wellId) throws Exception {
+		AMQPublisherSubscriber amqPublisherSubscriber = null;
+		try {
+			amqPublisherSubscriber = new AMQPublisherSubscriber();
+			amqPublisherSubscriber.init();
+			amqPublisherSubscriber.produce(new ActionMessage(ActionMessage.ActionType.StopMachine, UUID.randomUUID().toString(), wellId));
+		} finally {
+			if (amqPublisherSubscriber != null) {
+				amqPublisherSubscriber.close();
+			}
+		}
 	}
 }

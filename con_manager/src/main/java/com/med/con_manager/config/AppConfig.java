@@ -1,5 +1,8 @@
 package com.med.con_manager.config;
 
+import com.med.con_manager.scheduler.JobLocalManager;
+import com.med.con_manager.scheduler.JobManager;
+import com.med.con_manager.scheduler.JobRunrManager;
 import com.med.con_manager.utility.EnvironmentVariables;
 import com.med.con_manager.zkeeper.ZKeeperManage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,4 +20,8 @@ public class AppConfig {
 		return new ZKeeperManage(environmentVariables);
 	}
 
+	@Bean
+	public JobManager jobManager() {
+		return new JobLocalManager();
+	}
 }

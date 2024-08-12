@@ -75,7 +75,6 @@ public class ClientConsumer implements Runnable, MessageListener, Closeable {
 				log.error("the received message is empty!");
 				break;
 			}
-
 			this.onMessage(msg);
 		}
 	}

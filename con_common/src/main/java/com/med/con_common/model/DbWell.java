@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Objects;
 
 public class DbWell {
 	private String Name;
@@ -78,6 +79,20 @@ public class DbWell {
 	public static DbWell toDbWell(org.bson.Document document) {
 		var jsonData = document.toJson();
 		return new Gson().fromJson(jsonData, DbWell.class);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		DbWell dbWell = (DbWell) o;
+		return Objects.equals(ID, dbWell.ID) &&
+				Objects.equals(Name, dbWell.Name);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(ID, Name);
 	}
 
 	@Override

@@ -58,3 +58,29 @@ MED_MONGO_CONN_STR=mongodb://localhost:27017
 MED_MONGO_DB_NAME=AVIDb
 MED_VERBOSE=true
 ```
+
+## JobRunr Storage Providers:  
+There are two types of providers:
+1. Mongo
+```java
+@Bean
+public StorageProvider storageProvider() {
+    var connectionString = new ConnectionString(CommonEnvironmentVariables.getMongoDbConnectionString());
+
+    MongoClientSettings settings = MongoClientSettings.builder()
+            .uuidRepresentation(UuidRepresentation.JAVA_LEGACY)
+            .applyConnectionString(connectionString)
+            .build();
+
+    var mongoClient = MongoClients.create(settings);
+
+    return new MongoDBStorageProvider(mongoClient);
+}
+```
+2. InMemory
+```java 
+@Bean
+public StorageProvider storageProvider() {
+    return new InMemoryStorageProvider();
+}
+```

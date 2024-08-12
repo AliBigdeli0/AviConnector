@@ -5,7 +5,10 @@ import com.med.con_manager.scheduler.JobManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
@@ -26,12 +29,6 @@ public class JobController {
 			log.error(ex.getMessage());
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "please check the system logs! or connect to the system administration");
 		}
-	}
-
-	@DeleteMapping("/{id}")
-	public Mono<String> deleteJob(@PathVariable("id") String id) {
-		jobManager.killJob(id);
-		return Mono.just("the object has deleted");
 	}
 
 	@GetMapping("kill")

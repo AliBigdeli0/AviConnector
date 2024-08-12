@@ -19,7 +19,7 @@ public class ConnectorJob {
 	}
 
 	private void createProcess() throws URISyntaxException {
-		var processBuilder = new ProcessBuilder(Constants.getJavaPath(), "-jar", Constants.getConDataJarFile());
+		var processBuilder = new ProcessBuilder(Constants.getJavaPath(), "-Xmx4g", "-jar", Constants.getConDataJarFile());
 
 		setEnvironmentVariables(processBuilder);
 
@@ -48,11 +48,8 @@ public class ConnectorJob {
 			if (well == null) throw new Exception("the well object can not be empty");
 			createProcess();
 			executionThread.start();
-			executionThread.join();
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
-		} finally {
-			cancel();
 		}
 	}
 
