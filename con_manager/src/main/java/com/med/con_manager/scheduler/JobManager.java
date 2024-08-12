@@ -61,6 +61,15 @@ public class JobManager {
 		return null;
 	}
 
+	public void killJob(DbWell well) throws Exception {
+		var job = getJobWithWellName(well);
+		if (job != null) {
+			storageProvider.deletePermanently(job.getId());
+		} else {
+			throw new Exception("job does not exist in the list of jobs");
+		}
+	}
+
 	public void killJob(String id) {
 		synchronized (lock) {
 			BackgroundJob.delete(UUID.fromString(id));

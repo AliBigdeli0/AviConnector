@@ -34,6 +34,18 @@ public class JobController {
 		return Mono.just("the object has deleted");
 	}
 
+	@GetMapping("kill")
+	public Mono<String> deleteJobWithWellId(@RequestParam("well_id") String wellId) {
+		try (var db = new DbManager()) {
+			var well = db.readWellWithId(wellId);
+			jobManager.killJob(well);
+			return Mono.just("the job deleted!");
+		} catch (Exception ex) {
+			log.error(ex.getMessage());
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "please check the system logs! or connect to the system administration");
+		}
+	}
+
 	@GetMapping("exist")
 	public Mono<Boolean> jobStatus(@RequestParam("well_id") String wellId) {
 		try (var db = new DbManager()) {

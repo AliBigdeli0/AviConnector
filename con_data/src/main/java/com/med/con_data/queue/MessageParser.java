@@ -16,7 +16,7 @@ public class MessageParser {
 	public void ParseQueue(byte[] msg) {
 		var msgStr = new String(msg);
 
-		System.out.printf("\rthe counter is: %d", counter++);
+		log.info("the counter is: {}", counter++);
 	}
 
 	public void ParseMessageStream(ActiveMQStreamMessage stream) throws JMSException {
