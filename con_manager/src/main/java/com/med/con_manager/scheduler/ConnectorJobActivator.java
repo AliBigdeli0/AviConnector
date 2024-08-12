@@ -21,6 +21,7 @@ public class ConnectorJobActivator {
 			public <T> T activateJob(Class<T> type) {
 				synchronized (WellStack) {
 					var firstWell = WellStack.pop();
+					log.info("====> Create a new job from activate job, well info is: {}", firstWell);
 					return type.cast(new ConnectorJob(firstWell));
 				}
 			}

@@ -1,6 +1,7 @@
 package com.med.con_manager.scheduler;
 
 import com.med.con_common.model.DbWell;
+import com.med.con_manager.utility.EnvironmentVariables;
 import lombok.extern.slf4j.Slf4j;
 import org.jobrunr.jobs.Job;
 import org.jobrunr.jobs.states.StateName;
@@ -11,7 +12,9 @@ import org.jobrunr.storage.navigation.AmountRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.Objects;
+import java.util.Random;
 import java.util.UUID;
 
 @Service
@@ -20,6 +23,9 @@ public class JobManager {
 
 	@Autowired
 	StorageProvider storageProvider;
+
+	@Autowired
+	EnvironmentVariables environmentVariables;
 
 	private final Object lock = new Object();
 
@@ -30,6 +36,7 @@ public class JobManager {
 
 		synchronized (ConnectorJobActivator.WellStack) {
 			var uid = UUID.randomUUID();
+			var rand = new Random();
 
 			ConnectorJobActivator.WellStack.push(well);
 			ConnectorJobActivator.WellStack.push(well);
@@ -38,6 +45,9 @@ public class JobManager {
 					.aJob()
 					.withId(uid)
 					.withName(String.format("%s", well.getJobName()))
+					.scheduleIn(Duration.ofSeconds(rand
+							.nextInt(environmentVariables.schedulerMinWaitInSecond, environmentVariables.schedulerMaxWaitInSecond)
+					))
 					.withDetails(ConnectorJob::execute);
 
 			BackgroundJob.create(job);

@@ -17,6 +17,12 @@ public class EnvironmentVariables {
 	@Value("${MED_IGNITE_ADDRESS:localhost:10800}")
 	public String igniteAddress;
 
+	@Value("${MED_SCHEDULER_MIN_WAIT_TIME:5}")
+	public int schedulerMinWaitInSecond;
+
+	@Value("${MED_SCHEDULER_MAX_WAIT_TIME:10}")
+	public int schedulerMaxWaitInSecond;
+
 	public String getZookeeperAddress() {
 		return zookeeperAddress.trim();
 	}

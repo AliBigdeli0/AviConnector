@@ -11,8 +11,9 @@
   - [ ] Calculate Last Message's Time
 - [x] Logger Into File
   - [x] File Rolling
-- [x] Mongodb Database
+- [ ] Mongodb Database
   - [x] Reinitialize After Disconnection
+  - [ ] Read Time Based Data 
 - [x] Adding an embedded job scheduler to program
   - [x] install and run it
   - [x] check for api call to kill the process
