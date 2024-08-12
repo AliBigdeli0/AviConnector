@@ -30,6 +30,7 @@ public class ClientConsumer implements Runnable, MessageListener, Closeable {
 	private void ReinitConnection(String queueAddress) throws Exception {
 		this.close();
 		ConnectionFactory conFactory = new ActiveMQConnectionFactory(queueAddress);
+
 		this.conn = conFactory.createConnection();
 		this.conn.start();
 
@@ -70,7 +71,10 @@ public class ClientConsumer implements Runnable, MessageListener, Closeable {
 	private void receiveMessageWait() throws Exception {
 		while (!Thread.currentThread().isInterrupted()) {
 			var msg = consumer.receive();
-			if (msg == null)  break;
+			if (msg == null) {
+				log.error("the received message is empty!");
+				break;
+			}
 
 			this.onMessage(msg);
 		}

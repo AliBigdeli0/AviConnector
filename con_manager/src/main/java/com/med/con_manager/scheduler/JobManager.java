@@ -17,8 +17,8 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 
-@Service
 @Slf4j
+@Service
 public class JobManager {
 
 	@Autowired
@@ -36,7 +36,8 @@ public class JobManager {
 
 		synchronized (ConnectorJobActivator.WellStack) {
 			var uid = UUID.randomUUID();
-			var rand = new Random();
+			var randValue = new Random().nextInt(environmentVariables.schedulerMinWaitInSecond,
+					environmentVariables.schedulerMaxWaitInSecond);
 
 			ConnectorJobActivator.WellStack.push(well);
 			ConnectorJobActivator.WellStack.push(well);
@@ -45,9 +46,7 @@ public class JobManager {
 					.aJob()
 					.withId(uid)
 					.withName(String.format("%s", well.getJobName()))
-					.scheduleIn(Duration.ofSeconds(rand
-							.nextInt(environmentVariables.schedulerMinWaitInSecond, environmentVariables.schedulerMaxWaitInSecond)
-					))
+					.scheduleIn(Duration.ofSeconds(randValue))
 					.withDetails(ConnectorJob::execute);
 
 			BackgroundJob.create(job);
@@ -62,8 +61,8 @@ public class JobManager {
 	}
 
 	private Job getJobWithWellName(DbWell well) {
-		var listProcessJobs = storageProvider.getJobList(StateName.PROCESSING, new AmountRequest("", 512));
-		var listQueuedJobs = storageProvider.getJobList(StateName.ENQUEUED, new AmountRequest("", 512));
+		var listProcessJobs = storageProvider.getJobList(StateName.PROCESSING, new AmountRequest("", 0xfff));
+		var listQueuedJobs = storageProvider.getJobList(StateName.ENQUEUED, new AmountRequest("", 0xfff));
 
 		var processJob = listProcessJobs.stream().filter(j -> Objects.equals(j.getJobName(), well.getJobName())).findFirst();
 		var enqueueJob = listQueuedJobs.stream().filter(j -> Objects.equals(j.getJobName(), well.getJobName())).findFirst();
@@ -91,3 +90,4 @@ public class JobManager {
 		}
 	}
 }
+

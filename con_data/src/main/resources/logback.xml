@@ -15,12 +15,11 @@
 
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>logs/con_data_${MED_LOG_NAME}-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-            <maxFileSize>1MB</maxFileSize>
-            <maxHistory>10000</maxHistory> <!--in days-->
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>30</maxHistory> <!--in days-->
         </rollingPolicy>
     </appender>
 
-    <!-- Set the log level and attach appender -->
     <root level="info">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>

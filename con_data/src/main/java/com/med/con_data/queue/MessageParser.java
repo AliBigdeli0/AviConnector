@@ -15,7 +15,7 @@ import java.io.ByteArrayOutputStream;
 public class MessageParser {
 	static int counter=0;
 	public void ParseQueue(byte[] msg) {
-		var msgStr = new String(msg);
+//		var msgStr = new String(msg);
 
 		if (CommonEnvironmentVariables.getVerbose())
 			log.info("the message counter is : {}", counter++);
@@ -25,9 +25,11 @@ public class MessageParser {
 		var outputStream = new ByteArrayOutputStream();
 		byte[] buffer = new byte[1024];
 		int bytesRead;
+		log.info("{} > before receive message", counter);
 		while((bytesRead = stream.readBytes(buffer)) != -1) {
 			outputStream.write(buffer, 0 , bytesRead);
 		}
+		log.info("{} > after receive message", counter);
 
 		var bytes = outputStream.toByteArray();
 		ParseQueue(bytes);
