@@ -15,10 +15,8 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class Runner {
-
 	@Autowired
 	EnvironmentVariables environmentVariables;
-
 
 	@Bean
 	public StorageProvider storageProvider() {
