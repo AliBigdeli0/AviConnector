@@ -23,7 +23,11 @@ public class JobManager {
 
 	private final Object lock = new Object();
 
-	public String newJob(DbWell well) {
+	public String newJob(DbWell well) throws Exception {
+
+		if (checkJobExist(well))
+			throw new Exception("requested job with name '" + well.getJobName() + "' exist in process list!");
+
 		synchronized (ConnectorJobActivator.WellStack) {
 			var uid = UUID.randomUUID();
 
@@ -32,7 +36,8 @@ public class JobManager {
 
 			var job = JobBuilder
 					.aJob()
-					.withId(uid).withName(String.format("%s", well.getJobName()))
+					.withId(uid)
+					.withName(String.format("%s", well.getJobName()))
 					.withDetails(ConnectorJob::execute);
 
 			BackgroundJob.create(job);

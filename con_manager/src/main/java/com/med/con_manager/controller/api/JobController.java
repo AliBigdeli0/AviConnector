@@ -17,7 +17,7 @@ public class JobController {
 	@Autowired
 	JobManager jobManager;
 
-	@GetMapping()
+	@GetMapping("/create")
 	public Mono<String> createJob(@RequestParam("well_id") String wellId) {
 		try (var db = new DbManager()) {
 			var well = db.readWellWithId(wellId);
