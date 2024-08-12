@@ -30,4 +30,9 @@ public class CommonEnvironmentVariables {
 	public static String getMongoDbName() {
 		return environmentOrDefault("MED_MONGO_DB_NAME", "AVIDb");
 	}
+
+	public static Boolean getVerbose() {
+		var value = environmentOrDefault("MED_VERBOSE", "true");
+		return Boolean.parseBoolean(value);
+	}
 }

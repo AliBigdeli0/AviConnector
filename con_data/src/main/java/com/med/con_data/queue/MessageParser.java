@@ -1,5 +1,6 @@
 package com.med.con_data.queue;
 
+import com.med.con_common.utility.CommonEnvironmentVariables;
 import jakarta.jms.JMSException;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,8 @@ public class MessageParser {
 	public void ParseQueue(byte[] msg) {
 		var msgStr = new String(msg);
 
-		log.info("the counter is: {}", counter++);
+		if (CommonEnvironmentVariables.getVerbose())
+			log.info("the message counter is : {}", counter++);
 	}
 
 	public void ParseMessageStream(ActiveMQStreamMessage stream) throws JMSException {
