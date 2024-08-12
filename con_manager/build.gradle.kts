@@ -58,6 +58,10 @@ dependencies {
 
     // AMQ
     implementation("org.apache.activemq:activemq-client:6.1.3")
+
+    // Mongodb
+    implementation("org.mongodb:mongodb-driver-sync:5.1.3")
+    implementation("org.mongodb:bson:5.1.3")
 }
 
 tasks.named<JavaExec>("bootRun") {

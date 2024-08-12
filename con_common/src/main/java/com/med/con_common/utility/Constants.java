@@ -4,6 +4,7 @@ import java.nio.file.Path;
 
 public final class Constants {
 	public static final String CON_DATA_JAR_NAME = "con_data-1.0.0.jar";
+	public static final String MONGO_WELL_NAME = "wells";
 
 	public static String getJavaPath() {
 		var os = System.getProperty("os.name").toLowerCase();
