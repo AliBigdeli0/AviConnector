@@ -11,8 +11,8 @@
   - [ ] Calculate Last Message's Time
 - [x] Logger Into File
   - [x] File Rolling
-- [ ] Mongodb Database
-  - [ ] Reinitialize After Disconnection
+- [x] Mongodb Database
+  - [x] Reinitialize After Disconnection
 - [x] Adding an embedded job scheduler to program
   - [x] install and run it
   - [x] check for api call to kill the process
@@ -55,4 +55,5 @@ MED_AMQ_PUB_SUB_ADDRESS=tcp://localhost:61616
 MED_AMQ_PUB_SUB_NAME=msg.bus
 MED_MONGO_CONN_STR=mongodb://localhost:27017
 MED_MONGO_DB_NAME=AVIDb
+MED_VERBOSE=true
 ```
