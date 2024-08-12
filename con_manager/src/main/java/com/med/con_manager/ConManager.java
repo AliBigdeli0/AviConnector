@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 @Slf4j
@@ -24,6 +23,8 @@ public class ConManager {
 	@PostConstruct
 	public void init() {
 		log.info("the common version is : {}", Info.Version);
+		log.info("Developer Name : {}", Info.DeveloperName);
+		log.info("Developer Email: {}", Info.DeveloperEmail);
 	}
 
 	// @Bean

@@ -24,7 +24,7 @@ public class CommonEnvironmentVariables {
 	}
 
 	public static String getMongoDbConnectionString() {
-		return environmentOrDefault("MED_MONGO_CONN_STR", "mongodb://localhost:27017");
+		return environmentOrDefault(Constants.MED_MONGO_CONN_STR, "mongodb://localhost:27017");
 	}
 
 	public static String getMongoDbName() {

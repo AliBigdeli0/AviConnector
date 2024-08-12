@@ -7,11 +7,14 @@ import com.med.con_common.utility.Constants;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import org.bson.Document;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class DbManager implements Closeable {
 	MongoClient client = null;
@@ -32,12 +35,17 @@ public class DbManager implements Closeable {
 		var retWells = new ArrayList<DbWell>();
 
 		for (var wellDoc : wells_docs) {
-			var jsonData = wellDoc.toJson();
-			var well = new Gson().fromJson(jsonData, DbWell.class);
-			retWells.add(well);
+			retWells.add(DbWell.toDbWell(wellDoc));
 		}
 
 		return retWells;
+	}
+
+	public DbWell readWellWithId(String id) {
+		var well_col = db.getCollection(Constants.MONGO_WELL_NAME);
+		var filter = Filters.eq("ID", id);
+		var document = well_col.find(filter).first();
+		return DbWell.toDbWell(Objects.requireNonNull(document));
 	}
 
 	@Override

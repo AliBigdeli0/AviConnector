@@ -1,17 +1,24 @@
 package com.med.con_manager.scheduler;
 
+import com.med.con_common.model.DbWell;
+import com.med.con_common.utility.CommonEnvironmentVariables;
 import com.med.con_common.utility.Constants;
 import lombok.extern.slf4j.Slf4j;
 
+import java.net.URISyntaxException;
+
 @Slf4j
 public class ConnectorJob {
-	private final Thread executionThread;
+	private Thread executionThread = null;
 
 	Process process;
-	private final String well_id;
+	private final DbWell well;
 
-	public ConnectorJob(String well_id) {
-		this.well_id = well_id;
+	public ConnectorJob(DbWell well) {
+		this.well = well;
+	}
+
+	private void createProcess() throws URISyntaxException {
 		var processBuilder = new ProcessBuilder(Constants.getJavaPath(), "-jar", Constants.getConDataJarFile());
 
 		setEnvironmentVariables(processBuilder);
@@ -20,23 +27,26 @@ public class ConnectorJob {
 			try {
 				process = processBuilder.start();
 				int exitCode = process.waitFor();
-				log.info("WARNING=> the well id '{}' has finished with code {}", well_id, exitCode);
+				log.info("WARNING=> well with name '{}({})' has finished with code {}", this.well.getName(), well.getID(), exitCode);
 			} catch (Exception ex) {
 				log.error(ex.getMessage());
 			}
 		});
 	}
 
-	private void setEnvironmentVariables(ProcessBuilder processBuilder) {
+	private void setEnvironmentVariables(ProcessBuilder processBuilder) throws URISyntaxException {
 		var environments = processBuilder.environment();
-		environments.put("MED_QUEUE_NAME", "A_MF_DATA_VALUE");
-		environments.put("MED_QUEUE_ADDRESS", "tcp://127.0.0.1:61616");
-		environments.put("MED_WELL_ID", this.well_id);
-		environments.put("MED_LOG_NAME", "test");
+		environments.put("MED_QUEUE_NAME", this.well.getMQName());
+		environments.put("MED_QUEUE_ADDRESS", this.well.getMQAddress());
+		environments.put("MED_WELL_ID", this.well.getID());
+		environments.put("MED_LOG_NAME", this.well.getName());
+		environments.put(Constants.MED_MONGO_CONN_STR, CommonEnvironmentVariables.getMongoDbConnectionString());
 	}
 
 	public void execute() {
 		try {
+			if (well == null) throw new Exception("the well object can not be empty");
+			createProcess();
 			executionThread.start();
 			executionThread.join();
 		} catch (Exception ex) {
@@ -49,11 +59,18 @@ public class ConnectorJob {
 	public void cancel() {
 		try {
 			try {
-				process.destroyForcibly();
-				process = null;
+				if (process != null) {
+					process.destroyForcibly();
+					process = null;
+				}
 			} catch (Exception ex) {
-				log.error("error in kill process in well id : %s{}", ex.getMessage());
+				log.error("[Well Name: {}(ID:{})]: error in kill process in well id : {}",
+						this.well.getMQName(),
+						this.well.getID(),
+						ex.getMessage()
+				);
 			}
+
 			executionThread.interrupt();
 			executionThread.join();
 			log.info("==================> the job has cancelled");

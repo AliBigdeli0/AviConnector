@@ -1,10 +1,16 @@
 package com.med.con_manager.controller.api;
 
+import com.med.con_common.db.DbManager;
 import com.med.con_manager.scheduler.JobManager;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
+
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/job")
 public class JobController {
@@ -13,12 +19,29 @@ public class JobController {
 
 	@GetMapping()
 	public Mono<String> createJob(@RequestParam("well_id") String wellId) {
-		return Mono.just(jobManager.newJob(wellId));
+		try (var db = new DbManager()) {
+			var well = db.readWellWithId(wellId);
+			return Mono.just(jobManager.newJob(well));
+		} catch (Exception ex) {
+			log.error(ex.getMessage());
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "please check the system logs! or connect to the system administration");
+		}
 	}
 
 	@DeleteMapping("/{id}")
 	public Mono<String> deleteJob(@PathVariable("id") String id) {
 		jobManager.killJob(id);
 		return Mono.just("the object has deleted");
+	}
+
+	@GetMapping("exist")
+	public Mono<Boolean> jobStatus(@RequestParam("well_id") String wellId) {
+		try (var db = new DbManager()) {
+			var well = db.readWellWithId(wellId);
+			return Mono.just(jobManager.checkJobExist(well));
+		} catch (Exception ex) {
+			log.error(ex.getMessage());
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "please check the system logs! or connect to the system administration");
+		}
 	}
 }
