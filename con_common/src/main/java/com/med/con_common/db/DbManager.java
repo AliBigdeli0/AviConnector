@@ -1,6 +1,6 @@
 package com.med.con_common.db;
 
-import com.google.gson.Gson;
+import com.med.con_common.model.DbTime;
 import com.med.con_common.model.DbWell;
 import com.med.con_common.utility.CommonEnvironmentVariables;
 import com.med.con_common.utility.Constants;
@@ -8,11 +8,12 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-import org.bson.Document;
+import org.bson.BsonDocument;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -46,6 +47,32 @@ public class DbManager implements Closeable {
 		var filter = Filters.eq("ID", id);
 		var document = well_col.find(filter).first();
 		return DbWell.toDbWell(Objects.requireNonNull(document));
+	}
+
+	public void bulkTimeDb(List<DbTime> timeData) throws IOException {
+		final var bulkToInsert = new HashMap<String, List<BsonDocument>>();
+		separateTimeDbByColName(timeData, bulkToInsert);
+		insertBulkTimeDb(bulkToInsert);
+	}
+
+	private void insertBulkTimeDb(HashMap<String, List<BsonDocument>> bulkToInsert) {
+		for (var colName : bulkToInsert.keySet()) {
+			final var collection = db.getCollection(colName, BsonDocument.class);
+			collection.insertMany(bulkToInsert.get(colName));
+		}
+	}
+
+	private static void separateTimeDbByColName(List<DbTime> timeData, HashMap<String, List<BsonDocument>> bulkToInsert) throws IOException {
+		for (var timeDb : timeData) {
+			final var collectionName = timeDb.collectionName();
+			final var bsonDocument = timeDb.toBsonDocument();
+
+			if (!bulkToInsert.containsKey(collectionName)) {
+				bulkToInsert.put(collectionName, new ArrayList<>());
+			}
+
+			bulkToInsert.get(collectionName).add(bsonDocument);
+		}
 	}
 
 	@Override

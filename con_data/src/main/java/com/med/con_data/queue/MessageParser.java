@@ -1,8 +1,9 @@
 package com.med.con_data.queue;
 
+import com.med.con_common.db.DbManager;
 import com.med.con_common.message.AMQPublisherSubscriber;
+import com.med.con_common.model.DbTime;
 import com.med.con_common.model.DbWell;
-import com.med.con_common.model.JsonTimeDb;
 import com.med.con_common.utility.CommonEnvironmentVariables;
 import com.med.con_common.utility.CompressionManager;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +19,7 @@ import java.util.concurrent.locks.ReentrantLock;
 @Service
 public class MessageParser {
 	static int counter=0;
-	public final ConcurrentLinkedDeque<JsonTimeDb> queue = new ConcurrentLinkedDeque<>();
+	public final ConcurrentLinkedDeque<DbTime> queue = new ConcurrentLinkedDeque<>();
 	private final Lock lock = new ReentrantLock();
 	private final DbWell well;
 
@@ -28,7 +29,7 @@ public class MessageParser {
 
 	public void ParseQueue(byte[] msg) throws Exception {
 		lock.lock();
-		try {
+		try (final var dbMan = new DbManager()) {
 			if (CommonEnvironmentVariables.getVerbose())
 				log.info("the message counter is : {}", counter++);
 
@@ -37,13 +38,11 @@ public class MessageParser {
 
 			AMQPublisherSubscriber.sendMessageToExclusiveBus(well, strMsg);
 
-			final var jsonTimeDbMsg = JsonTimeDb.from(strMsg);
+			final var jsonTimeDbMsg = DbTime.from(strMsg);
 			queue.push(jsonTimeDbMsg);
 
 			if (queue.size() > 60) {
-				for (JsonTimeDb jsonTimeDb : queue) {
-					log.info(jsonTimeDb.toString());
-				}
+				dbMan.bulkTimeDb(queue.stream().toList());
 				queue.clear();
 			}
 		} finally {

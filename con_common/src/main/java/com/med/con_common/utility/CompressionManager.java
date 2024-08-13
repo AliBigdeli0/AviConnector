@@ -7,8 +7,6 @@ import java.util.zip.GZIPInputStream;
 
 public class CompressionManager {
 
-
-
 	public static byte[] decompress(byte[] raw) throws IOException {
 		try (var byteArrayInputStream = new ByteArrayInputStream(raw);
 		     var gzipInputStream = new GZIPInputStream(byteArrayInputStream);
