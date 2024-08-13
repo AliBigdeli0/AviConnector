@@ -26,9 +26,6 @@ dependencyManagement {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-activemq")
-//	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
-//	implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
-//	implementation("org.springframework.cloud:spring-cloud-starter-zookeeper-config")
 
     // lombok
     compileOnly("org.projectlombok:lombok")
@@ -47,6 +44,10 @@ dependencies {
 
     // AMQ
     implementation("org.apache.activemq:activemq-client:6.1.3")
+
+    // Mongodb
+    implementation("org.mongodb:mongodb-driver-sync:5.1.3")
+    implementation("org.mongodb:bson:5.1.3")
 }
 
 tasks.named<JavaExec>("bootRun") {

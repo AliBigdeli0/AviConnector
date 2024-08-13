@@ -76,6 +76,10 @@ public class DbWell {
 		return String.format("%s_%s", ID, Name);
 	}
 
+	public String getBusName() {
+		return String.format("bus.%s", this.getJobName());
+	}
+
 	public static DbWell toDbWell(org.bson.Document document) {
 		var jsonData = document.toJson();
 		return new Gson().fromJson(jsonData, DbWell.class);

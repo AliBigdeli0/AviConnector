@@ -4,7 +4,7 @@
   - [x] Reinitialize after disconnection
 - [x] Deploy Fat Jar File
 - [ ] Message Serialization
-  - [ ] Deserialize Message
+  - [x] Deserialize Message
   - [ ] Serialize Message to Mongodb
 - [ ] Live Message Handler (ActiveMQ Topics)
   - [x] Send Live Message
@@ -13,7 +13,7 @@
   - [x] File Rolling
 - [ ] Mongodb Database
   - [x] Reinitialize After Disconnection
-  - [ ] Read Time Based Data 
+  - [ ] Write Time Based Data 
 - [x] Adding an embedded job scheduler to program
   - [x] install and run it
   - [x] check for api call to kill the process

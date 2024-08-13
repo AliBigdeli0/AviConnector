@@ -1,6 +1,7 @@
 package com.med.con_data.queue;
 
 import com.med.con_common.message.AMQPublisherSubscriber;
+import com.med.con_common.message.topic.CommonTopicInjection;
 import com.med.con_common.model.ActionMessage;
 import com.med.con_data.utility.EnvironmentVariables;
 import jakarta.jms.*;
@@ -39,7 +40,7 @@ public class ServerSubscriber implements Runnable, MessageListener {
 	private void reinitConnection() throws JMSException {
 		if (amqPublisherSubscriber != null)
 			amqPublisherSubscriber.close();
-		amqPublisherSubscriber = new AMQPublisherSubscriber();
+		amqPublisherSubscriber = new AMQPublisherSubscriber(new CommonTopicInjection());
 		amqPublisherSubscriber.init();
 	}
 
@@ -68,14 +69,14 @@ public class ServerSubscriber implements Runnable, MessageListener {
 			try {
 				reinitConnection();
 				log.info("the subscriber address is '{}', topic name: '{}'",
-						amqPublisherSubscriber.getMQAddress(), amqPublisherSubscriber.getMQTopicName());
+						amqPublisherSubscriber.getMQAddress(), amqPublisherSubscriber.topic.getTopicName());
 				try (var consumer = amqPublisherSubscriber.consumer(this)) {
 					receiveMessageWait(consumer);
 				}
 			} catch (Exception e) {
 				log.error(e.getMessage());
 			} finally {
-				log.info("WARNING => topic with name '{}' is closed. going to reset it!", this.amqPublisherSubscriber.getMQTopicName());
+				log.info("WARNING => topic with name '{}' is closed. going to reset it!", this.amqPublisherSubscriber.topic.getTopicName());
 
 				try {
 					Thread.sleep(environmentVariables.getReconnectWaitTimeInMilliSeconds(), 0);

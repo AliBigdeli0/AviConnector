@@ -16,7 +16,7 @@ public class AMQController {
 	@GetMapping("kill_job")
 	void sendKillRequestToMsgBus(@RequestParam("well_id") String wellId) throws Exception {
 		try {
-			AMQPublisherSubscriber.sendMessage(ActionMessage.ActionType.StopMachine, wellId);
+			AMQPublisherSubscriber.sendMessageToCommonBus(ActionMessage.ActionType.StopMachine, wellId);
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
 			throw ex;

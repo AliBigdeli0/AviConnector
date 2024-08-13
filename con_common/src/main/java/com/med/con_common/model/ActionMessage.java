@@ -7,6 +7,7 @@ import java.util.UUID;
 public class ActionMessage {
 	public enum ActionType {
 		StopMachine,
+		LiveMessage,
 	}
 
 	private ActionType type;

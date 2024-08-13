@@ -1,28 +1,32 @@
 package com.med.con_data.queue;
 
+import com.med.con_common.message.AMQPublisherSubscriber;
+import com.med.con_common.model.DbWell;
 import com.med.con_common.model.JsonTimeDb;
 import com.med.con_common.utility.CommonEnvironmentVariables;
 import com.med.con_common.utility.CompressionManager;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.activemq.command.ActiveMQStreamMessage;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Slf4j
-@NoArgsConstructor
 @Service
 public class MessageParser {
 	static int counter=0;
 	public final ConcurrentLinkedDeque<JsonTimeDb> queue = new ConcurrentLinkedDeque<>();
 	private final Lock lock = new ReentrantLock();
+	private final DbWell well;
 
-	public void ParseQueue(byte[] msg) throws IOException {
+	public MessageParser(DbWell well) {
+		this.well = well;
+	}
+
+	public void ParseQueue(byte[] msg) throws Exception {
 		lock.lock();
 		try {
 			if (CommonEnvironmentVariables.getVerbose())
@@ -30,6 +34,9 @@ public class MessageParser {
 
 			final var decompressMsg = CompressionManager.decompress(msg);
 			final var strMsg = new String(decompressMsg);
+
+			AMQPublisherSubscriber.sendMessageToExclusiveBus(well, strMsg);
+
 			final var jsonTimeDbMsg = JsonTimeDb.from(strMsg);
 			queue.push(jsonTimeDbMsg);
 
