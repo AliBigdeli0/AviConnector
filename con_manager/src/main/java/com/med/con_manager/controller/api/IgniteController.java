@@ -3,6 +3,7 @@ package com.med.con_manager.controller.api;
 import com.med.con_common.db.DbManager;
 import com.med.con_common.message.IgniteManager;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +27,17 @@ public class IgniteController {
 			log.error(ex.getMessage());
 		}
 		return Mono.just(-999L);
+	}
+
+	@GetMapping("/names")
+	public Mono<String> getNames() {
+		try (var ignite = new IgniteManager()) {
+			ignite.reinit();
+			return Mono.just(Strings.join(ignite.getCacheNames(), ','));
+		} catch (Exception ex) {
+			log.error(ex.getMessage());
+		}
+		return Mono.just("error in get names");
 	}
 
 	@GetMapping("/test")

@@ -87,9 +87,14 @@ public class IgniteManager implements Closeable {
 		return list;
 	}
 
+	public List<String> getCacheNames() {
+		return igniteClient.cacheNames().stream().toList();
+	}
+
 	@Override
 	public void close() throws IOException {
 		if (igniteClient != null) igniteClient.close();
 		if (ignite != null) ignite.close();
 	}
+
 }
