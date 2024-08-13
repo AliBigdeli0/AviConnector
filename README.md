@@ -6,9 +6,9 @@
 - [x] Message Serialization
   - [x] Deserialize Message
   - [x] Serialize Message to Mongodb
-- [ ] Live Message Handler (ActiveMQ Topics)
+- [x] Live Message Handler (ActiveMQ Topics)
   - [x] Send Live Message
-  - [ ] Calculate Last Message's Time
+  - [x] Calculate Last Message's Time
 - [x] Logger Into File
   - [x] File Rolling
 - [x] Mongodb Database
