@@ -32,7 +32,7 @@ public class CommonEnvironmentVariables {
 	}
 
 	public static Boolean getVerbose() {
-		var value = environmentOrDefault("MED_VERBOSE", "true");
+		var value = environmentOrDefault("MED_VERBOSE", "false");
 		return Boolean.parseBoolean(value);
 	}
 }

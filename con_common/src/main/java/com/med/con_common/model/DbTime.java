@@ -40,8 +40,8 @@ public class DbTime {
 			SerializeManager.fastSerialize(GetAllDbData, outputStream);
 			var compressedBytes = outputStream.toByteArray();
 			var document = new BsonDocument();
-			document.append("d", new BsonDateTime(convertDate().toEpochMilli()));
 			document.append("l", new BsonBinary(compressedBytes));
+			document.append("d", new BsonDateTime(convertDate().toEpochMilli()));
 			return document;
 		}
 	}

@@ -3,17 +3,17 @@
 - [x] Connect To ActiveMQ
   - [x] Reinitialize after disconnection
 - [x] Deploy Fat Jar File
-- [ ] Message Serialization
+- [x] Message Serialization
   - [x] Deserialize Message
-  - [ ] Serialize Message to Mongodb
+  - [x] Serialize Message to Mongodb
 - [ ] Live Message Handler (ActiveMQ Topics)
   - [x] Send Live Message
   - [ ] Calculate Last Message's Time
 - [x] Logger Into File
   - [x] File Rolling
-- [ ] Mongodb Database
+- [x] Mongodb Database
   - [x] Reinitialize After Disconnection
-  - [ ] Write Time Based Data 
+  - [x] Write Time Based Data 
 - [x] Adding an embedded job scheduler to program
   - [x] install and run it
   - [x] check for api call to kill the process

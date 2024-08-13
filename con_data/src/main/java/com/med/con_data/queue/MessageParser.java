@@ -41,7 +41,7 @@ public class MessageParser {
 			final var jsonTimeDbMsg = DbTime.from(strMsg);
 			queue.push(jsonTimeDbMsg);
 
-			if (queue.size() > 60) {
+			if (queue.size() > 10) {
 				dbMan.bulkTimeDb(queue.stream().toList());
 				queue.clear();
 			}
