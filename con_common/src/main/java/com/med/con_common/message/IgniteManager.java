@@ -16,6 +16,8 @@ import org.apache.ignite.configuration.IgniteConfiguration;
 import javax.cache.CacheException;
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class IgniteManager implements Closeable {
@@ -62,18 +64,27 @@ public class IgniteManager implements Closeable {
 	}
 
 	public long sizeOfMemory(DbWell well) {
-		ClientCache<Integer, String> cache = igniteClient.getOrCreateCache(well.getJobName());
+		final ClientCache<Integer, String> cache = igniteClient.getOrCreateCache(well.getJobName());
 		return cache.size();
 	}
 
-	public void pushTimeToMemory(DbTime newTimeData, DbWell well) throws IOException {
-		IgniteCache<Integer, String> cache = ignite.getOrCreateCache(well.getJobName());
+	public void pushTimeToMemory(final DbTime newTimeData, final DbWell well) throws IOException {
+		final IgniteCache<Integer, String> cache = ignite.getOrCreateCache(well.getJobName());
 		cache.put(cache.size() + 1, newTimeData.toJson());
+	}
 
-//		while (cache.size() >= CommonEnvironmentVariables.getDataCacheSize()) {
-//			var key = cache.iterator().next().getKey();
-//			cache.remove(key);
-//		}
+	public List<DbTime> readAllCache(final DbWell well) {
+		final IgniteCache<Integer, String> cache = ignite.getOrCreateCache(well.getJobName());
+		final var it = cache.iterator();
+		final List<DbTime> list = new ArrayList<>();
+
+		while (it.hasNext()) {
+			final var kv = it.next();
+			list.add(DbTime.from(kv.getValue()));
+			cache.remove(kv.getKey());
+		}
+
+		return list;
 	}
 
 	@Override
