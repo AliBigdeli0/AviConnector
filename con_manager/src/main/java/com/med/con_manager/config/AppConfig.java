@@ -22,6 +22,6 @@ public class AppConfig {
 
 	@Bean
 	public JobManager jobManager() {
-		return new JobLocalManager();
+		return new JobRunrManager();
 	}
 }

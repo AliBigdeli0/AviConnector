@@ -64,16 +64,25 @@ public class JobRunrManager implements JobManager {
 	}
 
 	private Job getJobWithWellName(DbWell well) {
-		var listProcessJobs = storageProvider.getJobList(StateName.PROCESSING, new AmountRequest("", 0xfff));
-		var listQueuedJobs = storageProvider.getJobList(StateName.ENQUEUED, new AmountRequest("", 0xfff));
+		final var listProcessJobs = storageProvider.getJobList(StateName.PROCESSING, new AmountRequest("", 0xfff));
+		final var listQueuedJobs = storageProvider.getJobList(StateName.ENQUEUED, new AmountRequest("", 0xfff));
+		final var listSucceededJobs = storageProvider.getJobList(StateName.SUCCEEDED, new AmountRequest("", 0xfff));
+		final var listScheduledJobs = storageProvider.getJobList(StateName.SCHEDULED, new AmountRequest("", 0xfff));
+
 
 		var processJob = listProcessJobs.stream().filter(j -> Objects.equals(j.getJobName(), well.getJobName())).findFirst();
 		var enqueueJob = listQueuedJobs.stream().filter(j -> Objects.equals(j.getJobName(), well.getJobName())).findFirst();
+		var succeededJob = listSucceededJobs.stream().filter(j -> Objects.equals(j.getJobName(), well.getJobName())).findFirst();
+		var scheduledJob = listScheduledJobs.stream().filter(j -> Objects.equals(j.getJobName(), well.getJobName())).findFirst();
 
 		if (processJob.isPresent()) {
 			return processJob.get();
 		} else if (enqueueJob.isPresent()) {
 			return enqueueJob.get();
+		} else if (succeededJob.isPresent()) {
+			return succeededJob.get();
+		} else if (scheduledJob.isPresent()) {
+			return scheduledJob.get();
 		}
 		return null;
 	}

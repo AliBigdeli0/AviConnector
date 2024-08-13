@@ -27,16 +27,25 @@ public class Runner {
 
 	@Bean
 	public StorageProvider storageProvider() {
-		return new InMemoryStorageProvider();
+		var connectionString = new ConnectionString(CommonEnvironmentVariables.getMongoDbConnectionString());
+
+		MongoClientSettings settings = MongoClientSettings.builder()
+				.uuidRepresentation(UuidRepresentation.JAVA_LEGACY)
+				.applyConnectionString(connectionString)
+				.build();
+
+		var mongoClient = MongoClients.create(settings);
+
+		return new MongoDBStorageProvider(mongoClient);
 	}
 
-	// @Bean
+	@Bean
 	public BackgroundJobServerConfiguration backgroundJobServerConfiguration() {
 		return BackgroundJobServerConfiguration
 				.usingStandardBackgroundJobServerConfiguration();
 	}
 
-	// @Bean
+	@Bean
 	public JobRunrConfiguration.JobRunrConfigurationResult
 	jobRunrConfigurationResult(
 			StorageProvider storageProvider,
@@ -52,7 +61,7 @@ public class Runner {
 				.initialize();
 	}
 
-	// @Bean
+	@Bean
 	public JobScheduler initJobRunr(JobRunrConfiguration.JobRunrConfigurationResult configure) {
 		return configure.getJobScheduler();
 	}

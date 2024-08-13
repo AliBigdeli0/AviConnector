@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Slf4j
 @NoArgsConstructor
@@ -18,15 +20,17 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 public class MessageParser {
 	static int counter=0;
 	public final ConcurrentLinkedDeque<JsonTimeDb> queue = new ConcurrentLinkedDeque<>();
+	private final Lock lock = new ReentrantLock();
 
 	public void ParseQueue(byte[] msg) throws IOException {
-		synchronized (queue) {
+		lock.lock();
+		try {
 			if (CommonEnvironmentVariables.getVerbose())
 				log.info("the message counter is : {}", counter++);
 
-			var decompressMsg = CompressionManager.decompress(msg);
-			var strMsg = new String(decompressMsg);
-			var jsonTimeDbMsg = JsonTimeDb.from(strMsg);
+			final var decompressMsg = CompressionManager.decompress(msg);
+			final var strMsg = new String(decompressMsg);
+			final var jsonTimeDbMsg = JsonTimeDb.from(strMsg);
 			queue.push(jsonTimeDbMsg);
 
 			if (queue.size() > 60) {
@@ -35,12 +39,14 @@ public class MessageParser {
 				}
 				queue.clear();
 			}
+		} finally {
+			lock.unlock();
 		}
 	}
 
 	public void ParseMessageStream(ActiveMQStreamMessage stream) throws Exception {
 		try (var outputStream = new ByteArrayOutputStream()) {
-			byte[] buffer = new byte[0xfffff];
+			final byte[] buffer = new byte[0xfffff];
 			int bytesRead;
 
 			while ((bytesRead = stream.readBytes(buffer)) != -1) {

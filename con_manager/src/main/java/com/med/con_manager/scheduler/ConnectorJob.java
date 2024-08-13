@@ -23,8 +23,8 @@ public class ConnectorJob {
 
 	private void createProcess() throws URISyntaxException {
 		final var listArgs = List.of(Constants.getJavaPath(), "-Xmx4g", "-jar", Constants.getConDataJarFile());
-		
 		final var processBuilder = new ProcessBuilder();
+
 		processBuilder.command(listArgs);
 
 		setEnvironmentVariables(processBuilder);
@@ -33,8 +33,8 @@ public class ConnectorJob {
 			try {
 				log.info("going to start process '{}'", this.well.getJobName());
 				process = processBuilder.start();
-				var error = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-				var op = new BufferedReader(new InputStreamReader(process.getInputStream()));
+				final var error = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+				final var op = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
 				// reader
 				BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -44,7 +44,7 @@ public class ConnectorJob {
 				BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
 				while (errorReader.readLine() != null) ;
 
-				int exitCode = process.waitFor();
+				final int exitCode = process.waitFor();
 				log.info("WARNING=> well with name '{}' has finished with code {}", this.well.getJobName(), exitCode);
 			} catch (Exception ex) {
 				log.error(ex.getMessage());
@@ -67,6 +67,7 @@ public class ConnectorJob {
 			if (well == null) throw new Exception("the well object can not be empty");
 			createProcess();
 			executionThread.start();
+			executionThread.join();
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
 		}
