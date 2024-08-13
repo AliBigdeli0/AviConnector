@@ -1,6 +1,6 @@
 package com.med.con_data.config;
 
-import com.med.con_common.db.DbManager;
+import com.med.con_common.model.DbWell;
 import com.med.con_data.queue.ClientConsumer;
 import com.med.con_data.queue.MessageParser;
 import com.med.con_data.utility.EnvironmentVariables;
@@ -18,16 +18,16 @@ public class MessageMQConfig {
 	@Autowired
 	EnvironmentVariables environmentVariables;
 
+	@Autowired
+	DbWell getWell;
+
 	@Bean
 	public MessageParser messageParser() throws IOException {
-		try (var dbMan = new DbManager()) {
-			var well = dbMan.readWellWithId(environmentVariables.getWellID());
-			return new MessageParser(well);
-		}
+		return new MessageParser(getWell);
 	}
 
 	@Bean
 	public ClientConsumer consumer() throws Exception {
-		return new ClientConsumer(messageParser(), environmentVariables);
+		return new ClientConsumer(messageParser(), environmentVariables, getWell);
 	}
 }

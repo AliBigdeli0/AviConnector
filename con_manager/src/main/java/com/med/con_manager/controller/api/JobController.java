@@ -1,6 +1,8 @@
 package com.med.con_manager.controller.api;
 
 import com.med.con_common.db.DbManager;
+import com.med.con_common.message.AMQPublisherSubscriber;
+import com.med.con_common.model.ActionMessage;
 import com.med.con_manager.scheduler.JobManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +36,11 @@ public class JobController {
 	@GetMapping("kill")
 	public Mono<String> deleteJobWithWellId(@RequestParam("well_id") String wellId) {
 		try (var db = new DbManager()) {
+			AMQPublisherSubscriber.sendMessageToCommonBus(ActionMessage.ActionType.StopMachine, wellId);
+
 			var well = db.readWellWithId(wellId);
 			jobManager.killJob(well);
+
 			return Mono.just("the job deleted!");
 		} catch (Exception ex) {
 			log.error(ex.getMessage());

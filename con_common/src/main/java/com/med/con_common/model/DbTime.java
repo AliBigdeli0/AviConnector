@@ -5,7 +5,6 @@ import com.med.con_common.utility.SerializeManager;
 import org.bson.BsonBinary;
 import org.bson.BsonDateTime;
 import org.bson.BsonDocument;
-import org.bson.Document;
 import org.bson.codecs.pojo.annotations.BsonIgnore;
 
 import java.io.ByteArrayOutputStream;
@@ -54,6 +53,10 @@ public class DbTime {
 		var zonedDateTime = timeDb.convertDate().atZone(ZoneId.of("UTC"));
 		var formatter = DateTimeFormatter.ofPattern("yy_MM_dd");
 		return String.format("c_%s_%s", timeDb.WellID, zonedDateTime.format(formatter));
+	}
+
+	public String toJson() {
+		return new Gson().toJson(this);
 	}
 
 	@Override

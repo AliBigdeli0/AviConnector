@@ -1,10 +1,13 @@
 package com.med.con_data.queue;
 
+import com.med.con_common.message.IgniteManager;
+import com.med.con_common.model.DbWell;
 import com.med.con_data.utility.EnvironmentVariables;
 import jakarta.jms.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQStreamMessage;
+import org.apache.ignite.IgniteException;
 import org.springframework.stereotype.Service;
 
 import java.io.Closeable;
@@ -21,10 +24,13 @@ public class ClientConsumer implements Runnable, MessageListener, Closeable {
 
 	private final MessageParser messageParser;
 	private final EnvironmentVariables environmentVariables;
+	private IgniteManager igniteManager = null;
+	private final DbWell well;
 
-	public ClientConsumer(MessageParser msgParser, EnvironmentVariables environmentVariables) throws Exception {
+	public ClientConsumer(MessageParser msgParser, EnvironmentVariables environmentVariables, DbWell well) throws Exception {
 		messageParser = msgParser;
 		this.environmentVariables = environmentVariables;
+		this.well = well;
 	}
 
 	private void ReinitConnection(String queueAddress) throws Exception {
@@ -37,6 +43,24 @@ public class ClientConsumer implements Runnable, MessageListener, Closeable {
 		session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		final var destination = session.createQueue(this.environmentVariables.getQueueName());
 		consumer = session.createConsumer(destination);
+
+
+		initIgnite();
+	}
+
+	private void initIgnite() throws IOException {
+		try {
+			if (this.igniteManager != null) {
+				this.igniteManager.close();
+				this.igniteManager = null;
+			}
+			this.igniteManager = new IgniteManager();
+			this.igniteManager.init();
+			if (this.igniteManager.isOffline(well)) throw new IOException("WARNING => the ignite is not available");
+		} catch (IgniteException ex) {
+			log.error(ex.getMessage());
+			throw new IOException("WARNING => ignite is not available");
+		}
 	}
 
 	@Override
@@ -75,7 +99,12 @@ public class ClientConsumer implements Runnable, MessageListener, Closeable {
 				log.error("the received message is empty!");
 				break;
 			}
-			this.onMessage(msg);
+			if (igniteManager.isOffline(well)) {
+				throw new IOException("WARNING => error in get access to ignite");
+			}
+			else {
+				this.onMessage(msg);
+			}
 		}
 	}
 
@@ -83,7 +112,7 @@ public class ClientConsumer implements Runnable, MessageListener, Closeable {
 	public void onMessage(Message message) {
 		if (message instanceof ActiveMQStreamMessage streamMessage) {
 			try {
-				messageParser.ParseMessageStream(streamMessage);
+				messageParser.ParseMessageStream(streamMessage, igniteManager);
 			} catch (Exception e) {
 				log.error(e.getMessage());
 			}

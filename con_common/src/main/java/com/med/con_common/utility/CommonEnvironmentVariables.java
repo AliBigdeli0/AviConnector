@@ -12,7 +12,7 @@ public class CommonEnvironmentVariables {
 	}
 
 	public static String getIgniteAddress() {
-		return environmentOrDefault("MED_IGNITE_ADDRESS", "localhost:10800");
+		return environmentOrDefault("MED_IGNITE_ADDRESS", "ignite.local:10800");
 	}
 
 	public static String getAMQPublisherSubscriberAddress() {
@@ -34,5 +34,10 @@ public class CommonEnvironmentVariables {
 	public static Boolean getVerbose() {
 		var value = environmentOrDefault("MED_VERBOSE", "false");
 		return Boolean.parseBoolean(value);
+	}
+
+	public static Integer getDataCacheSize() {
+		var value = environmentOrDefault("MED_DATA_CACHE_SIZE", "60");
+		return Integer.parseInt(value);
 	}
 }

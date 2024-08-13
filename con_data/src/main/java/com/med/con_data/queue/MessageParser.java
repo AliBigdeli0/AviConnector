@@ -2,6 +2,7 @@ package com.med.con_data.queue;
 
 import com.med.con_common.db.DbManager;
 import com.med.con_common.message.AMQPublisherSubscriber;
+import com.med.con_common.message.IgniteManager;
 import com.med.con_common.model.DbTime;
 import com.med.con_common.model.DbWell;
 import com.med.con_common.utility.CommonEnvironmentVariables;
@@ -11,6 +12,7 @@ import org.apache.activemq.command.ActiveMQStreamMessage;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -27,30 +29,50 @@ public class MessageParser {
 		this.well = well;
 	}
 
-	public void ParseQueue(byte[] msg) throws Exception {
+	public void ParseQueue(final byte[] msg, final IgniteManager igniteManager) throws Exception {
 		lock.lock();
-		try (final var dbMan = new DbManager()) {
+		try {
 			if (CommonEnvironmentVariables.getVerbose())
 				log.info("the message counter is : {}", counter++);
 
-			final var decompressMsg = CompressionManager.decompress(msg);
-			final var strMsg = new String(decompressMsg);
+			final var strMsg = getJsonFromBytes(msg);
+			publishToLive(strMsg);
 
-			AMQPublisherSubscriber.sendMessageToExclusiveBus(well, strMsg);
+			final var dbTime = pushToDbQueue(strMsg);
 
-			final var jsonTimeDbMsg = DbTime.from(strMsg);
-			queue.push(jsonTimeDbMsg);
-
-			if (queue.size() > 10) {
-				dbMan.bulkTimeDb(queue.stream().toList());
-				queue.clear();
-			}
+			pushToCacheMemory(igniteManager, dbTime);
 		} finally {
 			lock.unlock();
 		}
 	}
 
-	public void ParseMessageStream(ActiveMQStreamMessage stream) throws Exception {
+	private void pushToCacheMemory(final IgniteManager igniteManager, final DbTime dbTime) throws IOException {
+		igniteManager.pushTimeToMemory(dbTime, well);
+	}
+
+	private DbTime pushToDbQueue(final String strMsg) throws IOException {
+		final var jsonTimeDbMsg = DbTime.from(strMsg);
+		queue.push(jsonTimeDbMsg);
+
+		if (queue.size() > CommonEnvironmentVariables.getDataCacheSize()) {
+			try (var dbMan = new DbManager()) {
+				dbMan.bulkTimeDb(queue.stream().toList());
+				queue.clear();
+			}
+		}
+		return jsonTimeDbMsg;
+	}
+
+	private void publishToLive(final String strMsg) throws Exception {
+		AMQPublisherSubscriber.sendMessageToExclusiveBus(well, strMsg);
+	}
+
+	private static String getJsonFromBytes(final byte[] msg) throws IOException {
+		final var decompressMsg = CompressionManager.decompress(msg);
+		return new String(decompressMsg);
+	}
+
+	public void ParseMessageStream(final ActiveMQStreamMessage stream, final IgniteManager igniteManager) throws Exception {
 		try (var outputStream = new ByteArrayOutputStream()) {
 			final byte[] buffer = new byte[0xfffff];
 			int bytesRead;
@@ -59,7 +81,7 @@ public class MessageParser {
 				outputStream.write(buffer, 0, bytesRead);
 			}
 
-			ParseQueue(outputStream.toByteArray());
+			ParseQueue(outputStream.toByteArray(), igniteManager);
 		}
 	}
 }
