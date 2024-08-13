@@ -1,6 +1,7 @@
 package com.med.con_manager.scheduler;
 
 import com.med.con_common.model.DbWell;
+import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +43,18 @@ public class JobLocalManager implements JobManager {
 			var job = jobs.get(well);
 			job.cancel();
 			jobs.remove(well);
+		} finally {
+			lock.unlock();
+		}
+	}
+
+	@PreDestroy
+	public void cleanup() {
+		lock.lock();
+		try {
+			for (var job : jobs.values()) {
+				job.cancel();
+			}
 		} finally {
 			lock.unlock();
 		}

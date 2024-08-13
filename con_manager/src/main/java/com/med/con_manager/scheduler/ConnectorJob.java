@@ -5,7 +5,10 @@ import com.med.con_common.utility.CommonEnvironmentVariables;
 import com.med.con_common.utility.Constants;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.URISyntaxException;
+import java.util.List;
 
 @Slf4j
 public class ConnectorJob {
@@ -19,19 +22,42 @@ public class ConnectorJob {
 	}
 
 	private void createProcess() throws URISyntaxException {
-		var processBuilder = new ProcessBuilder(Constants.getJavaPath(), "-Xmx4g", "-jar", Constants.getConDataJarFile());
+		final var listArgs = List.of(Constants.getJavaPath(), "-Xmx4g", "-jar", Constants.getConDataJarFile());
+//		var listArgs = List.of("bash", "-c", "./con_data.sh");
+
+		final var processBuilder = new ProcessBuilder();
+		processBuilder.command(listArgs);
 
 		setEnvironmentVariables(processBuilder);
 
 		this.executionThread = new Thread(() -> {
 			try {
+				log.info("going to start process '{}'", this.well.getJobName());
 				process = processBuilder.start();
+				var error = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+				var op = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+				// reader
+				BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+				String line;
+				while ((line = reader.readLine()) != null) {
+					System.out.println(line);
+				}
+
+				// errors
+				BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+				String errorLine;
+				while ((errorLine = errorReader.readLine()) != null) {
+					System.err.println("ERROR: " + errorLine);
+				}
+
 				int exitCode = process.waitFor();
-				log.info("WARNING=> well with name '{}({})' has finished with code {}", this.well.getName(), well.getID(), exitCode);
+				log.info("WARNING=> well with name '{}' has finished with code {}", this.well.getJobName(), exitCode);
 			} catch (Exception ex) {
 				log.error(ex.getMessage());
 			}
 		});
+		this.executionThread.setPriority(Thread.MAX_PRIORITY);
 	}
 
 	private void setEnvironmentVariables(ProcessBuilder processBuilder) throws URISyntaxException {
