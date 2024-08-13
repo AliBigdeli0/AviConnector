@@ -23,8 +23,7 @@ public class ConnectorJob {
 
 	private void createProcess() throws URISyntaxException {
 		final var listArgs = List.of(Constants.getJavaPath(), "-Xmx4g", "-jar", Constants.getConDataJarFile());
-//		var listArgs = List.of("bash", "-c", "./con_data.sh");
-
+		
 		final var processBuilder = new ProcessBuilder();
 		processBuilder.command(listArgs);
 
@@ -39,17 +38,11 @@ public class ConnectorJob {
 
 				// reader
 				BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-				String line;
-				while ((line = reader.readLine()) != null) {
-					System.out.println(line);
-				}
+				while (reader.readLine() != null) ;
 
 				// errors
 				BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-				String errorLine;
-				while ((errorLine = errorReader.readLine()) != null) {
-					System.err.println("ERROR: " + errorLine);
-				}
+				while (errorReader.readLine() != null) ;
 
 				int exitCode = process.waitFor();
 				log.info("WARNING=> well with name '{}' has finished with code {}", this.well.getJobName(), exitCode);
