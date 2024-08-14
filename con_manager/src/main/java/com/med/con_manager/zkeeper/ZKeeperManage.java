@@ -9,12 +9,11 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class ZKeeperManage {
+	EnvironmentVariables environmentVariables;
 
 	public ZKeeperManage(EnvironmentVariables environmentVariables) {
 		this.environmentVariables = environmentVariables;
 	}
-
-	EnvironmentVariables environmentVariables;
 
 	public void init() {
 		ZooKeeper zooKeeper = null;
