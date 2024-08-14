@@ -48,6 +48,17 @@ public class JobController {
 		}
 	}
 
+	@GetMapping("kill_all")
+	public Mono<String> killAllJobs() {
+		try {
+			AMQPublisherSubscriber.sendMessageToCommonBus(ActionMessage.ActionType.StopAll, "");
+			return Mono.just("request sent!");
+		} catch (Exception ex) {
+			log.error(ex.getMessage());
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "please check the system logs! or connect to the system administration");
+		}
+	}
+
 	@GetMapping("exist")
 	public Mono<Boolean> jobStatus(@RequestParam("well_id") String wellId) {
 		try (var db = new DbManager()) {

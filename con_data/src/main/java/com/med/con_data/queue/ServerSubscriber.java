@@ -51,16 +51,22 @@ public class ServerSubscriber implements Runnable, MessageListener {
 	private void parseMessage(ActionMessage actionMsg) {
 		if (Objects.requireNonNull(actionMsg.getType()) == ActionMessage.ActionType.StopMachine) {
 			if (!Objects.equals(environmentVariables.getWellID(), actionMsg.getWellId())) return;
-			log.info("WARNING ===> going to kill well id : '{}'", actionMsg.getWellId());
-
-			closeables.forEach(c -> {
-				try {
-					c.close();
-				} catch (IOException e) {
-					log.error(e.getMessage());
-				}
-			});
+			sendKillSignal(actionMsg);
+		} else if (Objects.requireNonNull(actionMsg.getType()) == ActionMessage.ActionType.StopAll) {
+			sendKillSignal(actionMsg);
 		}
+	}
+
+	private void sendKillSignal(ActionMessage actionMsg) {
+		log.info("WARNING ===> going to kill well id : '{}'", actionMsg.getWellId());
+
+		closeables.forEach(c -> {
+			try {
+				c.close();
+			} catch (IOException e) {
+				log.error(e.getMessage());
+			}
+		});
 	}
 
 	@Override
