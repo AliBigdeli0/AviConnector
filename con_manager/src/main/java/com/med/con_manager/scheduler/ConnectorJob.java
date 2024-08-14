@@ -3,12 +3,13 @@ package com.med.con_manager.scheduler;
 import com.med.con_common.model.DbWell;
 import com.med.con_common.utility.CommonEnvironmentVariables;
 import com.med.con_common.utility.Constants;
+import com.med.con_manager.utility.ConsoleHelper;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
-import java.util.List;
+import java.util.ArrayList;
 
 @Slf4j
 public class ConnectorJob {
@@ -22,12 +23,13 @@ public class ConnectorJob {
 	}
 
 	private void createProcess() throws URISyntaxException {
-		final var listArgs = List.of(Constants.getJavaPath(), "-Xmx4g", "-jar", Constants.getConDataJarFile());
 		final var processBuilder = new ProcessBuilder();
 
-		processBuilder.command(listArgs);
+		processBuilder.command(executionCommand());
 
 		setEnvironmentVariables(processBuilder);
+
+		final boolean isVerbose = CommonEnvironmentVariables.getVerbose();
 
 		this.executionThread = new Thread(() -> {
 			try {
@@ -37,12 +39,12 @@ public class ConnectorJob {
 				final var op = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
 				// reader
-				BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-				while (reader.readLine() != null) ;
+				final BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+				ConsoleHelper.handleReader(reader, isVerbose);
 
 				// errors
-				BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-				while (errorReader.readLine() != null) ;
+				final BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+				ConsoleHelper.handleReader(errorReader, isVerbose);
 
 				final int exitCode = process.waitFor();
 				log.info("WARNING=> well with name '{}' has finished with code {}", this.well.getJobName(), exitCode);
@@ -52,6 +54,42 @@ public class ConnectorJob {
 		});
 		this.executionThread.setPriority(Thread.MAX_PRIORITY);
 	}
+
+	private ArrayList<String> executionCommand() {
+		var retList = new ArrayList<String>();
+		retList.add(Constants.getJavaPath());
+		retList.add("-Xmx4g");
+		retList.add("-jar");
+
+		retList.add("--add-opens=java.base/jdk.internal.access=ALL-UNNAMED");
+		retList.add("--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED");
+		retList.add("--add-opens=java.base/sun.nio.ch=ALL-UNNAMED");
+		retList.add("--add-opens=java.base/sun.util.calendar=ALL-UNNAMED");
+		retList.add("--add-opens=java.management/com.sun.jmx.mbeanserver=ALL-UNNAMED");
+		retList.add("--add-opens=jdk.internal.jvmstat/sun.jvmstat.monitor=ALL-UNNAMED");
+		retList.add("--add-opens=java.base/sun.reflect.generics.reflectiveObjects=ALL-UNNAMED");
+		retList.add("--add-opens=jdk.management/com.sun.management.internal=ALL-UNNAMED");
+		retList.add("--add-opens=java.base/java.io=ALL-UNNAMED");
+		retList.add("--add-opens=java.base/java.nio=ALL-UNNAMED");
+		retList.add("--add-opens=java.base/java.net=ALL-UNNAMED");
+		retList.add("--add-opens=java.base/java.util=ALL-UNNAMED");
+		retList.add("--add-opens=java.base/java.util.concurrent=ALL-UNNAMED");
+		retList.add("--add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED");
+		retList.add("--add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED");
+		retList.add("--add-opens=java.base/java.lang=ALL-UNNAMED");
+		retList.add("--add-opens=java.base/java.lang.invoke=ALL-UNNAMED");
+		retList.add("--add-opens=java.base/java.math=ALL-UNNAMED");
+		retList.add("--add-opens=java.sql/java.sql=ALL-UNNAMED");
+		retList.add("--add-opens=java.base/java.lang.reflect=ALL-UNNAMED");
+		retList.add("--add-opens=java.base/java.time=ALL-UNNAMED");
+		retList.add("--add-opens=java.base/java.text=ALL-UNNAMED");
+		retList.add("--add-opens=java.management/sun.management=ALL-UNNAMED");
+		retList.add("--add-opens=java.desktop/java.awt.font=ALL-UNNAMED");
+
+		retList.add(Constants.getConDataJarFile());
+		return retList;
+	}
+
 
 	private void setEnvironmentVariables(ProcessBuilder processBuilder) throws URISyntaxException {
 		var environments = processBuilder.environment();
@@ -95,5 +133,4 @@ public class ConnectorJob {
 			log.error(e.getMessage());
 		}
 	}
-
 }

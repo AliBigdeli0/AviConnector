@@ -14,9 +14,6 @@ public class EnvironmentVariables {
 	@Value("${MED_DASHBOARD_PORT:12001}")
 	public int dashboardPort;
 
-	@Value("${MED_IGNITE_ADDRESS:localhost:10800}")
-	public String igniteAddress;
-
 	@Value("${MED_SCHEDULER_MIN_WAIT_TIME:5}")
 	public int schedulerMinWaitInSecond;
 
