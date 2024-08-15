@@ -22,6 +22,24 @@ public class JobController {
 	@Autowired
 	JobManager jobManager;
 
+	@GetMapping("/recreate")
+	public Mono<String> recreateJob(@RequestParam("well_id") String wellId) {
+		try (var db = new DbManager()) {
+			var well = db.readWellWithId(wellId);
+			try {
+				AMQPublisherSubscriber.sendMessageToCommonBus(ActionMessage.ActionType.StopMachine, wellId);
+				jobManager.killJob(well);
+			}catch (Exception ex) {
+				log.error(ex.getMessage());
+			}
+
+			return Mono.just(jobManager.newJob(well));
+		} catch (Exception ex) {
+			log.error(ex.getMessage());
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "please check the system logs! or connect to the system administration");
+		}
+	}
+
 	@GetMapping("/create")
 	public Mono<String> createJob(@RequestParam("well_id") String wellId) {
 		try (var db = new DbManager()) {
