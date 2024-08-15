@@ -19,7 +19,7 @@
   - [x] check for api call to kill the process
   - [x] add java process manager to handle and run connector.jar file
 - [ ]  Process Manager In AVIData
-   - [ ] Add the Connector Process
+   - [x] Add the Connector Process
    - [ ] Manage to Read the Latest Status From Ignite
    - [ ] Add Handler To The Web Configuration
    - [ ] Check Live Data by Send Health Check
