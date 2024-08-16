@@ -1,6 +1,7 @@
 package com.med.con_data;
 
 import com.med.con_common.Info;
+import com.med.con_common.utility.CommonEnvironmentVariables;
 import com.med.con_data.queue.ClientConsumer;
 import com.med.con_data.queue.ServerSubscriber;
 import com.med.con_data.utility.Executor;
@@ -38,6 +39,9 @@ public class ConData implements Closeable {
 	@PostConstruct
 	public void init() {
 		log.info("the common version is : {}", Info.Version);
+		log.info("the cache size is {} ", CommonEnvironmentVariables.getDataCacheSize());
+		log.info("the database connection string is : {}", CommonEnvironmentVariables.getMongoDbConnectionString());
+
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 			try {
 				close();

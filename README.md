@@ -20,7 +20,8 @@
   - [x] add java process manager to handle and run connector.jar file
 - [ ]  Process Manager In AVIData
    - [x] Add the Connector Process
-   - [ ] Manage to Read the Latest Status From Ignite
+   - [x] Manage to Read the Latest Status From Ignite
+   - [ ] Add Depth Base / Comment Writer To Program 
    - [ ] Add Handler To The Web Configuration
    - [ ] Check Live Data by Send Health Check
 - [x] Separate Project in Different Path
