@@ -1,6 +1,7 @@
 package com.med.con_common.db;
 
 import com.med.con_common.model.DbComment;
+import com.med.con_common.model.DbDepth;
 import com.med.con_common.model.DbTime;
 import com.med.con_common.model.DbWell;
 import com.med.con_common.utility.CommonEnvironmentVariables;
@@ -79,6 +80,12 @@ public class DbManager implements Closeable {
 
 			bulkToInsert.get(collectionName).add(bsonDocument);
 		}
+	}
+
+	public void insertDepth(DbDepth dbDepth) throws IOException {
+		final var colName = dbDepth.collectionName();
+		final var col = db.getCollection(colName, BsonDocument.class);
+		col.insertOne(dbDepth.toBsonDocument());
 	}
 
 	@Override

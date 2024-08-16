@@ -4,6 +4,7 @@ import com.med.con_common.db.DbManager;
 import com.med.con_common.message.AMQPublisherSubscriber;
 import com.med.con_common.message.IgniteManager;
 import com.med.con_common.model.DbComment;
+import com.med.con_common.model.DbDepth;
 import com.med.con_common.model.DbTime;
 import com.med.con_common.model.DbWell;
 import com.med.con_common.utility.CommonEnvironmentVariables;
@@ -53,12 +54,22 @@ public class MessageParser {
 		}
 	}
 
-	private void depthActions(DbTime jsonTimeDbMsg) {
+	private void depthActions(DbTime jsonTimeDbMsg) throws IOException {
 		if(Strings.isNotBlank(jsonTimeDbMsg.TotalDepth)) {
 			var currentDepth = Double.parseDouble(jsonTimeDbMsg.TotalDepth);
 			if(lastDepth != currentDepth) {
-//					pushToDepth();
+				var dbDepth = new DbDepth();
+				dbDepth.fill(jsonTimeDbMsg);
+
+				try(var dbMan = new DbManager()){
+					dbMan.insertDepth(dbDepth);
+				}
+
 				lastDepth = currentDepth;
+
+				if(CommonEnvironmentVariables.getVerbose()){
+					log.info("the depth value inserted : {}", jsonTimeDbMsg);
+				}
 			}
 		}
 	}
@@ -81,10 +92,6 @@ public class MessageParser {
 		var dbComment = new DbComment(commentStr, dateStr, totalDepth, wellId);
 		try(var dbMan = new DbManager()) {
 			dbMan.insertComment(dbComment);
-		}
-
-		if(CommonEnvironmentVariables.getVerbose()){
-			log.error("new comment inserted : {}", dbComment);
 		}
 	}
 
