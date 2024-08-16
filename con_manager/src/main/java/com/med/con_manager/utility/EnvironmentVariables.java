@@ -14,10 +14,10 @@ public class EnvironmentVariables {
 	@Value("${MED_DASHBOARD_PORT:12001}")
 	public int dashboardPort;
 
-	@Value("${MED_SCHEDULER_MIN_WAIT_TIME:5}")
+	@Value("${MED_SCHEDULER_MIN_WAIT_TIME:1}")
 	public int schedulerMinWaitInSecond;
 
-	@Value("${MED_SCHEDULER_MAX_WAIT_TIME:10}")
+	@Value("${MED_SCHEDULER_MAX_WAIT_TIME:4}")
 	public int schedulerMaxWaitInSecond;
 
 	public String getZookeeperAddress() {
