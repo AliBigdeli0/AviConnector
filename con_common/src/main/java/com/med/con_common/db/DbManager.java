@@ -1,5 +1,6 @@
 package com.med.con_common.db;
 
+import com.med.con_common.model.DbComment;
 import com.med.con_common.model.DbTime;
 import com.med.con_common.model.DbWell;
 import com.med.con_common.utility.CommonEnvironmentVariables;
@@ -47,6 +48,11 @@ public class DbManager implements Closeable {
 		var filter = Filters.eq("ID", id);
 		var document = well_col.find(filter).first();
 		return DbWell.toDbWell(Objects.requireNonNull(document));
+	}
+
+	public void insertComment(DbComment comment) throws IOException {
+		final var commentCol = db.getCollection(comment.generateCollectionName(), BsonDocument.class);
+		commentCol.insertOne(comment.toBsonDocument());
 	}
 
 	public void bulkTimeDb(List<DbTime> timeData) throws IOException {

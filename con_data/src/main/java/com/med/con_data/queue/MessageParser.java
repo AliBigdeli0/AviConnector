@@ -3,16 +3,20 @@ package com.med.con_data.queue;
 import com.med.con_common.db.DbManager;
 import com.med.con_common.message.AMQPublisherSubscriber;
 import com.med.con_common.message.IgniteManager;
+import com.med.con_common.model.DbComment;
 import com.med.con_common.model.DbTime;
 import com.med.con_common.model.DbWell;
 import com.med.con_common.utility.CommonEnvironmentVariables;
 import com.med.con_common.utility.CompressionManager;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.activemq.command.ActiveMQStreamMessage;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -23,6 +27,8 @@ public class MessageParser {
 	static AtomicInteger counter = new AtomicInteger();
 	private final Lock lock = new ReentrantLock();
 	private final DbWell well;
+	private String lastComment = "";
+	private double lastDepth = 0;
 
 	public MessageParser(DbWell well) {
 		this.well = well;
@@ -35,17 +41,54 @@ public class MessageParser {
 				log.info("the message counter is : {}", counter.incrementAndGet());
 
 			final var strMsg = getJsonFromBytes(msg);
+			final var jsonTimeDbMsg = DbTime.from(strMsg);
 
 			publishToLive(strMsg);
 
-			readMemoryAndPushToDb(strMsg, igniteManager);
+			commentActions(jsonTimeDbMsg);
+			depthActions(jsonTimeDbMsg);
+			timeActions(jsonTimeDbMsg, igniteManager);
 		} finally {
 			lock.unlock();
 		}
 	}
 
-	private void readMemoryAndPushToDb(final String strMsg, IgniteManager igniteManager) throws IOException {
-		final var jsonTimeDbMsg = DbTime.from(strMsg);
+	private void depthActions(DbTime jsonTimeDbMsg) {
+		if(Strings.isNotBlank(jsonTimeDbMsg.TotalDepth)) {
+			var currentDepth = Double.parseDouble(jsonTimeDbMsg.TotalDepth);
+			if(lastDepth != currentDepth) {
+//					pushToDepth();
+				lastDepth = currentDepth;
+			}
+		}
+	}
+
+	private void commentActions(DbTime jsonTimeDbMsg) throws IOException {
+		if(Strings.isNotEmpty(jsonTimeDbMsg.Comment))
+			if(!Objects.equals(jsonTimeDbMsg.Comment, lastComment))
+			{
+				pushToComments(jsonTimeDbMsg);
+				lastComment = jsonTimeDbMsg.Comment;
+			}
+	}
+
+	private void pushToComments(DbTime jsonTimeDbMsg) throws IOException {
+		var commentStr = jsonTimeDbMsg.Comment;
+		var wellId = well.getID();
+		Optional<Double> totalDepth = Strings.isNotBlank(jsonTimeDbMsg.TotalDepth) ? Optional.empty() : Optional.of(Double.parseDouble(jsonTimeDbMsg.TotalDepth));
+		var dateStr = jsonTimeDbMsg.Date;
+
+		var dbComment = new DbComment(commentStr, dateStr, totalDepth, wellId);
+		try(var dbMan = new DbManager()) {
+			dbMan.insertComment(dbComment);
+		}
+
+		if(CommonEnvironmentVariables.getVerbose()){
+			log.error("new comment inserted : {}", dbComment);
+		}
+	}
+
+	private void timeActions(final DbTime jsonTimeDbMsg, IgniteManager igniteManager) throws IOException {
 		igniteManager.pushTimeToMemory(jsonTimeDbMsg, well);
 		if (igniteManager.sizeOfMemory(well) > CommonEnvironmentVariables.getDataCacheSize()) {
 			try (var dbMan = new DbManager()) {
