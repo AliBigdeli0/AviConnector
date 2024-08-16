@@ -3,6 +3,7 @@ package com.med.con_manager.scheduler;
 import com.med.con_common.model.DbWell;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
+import org.jobrunr.jobs.context.JobContext;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,8 +22,8 @@ public class JobLocalManager implements JobManager {
 		try {
 			if (checkJobExist(well))
 				throw new Exception(String.format("job for well '%s' is currently running", well.getJobName()));
-			var newJob = new ConnectorJob(well);
-			newJob.execute();
+			var newJob = new ConnectorJob();
+			newJob.execute(JobContext.Null, well.toJson());
 			jobs.put(well, newJob);
 			return "job has created!";
 		} finally {

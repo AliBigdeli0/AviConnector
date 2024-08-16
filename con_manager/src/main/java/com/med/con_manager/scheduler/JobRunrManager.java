@@ -4,6 +4,7 @@ import com.med.con_common.model.DbWell;
 import com.med.con_manager.utility.EnvironmentVariables;
 import lombok.extern.slf4j.Slf4j;
 import org.jobrunr.jobs.Job;
+import org.jobrunr.jobs.context.JobContext;
 import org.jobrunr.jobs.states.StateName;
 import org.jobrunr.scheduling.BackgroundJob;
 import org.jobrunr.scheduling.JobBuilder;
@@ -36,24 +37,22 @@ public class JobRunrManager implements JobManager {
 		if (checkJobExist(well))
 			throw new Exception("requested job with name '" + well.getJobName() + "' exist in process list!");
 
-		synchronized (ConnectorJobActivator.WellStack) {
+		synchronized (lock) {
 			var uid = UUID.randomUUID();
 			var randValue = new Random().nextInt(environmentVariables.schedulerMinWaitInSecond,
 					environmentVariables.schedulerMaxWaitInSecond);
 
-			ConnectorJobActivator.WellStack.push(well);
-			ConnectorJobActivator.WellStack.push(well);
-
+			var connectorJob = new ConnectorJob();
 			var job = JobBuilder
 					.aJob()
 					.withId(uid)
 					.withName(String.format("%s", well.getJobName()))
 					.scheduleIn(Duration.ofSeconds(randValue))
-
-					.withDetails(ConnectorJob::execute);
+					.withDetails(() -> {
+						connectorJob.execute(JobContext.Null, well.toJson());
+					});
 
 			BackgroundJob.create(job);
-
 			return uid.toString();
 		}
 	}

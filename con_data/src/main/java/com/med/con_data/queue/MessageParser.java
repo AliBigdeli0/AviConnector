@@ -68,7 +68,7 @@ public class MessageParser {
 				lastDepth = currentDepth;
 
 				if(CommonEnvironmentVariables.getVerbose()){
-					log.info("the depth value inserted : {}", jsonTimeDbMsg);
+					log.info("==========> the depth value inserted : {}", jsonTimeDbMsg);
 				}
 			}
 		}

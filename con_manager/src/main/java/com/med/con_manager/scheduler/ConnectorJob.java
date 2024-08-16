@@ -5,6 +5,7 @@ import com.med.con_common.utility.CommonEnvironmentVariables;
 import com.med.con_common.utility.Constants;
 import com.med.con_manager.utility.ConsoleHelper;
 import lombok.extern.slf4j.Slf4j;
+import org.jobrunr.jobs.context.JobContext;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -16,10 +17,10 @@ public class ConnectorJob {
 	private Thread executionThread = null;
 
 	Process process;
-	private final DbWell well;
+	private DbWell well;
 
-	public ConnectorJob(DbWell well) {
-		this.well = well;
+	public ConnectorJob() {
+
 	}
 
 	private void createProcess() throws URISyntaxException {
@@ -100,8 +101,10 @@ public class ConnectorJob {
 		environments.put(Constants.MED_MONGO_CONN_STR, CommonEnvironmentVariables.getMongoDbConnectionString());
 	}
 
-	public void execute() {
+	public void execute(JobContext context, String jsonStr) {
 		try {
+			well = DbWell.fromJson(jsonStr);
+
 			if (well == null) throw new Exception("the well object can not be empty");
 			createProcess();
 			executionThread.start();

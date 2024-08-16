@@ -99,6 +99,14 @@ public class DbWell {
 		return Objects.hash(ID, Name);
 	}
 
+	public String toJson() {
+		return new Gson().toJson(this);
+	}
+
+	public static DbWell fromJson(String jsonStr) {
+		return new Gson().fromJson(jsonStr, DbWell.class);
+	}
+
 	@Override
 	public String toString() {
 		return "DbWell{" +

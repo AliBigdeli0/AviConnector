@@ -49,11 +49,9 @@ public class Runner {
 	public JobRunrConfiguration.JobRunrConfigurationResult
 	jobRunrConfigurationResult(
 			StorageProvider storageProvider,
-			JobActivator jobActivator,
 			BackgroundJobServerConfiguration backgroundJobServerConfiguration
 	) {
 		return JobRunr.configure()
-				.useJobActivator(jobActivator)
 				.useStorageProvider(storageProvider)
 				.useBackgroundJobServer(backgroundJobServerConfiguration)
 				.useDashboard(environmentVariables.dashboardPort)

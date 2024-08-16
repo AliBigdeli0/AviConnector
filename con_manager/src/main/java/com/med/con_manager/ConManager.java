@@ -1,8 +1,11 @@
 package com.med.con_manager;
 
 import com.med.con_common.Info;
+import com.med.con_common.message.AMQPublisherSubscriber;
+import com.med.con_common.model.ActionMessage;
 import com.med.con_manager.zkeeper.ZKeeperManage;
 import jakarta.annotation.PostConstruct;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -20,11 +23,14 @@ public class ConManager {
 		SpringApplication.run(ConManager.class, args);
 	}
 
+	@SneakyThrows
 	@PostConstruct
 	public void init() {
 		log.info("the common version is : {}", Info.Version);
 		log.info("Developer Name : {}", Info.DeveloperName);
 		log.info("Developer Email: {}", Info.DeveloperEmail);
+
+		AMQPublisherSubscriber.sendMessageToCommonBus(ActionMessage.ActionType.StopAll, "");
 	}
 
 	// @Bean
