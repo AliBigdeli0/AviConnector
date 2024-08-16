@@ -11,8 +11,6 @@ import org.jobrunr.configuration.JobRunr;
 import org.jobrunr.configuration.JobRunrConfiguration;
 import org.jobrunr.scheduling.JobScheduler;
 import org.jobrunr.server.BackgroundJobServerConfiguration;
-import org.jobrunr.server.JobActivator;
-import org.jobrunr.storage.InMemoryStorageProvider;
 import org.jobrunr.storage.StorageProvider;
 import org.jobrunr.storage.nosql.mongo.MongoDBStorageProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,4 +61,5 @@ public class Runner {
 	public JobScheduler initJobRunr(JobRunrConfiguration.JobRunrConfigurationResult configure) {
 		return configure.getJobScheduler();
 	}
+
 }
