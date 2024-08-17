@@ -46,7 +46,7 @@ deploy_con_data_container:: deploy_con_data_jar
 	 $(MOVE) all_$(CONTAINER_NAME).7z $(CONTAINER_NAME).7z  $(DEPLOY_PATH);
 		
 deploy_con_data_jar::
-	cd $(BUILD_DATA_PATH)/../.. ;																							\
+	@cd $(BUILD_DATA_PATH)/../.. ;																							\
 	./gradlew clean build jar;																								\
 	cd $(BUILD_DATA_PATH)																									\
 	$(REMOVE) $(DEPLOY_PATH)/$(JAR_DATA_NAME).7z ; 																			\
