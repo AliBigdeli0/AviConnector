@@ -27,7 +27,7 @@
 - [x] Separate Project in Different Path
 - [ ] Deploy
   - [x] Deploy Jar Files With Batch File
-  - [ ] Separate Lib Files From Con_Data
+  - [x] Separate Lib Files From Con_Data
   - [ ] Add Installer With ENV
   - [ ] Test On Windows Server
   - [ ] Test On Real Environment
