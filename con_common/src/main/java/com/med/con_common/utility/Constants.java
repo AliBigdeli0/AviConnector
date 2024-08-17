@@ -10,9 +10,12 @@ public final class Constants {
 	public static final String MED_IGNITE_ADDRESS = "MED_IGNITE_ADDRESS";
 	public static final String MED_VERBOSE = "MED_VERBOSE";
 
+	private static String getOs() {
+		return System.getProperty("os.name").toLowerCase();
+	}
+	
 	public static String getJavaPath() {
-		var os = System.getProperty("os.name").toLowerCase();
-		if (os.contains("win")) {
+		if (getOs().contains("win")) {
 			return "java.exe";
 		} else {
 			return "java";
@@ -22,6 +25,6 @@ public final class Constants {
 	public static String getClassPathExecution() {
 		var currentPath = System.getProperty("user.dir");
 		var path = Path.of(".","lib_data", "*" );
-		return String.format("%s:%s", CON_DATA_JAR_NAME, path);
+		return String.format("%s%s%s", CON_DATA_JAR_NAME, getOs().contains("win") ? ";" : ":", path);
 	}
 }
