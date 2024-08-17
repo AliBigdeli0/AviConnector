@@ -77,7 +77,7 @@ public class ClientConsumer implements Runnable, MessageListener, Closeable {
 				} catch (Exception ex) {
 					log.error(ex.getMessage());
 				} finally {
-					log.info("WARNING => Connection to '{}' is closed. going to reset it!", this.environmentVariables.getQueueAddress());
+					log.info("WARNING => Connection to '{}({})' is closed. going to reset it!", this.environmentVariables.getQueueAddress(), environmentVariables.getQueueName());
 
 					try {
 						Thread.sleep(environmentVariables.getReconnectWaitTimeInMilliSeconds(), 0);

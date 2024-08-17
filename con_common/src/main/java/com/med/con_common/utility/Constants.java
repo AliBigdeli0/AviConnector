@@ -25,7 +25,7 @@ public final class Constants {
 	public static String getClassPathExecution() {
 		var os = getOs();
 		var currentPath = System.getProperty("user.dir");
-		var path = Path.of(".","lib_data", os.contains("win") ? "" : "*");
+		var path ="./lib_data/*";
 		return String.format("%s%s%s", CON_DATA_JAR_NAME, os.contains("win") ? ";" : ":", path);
 	}
 }

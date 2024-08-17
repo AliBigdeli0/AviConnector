@@ -102,6 +102,7 @@ public class ConnectorJob {
 		environments.put("MED_WELL_ID", this.well.getID());
 		environments.put("MED_LOG_NAME", this.well.getName());
 		environments.put(Constants.MED_MONGO_CONN_STR, CommonEnvironmentVariables.getMongoDbConnectionString());
+		environments.put(Constants.MED_VERBOSE, CommonEnvironmentVariables.getVerbose().toString());
 	}
 
 	public void execute(JobContext context, String jsonStr) {
