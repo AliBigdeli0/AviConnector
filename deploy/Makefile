@@ -1,16 +1,22 @@
 # nemes
 CONTAINER_NAME=ubuntu_avi_connector
-JAR_DATA_NAME=con_data-1.0.0.jar
-JAR_MANAGER_NAME=con_manager-1.0.0.jar
+JAR_DATA_NAME=con_data-1.0.0-plain.jar
+JAR_MANAGER_NAME=con_manager-1.0.0-plain.jar
 
 # paths
 DEPLOY_PATH=~/Desktop/share/update_med/updates
+
+
 BUILD_DATA_PATH=$(PWD)/../con_data/build
+LIB_DATA_PATH=$(BUILD_DATA_PATH)/lib_data
+RUN_DATA_FILE_PATH=$(PWD)/run_data.bat
+
 BUILD_MANAGER_PATH=$(PWD)/../con_manager/build
+LIB_MANAGER_PATH=$(BUILD_MANAGER_PATH)/lib_manager
+RUN_MANAGER_FILE_PATH=$(PWD)/run_manager.bat
+
 TASK_DATA_FILE_PATH=$(PWD)/task_run.sh
 RUN_DOCKER_FILE_PATH=$(PWD)/run_docker.bat
-RUN_DATA_FILE_PATH=$(PWD)/run_data.bat
-RUN_MANAGER_FILE_PATH=$(PWD)/run_manager.bat
 
 # commands
 ZIP=7z a -t7z -mx=9
@@ -22,11 +28,11 @@ COPY=cp
 
 # con_manager
 deploy_con_manager_jar::
-	@cd $(BUILD_MANAGER_PATH)/../..; 																				\
-	./build_all.sh ; ./build_copy_con_data.sh ;																		\
-	cd $(BUILD_MANAGER_PATH);																						\
-	$(REMOVE) $(JAR_MANAGER_NAME).7z $(DEPLOY_PATH)/$(JAR_MANAGER_NAME).7z;											\
-	$(ZIP) $(JAR_MANAGER_NAME).7z ./libs/$(JAR_MANAGER_NAME) $(RUN_MANAGER_FILE_PATH)  $(JAR_DATA_NAME);			\
+	@cd $(BUILD_MANAGER_PATH)/../..; 																												\
+	./build_all.sh ; ./build_copy_con_data.sh ;																										\
+	cd $(BUILD_MANAGER_PATH);																														\
+	$(REMOVE) $(JAR_MANAGER_NAME).7z $(DEPLOY_PATH)/$(JAR_MANAGER_NAME).7z;																			\
+	$(ZIP) $(JAR_MANAGER_NAME).7z ./libs/$(JAR_MANAGER_NAME) $(LIB_MANAGER_PATH) $(RUN_MANAGER_FILE_PATH)  $(JAR_DATA_NAME) $(LIB_DATA_PATH);		\
 	$(MOVE) $(JAR_MANAGER_NAME).7z $(DEPLOY_PATH)		
 
 
@@ -40,11 +46,11 @@ deploy_con_data_container:: deploy_con_data_jar
 	 $(MOVE) all_$(CONTAINER_NAME).7z $(CONTAINER_NAME).7z  $(DEPLOY_PATH);
 		
 deploy_con_data_jar::
-	cd $(BUILD_DATA_PATH)/../.. ;																		\
-	./gradlew clean build jar;																			\
-	cd $(BUILD_DATA_PATH)																				\
-	$(REMOVE) $(DEPLOY_PATH)/$(JAR_DATA_NAME).7z ; 														\
-	$(ZIP) $(JAR_DATA_NAME).7z 	$(BUILD_DATA_PATH)/libs/$(JAR_DATA_NAME) $(RUN_DATA_FILE_PATH);			\
+	cd $(BUILD_DATA_PATH)/../.. ;																							\
+	./gradlew clean build jar;																								\
+	cd $(BUILD_DATA_PATH)																									\
+	$(REMOVE) $(DEPLOY_PATH)/$(JAR_DATA_NAME).7z ; 																			\
+	$(ZIP) $(JAR_DATA_NAME).7z 	$(BUILD_DATA_PATH)/libs/$(JAR_DATA_NAME) $(LIB_DATA_PATH) $(RUN_DATA_FILE_PATH);			\
 	$(COPY) $(JAR_DATA_NAME).7z $(DEPLOY_PATH)
 
 copy_con_data_task_run::
