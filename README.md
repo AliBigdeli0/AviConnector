@@ -13,23 +13,29 @@
   - [x] File Rolling
 - [x] Mongodb Database
   - [x] Reinitialize After Disconnection
-  - [x] Write Time Based Data 
+  - [x] Write Time Based Data
 - [x] Adding an embedded job scheduler to program
   - [x] install and run it
   - [x] check for api call to kill the process
   - [x] add java process manager to handle and run connector.jar file
-- [ ]  Process Manager In AVIData
-   - [x] Add the Connector Process
-   - [x] Manage to Read the Latest Status From Ignite
-   - [ ] Add Depth Base / Comment Writer To Program 
-   - [ ] Add Handler To The Web Configuration
-   - [ ] Check Live Data by Send Health Check
+- [ ] Process Manager In AVIData
+  - [x] Add the Connector Process
+  - [x] Manage to Read the Latest Status From Ignite
+  - [x] Add Depth Base / Comment Writer To Program
+  - [ ] Add Recreate Jobs To The Web Configuration
+  - [ ] Check Live Data by Send Health Check
 - [x] Separate Project in Different Path
-
+- [ ] Deploy
+  - [x] Deploy Jar Files With Batch File
+  - [ ] Add Installer With ENV
+  - [ ] Test On Windows Server
+  - [ ] Test On Real Environment
+  - [ ] Distribute ActiveMQ On Server
+  - [ ] Check for Distibuted RAM
 
 # General Notes
 
-## Compile Projects 
+## Compile Projects
 
 to compile and run jar file :
 
@@ -45,7 +51,8 @@ the files will be in the path `${project folder}/build/libs`.
 
 to run system, the variable `MED_WELL_ID` should be initialized. The test value for that is equal to `2345415781` , `MED_QUEUE_NAME` is equal to `A_MF_DATA_VALUE`, and `MED_QUEUE_ADDRESS` is `tcp://localhost:61616`.
 
-some environment variables for idea: 
+some environment variables for idea:
+
 ```shell
 MED_QUEUE_NAME=A_MF_DATA_VALUE ;
 MED_QUEUE_ADDRESS=tcp://127.0.0.1:61616 ;
@@ -60,9 +67,12 @@ MED_MONGO_DB_NAME=AVIDb
 MED_VERBOSE=true
 ```
 
-## JobRunr Storage Providers:  
+## JobRunr Storage Providers:
+
 There are two types of providers:
+
 1. Mongo
+
 ```java
 @Bean
 public StorageProvider storageProvider() {
@@ -78,8 +88,10 @@ public StorageProvider storageProvider() {
     return new MongoDBStorageProvider(mongoClient);
 }
 ```
+
 2. InMemory
-```java 
+
+```java
 @Bean
 public StorageProvider storageProvider() {
     return new InMemoryStorageProvider();
