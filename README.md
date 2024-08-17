@@ -98,3 +98,19 @@ public StorageProvider storageProvider() {
     return new InMemoryStorageProvider();
 }
 ```
+
+## Build Project
+
+to build the project `con_data` run the following commands:
+
+```bash
+# in build directory
+java -cp "./lib_data/*:con_data-1.0.0-plain.jar" com.med.con_data.ConData
+```
+
+to build the project `con_manager` run the following commands:
+
+```bash
+# in build directory
+java -cp "./lib_manager/*:con_manager-1.0.0-plain.jar" com.med.con_manager.ConManager
+```

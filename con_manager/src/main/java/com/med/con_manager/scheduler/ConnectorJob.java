@@ -59,8 +59,8 @@ public class ConnectorJob {
 	private ArrayList<String> executionCommand() {
 		var retList = new ArrayList<String>();
 		retList.add(Constants.getJavaPath());
+
 		retList.add("-Xmx4g");
-		retList.add("-jar");
 
 		retList.add("--add-opens=java.base/jdk.internal.access=ALL-UNNAMED");
 		retList.add("--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED");
@@ -87,7 +87,10 @@ public class ConnectorJob {
 		retList.add("--add-opens=java.management/sun.management=ALL-UNNAMED");
 		retList.add("--add-opens=java.desktop/java.awt.font=ALL-UNNAMED");
 
-		retList.add(Constants.getConDataJarFile());
+		retList.add("-cp");
+		retList.add(Constants.getClassPathExecution());
+		retList.add(Constants.CON_DATA_MAIN_CLASS);
+
 		return retList;
 	}
 

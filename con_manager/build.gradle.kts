@@ -66,9 +66,26 @@ dependencies {
     implementation("org.mongodb:bson:5.1.3")
 }
 
+tasks.register<Copy>("moveJars") {
+    from(configurations.runtimeClasspath.get().asFileTree.matching { include("*.jar") })
+    into(layout.buildDirectory.dir("lib_manager"))
+}
+
+tasks.named("build") {
+    finalizedBy("moveJars");
+}
+
+tasks.named("jar") {
+    finalizedBy("moveJars");
+}
+
 tasks.named<JavaExec>("bootRun") {
     val wd = file("${projectDir}/build/")
-    workingDir(wd);
+    workingDir(wd)
+
+    classpath = files(layout.buildDirectory.dir("lib_manager")) + sourceSets["main"].runtimeClasspath
+    mainClass.set("com.med.con_manager.ConManager")
+
     jvmArgs = listOf(
         "--add-opens=java.base/jdk.internal.access=ALL-UNNAMED",
         "--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED",
