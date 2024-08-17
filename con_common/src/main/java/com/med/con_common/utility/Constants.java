@@ -13,7 +13,7 @@ public final class Constants {
 	private static String getOs() {
 		return System.getProperty("os.name").toLowerCase();
 	}
-	
+
 	public static String getJavaPath() {
 		if (getOs().contains("win")) {
 			return "java.exe";
@@ -23,8 +23,9 @@ public final class Constants {
 	}
 
 	public static String getClassPathExecution() {
+		var os = getOs();
 		var currentPath = System.getProperty("user.dir");
-		var path = Path.of(".","lib_data", "*" );
-		return String.format("%s%s%s", CON_DATA_JAR_NAME, getOs().contains("win") ? ";" : ":", path);
+		var path = Path.of(".","lib_data", os.contains("win") ? "" : "*");
+		return String.format("%s%s%s", CON_DATA_JAR_NAME, os.contains("win") ? ";" : ":", path);
 	}
 }
