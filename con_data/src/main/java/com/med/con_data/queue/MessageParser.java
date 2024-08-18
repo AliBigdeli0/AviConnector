@@ -36,7 +36,7 @@ public class MessageParser {
 		this.well = well;
 	}
 
-	public void ParseQueue(final byte[] msg, final Memory igniteMemory) throws Exception {
+	public void ParseQueue(final byte[] msg, final Memory memory) throws Exception {
 		lock.lock();
 		try {
 			ConsoleHelper.logIfVerbose(log, "the message counter is : {}", counter.incrementAndGet());
@@ -48,7 +48,7 @@ public class MessageParser {
 
 			commentActions(jsonTimeDbMsg);
 			depthActions(jsonTimeDbMsg);
-			timeActions(jsonTimeDbMsg, igniteMemory);
+			timeActions(jsonTimeDbMsg, memory);
 		} finally {
 			lock.unlock();
 		}
@@ -97,11 +97,11 @@ public class MessageParser {
 		}
 	}
 
-	private void timeActions(final DbTime jsonTimeDbMsg, Memory igniteMemory) throws IOException {
-		igniteMemory.pushTimeToMemory(jsonTimeDbMsg, well);
-		if (igniteMemory.sizeOfMemory(well) > CommonEnvironmentVariables.getDataCacheSize()) {
+	private void timeActions(final DbTime jsonTimeDbMsg, Memory memory) throws IOException {
+		memory.pushTimeToMemory(jsonTimeDbMsg, well);
+		if (memory.sizeOfMemory(well) > CommonEnvironmentVariables.getDataCacheSize()) {
 			try (var dbMan = new DbManager()) {
-				var list = igniteMemory.readAllCache(well);
+				var list = memory.readAllCacheAndRemove(well);
 				dbMan.bulkTimeDb(list);
 			}
 		}

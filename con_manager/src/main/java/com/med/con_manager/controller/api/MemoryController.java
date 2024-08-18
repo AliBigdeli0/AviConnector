@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/v1/memory")
 @Slf4j
@@ -44,13 +46,14 @@ public class MemoryController {
 		}
 		return Mono.just("error in get names");
 	}
-
+	
 	@GetMapping("/test")
 	public String testIgnite() {
 		try (var memory = MemoryUtil.createMemory(memoryType)) {
 			memory.init(log);
-			memory.putCache("test", "1", "13");
-			return memory.getCache("test", "1", String.class);
+			var uid = UUID.randomUUID();
+			memory.putCache("test", uid, "13");
+			return memory.getCache("test", uid, String.class);
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
 		}

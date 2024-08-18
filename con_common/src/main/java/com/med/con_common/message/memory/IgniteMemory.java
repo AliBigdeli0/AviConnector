@@ -78,7 +78,7 @@ public class IgniteMemory implements Memory {
 		cache.put(cache.size() + 1, newTimeData.toJson());
 	}
 
-	public List<DbTime> readAllCache(final DbWell well) {
+	public List<DbTime> readAllCacheAndRemove(final DbWell well) {
 		final IgniteCache<Integer, String> cache = ignite.getOrCreateCache(well.getJobName());
 		final var it = cache.iterator();
 		final List<DbTime> list = new ArrayList<>();

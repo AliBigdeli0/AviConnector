@@ -13,5 +13,5 @@ logging:
 
 med:
   memory:
-    type: Ignite
+    type: Redis
     document: "valid types are: 'Ignite', 'Redis'"

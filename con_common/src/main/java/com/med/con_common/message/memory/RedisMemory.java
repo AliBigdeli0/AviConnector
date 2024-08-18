@@ -66,7 +66,7 @@ public class RedisMemory implements Memory{
 	public boolean isOffline(DbWell well) {
 		try (var jedis = jedisPool.getResource()) {
 			var response = jedis.ping();
-			return response.equals("PONG");
+			return !response.equals("PONG");
 		}
 	}
 
@@ -88,11 +88,24 @@ public class RedisMemory implements Memory{
 	}
 
 	@Override
-	public List<DbTime> readAllCache(DbWell well) {
+	public List<DbTime> readAllCacheAndRemove(DbWell well) {
 		try (var jedis = jedisPool.getResource()) {
 			var match = well.getJobName() + ":*";
 			Set<String> keys = readFromRedis(jedis, match);
-			return keys.stream().map(DbTime::from).toList();
+			try {
+				return keys.stream().map(key -> {
+					var value = jedis.get(key);
+					return DbTime.from(value);
+				}).toList();
+			} finally {
+				removeFromRedis(jedis, keys);
+			}
+		}
+	}
+
+	private void removeFromRedis(Jedis jedis, Set<String> keys) {
+		for (String key : keys) {
+			jedis.del(key);
 		}
 	}
 

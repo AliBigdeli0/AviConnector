@@ -23,9 +23,6 @@ public class MessageMQConfig {
 	@Autowired
 	DbWell getWell;
 
-	@Value("${med.memory.type}")
-	public MemoryType memoryType;
-
 	@Bean
 	public MessageParser messageParser() throws IOException {
 		return new MessageParser(getWell);
@@ -33,6 +30,6 @@ public class MessageMQConfig {
 
 	@Bean
 	public ClientConsumer consumer() throws Exception {
-		return new ClientConsumer(messageParser(), environmentVariables, getWell, memoryType);
+		return new ClientConsumer(messageParser(), environmentVariables, getWell);
 	}
 }

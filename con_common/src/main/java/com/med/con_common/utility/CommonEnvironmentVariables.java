@@ -41,7 +41,7 @@ public class CommonEnvironmentVariables {
 	}
 
 	public static Integer getDataCacheSize() {
-		var value = environmentOrDefault("MED_DATA_CACHE_SIZE", "600");
+		var value = environmentOrDefault("MED_DATA_CACHE_SIZE", "60");
 		return Integer.parseInt(value);
 	}
 }

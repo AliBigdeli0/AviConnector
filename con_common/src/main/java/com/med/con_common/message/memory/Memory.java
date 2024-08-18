@@ -16,6 +16,6 @@ public interface Memory extends Closeable {
 	boolean isOffline(DbWell well);
 	long sizeOfMemory(DbWell well);
 	void pushTimeToMemory(final DbTime newTimeData, final DbWell well) throws IOException;
-	List<DbTime> readAllCache(final DbWell well);
+	List<DbTime> readAllCacheAndRemove(final DbWell well);
 	List<String> getCacheNames();
 }
