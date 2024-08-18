@@ -22,7 +22,7 @@
   - [x] Add the Connector Process
   - [x] Manage to Read the Latest Status From Ignite
   - [x] Add Depth Base / Comment Writer To Program
-  - [ ] Add Recreate Jobs To The Web Configuration
+  - [x] Add Recreate Jobs To The Web Configuration
   - [ ] Check Live Data by Send Health Check
 - [x] Separate Project in Different Path
 - [x] Change Memory Catch to Redis
@@ -36,7 +36,7 @@
   - [ ] Test On Windows Server
   - [ ] Test On Real Environment
   - [ ] Distribute ActiveMQ On Server
-  - [ ] Check for Distibuted RAM
+  - [ ] Check for Distributed RAM
 
 # General Notes
 
@@ -130,7 +130,7 @@ make dd # or make deploy_data
 ```
 
 ## Redis Connection Problem
-By default, you can not connect to its port from another host, to connect from another host on **Windows** the port should be forwarded to the `6369`(the redis default port). To do that run following command on powershell or cmd: 
+By default, you can not connect to its port from another host, to connect from another host on **Windows** the port should be forwarded to port `6369`(the redis default port). To do that run the following command on Powershell or CMD: 
 
 ```shell
 netsh interface portproxy add v4tov4 listenport=6380 listenaddress=0.0.0.0 connectport=6379 onnectaddress=127.0.0.1
