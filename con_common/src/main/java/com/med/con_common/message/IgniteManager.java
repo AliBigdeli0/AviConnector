@@ -9,9 +9,6 @@ import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
 import org.apache.ignite.IgniteException;
 import org.apache.ignite.Ignition;
-import org.apache.ignite.client.ClientCache;
-import org.apache.ignite.client.IgniteClient;
-import org.apache.ignite.configuration.ClientConfiguration;
 import org.apache.ignite.configuration.IgniteConfiguration;
 import org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi;
 import org.apache.ignite.spi.discovery.tcp.ipfinder.multicast.TcpDiscoveryMulticastIpFinder;
@@ -21,29 +18,24 @@ import javax.cache.CacheException;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class IgniteManager implements Closeable {
-	IgniteClient igniteClient;
 	Ignite ignite;
 
 	public void init(Logger log) throws IgniteException {
-		final int TIMEOUTS = 2000;
+		final int TIMEOUTS = 8000;
 
-		var cfgClient = new ClientConfiguration().setAddresses(getIgniteAddress());
-		cfgClient.setTimeout(TIMEOUTS);
-		igniteClient = Ignition.startClient(cfgClient);
-		ConsoleHelper.logIfVerbose(log, "ignite client has created!");
+		final var host = getIgniteAddress().split(":")[0];
+		final var addressColl = List.of(host + ":47100..47101");
+		ConsoleHelper.logIfVerbose(log, "ignite discovery port is {}", addressColl);
 
-		var cfg = new IgniteConfiguration();
+		final var cfg = new IgniteConfiguration();
 		cfg.setClientMode(true);
-		var spi = new TcpDiscoverySpi();
 
-		// Configure IP finder.
-		var ipFinder = new TcpDiscoveryMulticastIpFinder();
-		var host = getIgniteAddress().split(":")[0];
-		ipFinder.setAddresses(Collections.singletonList(host + ":10000..10999"));
+		final var spi = new TcpDiscoverySpi();
+		final var ipFinder = new TcpDiscoveryMulticastIpFinder();
+		ipFinder.setAddresses(addressColl);
 		spi.setIpFinder(ipFinder);
 
 		cfg.setDiscoverySpi(spi);
@@ -58,12 +50,12 @@ public class IgniteManager implements Closeable {
 	}
 
 	public <K, V> void putCache(String cacheName, K key, V value) throws CacheException {
-		ClientCache<K, V> cache = igniteClient.getOrCreateCache(cacheName);
+		final IgniteCache<K, V> cache = ignite.getOrCreateCache(cacheName);
 		cache.put(key, value);
 	}
 
 	public <K, V> V getCache(String cacheName, K key) {
-		ClientCache<K, V> cache = igniteClient.getOrCreateCache(cacheName);
+		final IgniteCache<K, V> cache = ignite.getOrCreateCache(cacheName);
 		return cache.get(key);
 	}
 
@@ -80,7 +72,7 @@ public class IgniteManager implements Closeable {
 	}
 
 	public long sizeOfMemory(DbWell well) {
-		final ClientCache<Integer, String> cache = igniteClient.getOrCreateCache(well.getJobName());
+		final IgniteCache<Integer, String> cache = ignite.getOrCreateCache(well.getJobName());
 		return cache.size();
 	}
 
@@ -104,13 +96,11 @@ public class IgniteManager implements Closeable {
 	}
 
 	public List<String> getCacheNames() {
-		return igniteClient.cacheNames().stream().toList();
+		return ignite.cacheNames().stream().toList();
 	}
 
 	@Override
 	public void close() throws IOException {
-		if (igniteClient != null) igniteClient.close();
 		if (ignite != null) ignite.close();
 	}
-
 }

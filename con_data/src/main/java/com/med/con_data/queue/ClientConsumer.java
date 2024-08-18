@@ -8,10 +8,8 @@ import jakarta.jms.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQStreamMessage;
-import org.apache.ignite.IgniteException;
 import org.springframework.stereotype.Service;
 
-import javax.cache.Cache;
 import java.io.Closeable;
 import java.io.IOException;
 
@@ -35,18 +33,19 @@ public class ClientConsumer implements Runnable, MessageListener, Closeable {
 		this.well = well;
 	}
 
-	private void ReinitConnection(String queueAddress) throws Exception {
+	private void ReinitConnections(String queueAddress) throws Exception {
 		this.close();
 		final ConnectionFactory conFactory = new ActiveMQConnectionFactory(queueAddress);
 
+		log.info("the queue address information are {}({})",this.environmentVariables.getQueueName(), this.environmentVariables.getQueueAddress());
 		this.conn = conFactory.createConnection();
 		this.conn.start();
-		ConsoleHelper.logIfVerbose(log, "AMQ connection is created!");
+		ConsoleHelper.logIfVerbose(log, "the AMQ connection is created!");
 
 		session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		final var destination = session.createQueue(this.environmentVariables.getQueueName());
 		consumer = session.createConsumer(destination);
-		ConsoleHelper.logIfVerbose(log, "AMQ consumer is created");
+		ConsoleHelper.logIfVerbose(log, "the AMQ consumer is created!");
 
 		initIgnite();
 	}
@@ -75,7 +74,7 @@ public class ClientConsumer implements Runnable, MessageListener, Closeable {
 			while (numberOfAttempts < environmentVariables.getMaxReconnectAttempt() && !Thread.currentThread().isInterrupted()) {
 				try {
 					numberOfAttempts++;
-					ReinitConnection(this.environmentVariables.getQueueAddress());
+					ReinitConnections(this.environmentVariables.getQueueAddress());
 
 					log.info("the consumer '{}' is established!", this.environmentVariables.getQueueName());
 
@@ -83,7 +82,7 @@ public class ClientConsumer implements Runnable, MessageListener, Closeable {
 				} catch (Exception ex) {
 					log.error(ex.getMessage());
 				} finally {
-					log.info("WARNING => Connection to '{}({})' is closed. going to reset it!", this.environmentVariables.getQueueAddress(), environmentVariables.getQueueName());
+					log.info("WARNING => All connections are closed going to reset it!");
 
 					try {
 						Thread.sleep(environmentVariables.getReconnectWaitTimeInMilliSeconds(), 0);

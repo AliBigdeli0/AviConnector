@@ -114,3 +114,13 @@ to build the project `con_manager` run the following commands:
 # in build directory
 java -cp "./lib_manager/*:con_manager-1.0.0-plain.jar" com.med.con_manager.ConManager
 ```
+
+to deploy simply write the following command:
+
+```bash
+# to build the connector manager
+make dm # or make deploy_manager
+
+# to build the connector data
+make dd # or make deploy_data
+```
