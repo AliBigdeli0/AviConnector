@@ -9,3 +9,9 @@ springdoc:
   show-actuator: true
   swagger-ui:
     path: swagger-ui.html
+
+med:
+  job-manager:
+    db-type:
+      value: "InMemory"
+      document: "valid types are: 'Mongodb','InMemory'"

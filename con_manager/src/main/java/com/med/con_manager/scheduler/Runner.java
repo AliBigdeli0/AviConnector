@@ -11,9 +11,12 @@ import org.jobrunr.configuration.JobRunr;
 import org.jobrunr.configuration.JobRunrConfiguration;
 import org.jobrunr.scheduling.JobScheduler;
 import org.jobrunr.server.BackgroundJobServerConfiguration;
+import org.jobrunr.storage.InMemoryStorageProvider;
 import org.jobrunr.storage.StorageProvider;
 import org.jobrunr.storage.nosql.mongo.MongoDBStorageProvider;
+import org.springframework.beans.factory.BeanExpressionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -23,8 +26,10 @@ public class Runner {
 	@Autowired
 	EnvironmentVariables environmentVariables;
 
-	@Bean
-	public StorageProvider storageProvider() {
+	@Value("${med.job-manager.db-type.value}")
+	private String jobType;
+
+	public StorageProvider storageProviderMongodb() {
 		var connectionString = new ConnectionString(CommonEnvironmentVariables.getMongoDbConnectionString());
 
 		MongoClientSettings settings = MongoClientSettings.builder()
@@ -35,6 +40,19 @@ public class Runner {
 		var mongoClient = MongoClients.create(settings);
 
 		return new MongoDBStorageProvider(mongoClient);
+	}
+
+	public StorageProvider storageProviderInMemory() {
+		return new InMemoryStorageProvider();
+	}
+
+	@Bean
+	public StorageProvider storageProvider() {
+		return switch (jobType) {
+			case "InMemory" -> storageProviderInMemory();
+			case "Mongodb" -> storageProviderMongodb();
+			default -> throw new BeanExpressionException("invalid storage provider type");
+		};
 	}
 
 	@Bean
