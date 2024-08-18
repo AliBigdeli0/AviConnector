@@ -25,10 +25,10 @@
   - [ ] Add Recreate Jobs To The Web Configuration
   - [ ] Check Live Data by Send Health Check
 - [x] Separate Project in Different Path
-- [ ] Change Memory Catch to Redis
-  - [ ] Change In Connectors (JAVA)
-  - [ ] Change In AVIData (C#)
-  - [ ] Test Connections In Windows
+- [x] Change Memory Catch to Redis
+  - [x] Change In Connectors (JAVA)
+  - [x] Change In AVIData (C#)
+  - [x] Test Connections In Windows
 - [ ] Deploy
   - [x] Deploy Jar Files With Batch File
   - [x] Separate Lib Files From Con_Data
@@ -133,5 +133,5 @@ make dd # or make deploy_data
 By default, you can not connect to its port from another host, to connect from another host on **Windows** the port should be forwarded to the `6369`(the redis default port). To do that run following command on powershell or cmd: 
 
 ```shell
-PS C:\Users\Administrator> netsh interface portproxy add v4tov4 listenport=6380 listenaddress=0.0.0.0 connectport=6379 onnectaddress=127.0.0.1
+netsh interface portproxy add v4tov4 listenport=6380 listenaddress=0.0.0.0 connectport=6379 onnectaddress=127.0.0.1
 ```
