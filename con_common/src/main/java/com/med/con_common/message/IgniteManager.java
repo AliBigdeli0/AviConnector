@@ -12,13 +12,16 @@ import org.apache.ignite.client.ClientCache;
 import org.apache.ignite.client.IgniteClient;
 import org.apache.ignite.configuration.ClientConfiguration;
 import org.apache.ignite.configuration.IgniteConfiguration;
+import org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi;
+import org.apache.ignite.spi.discovery.tcp.ipfinder.multicast.TcpDiscoveryMulticastIpFinder;
 
 import javax.cache.CacheException;
 import java.io.Closeable;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
 
 public class IgniteManager implements Closeable {
 	IgniteClient igniteClient;
@@ -30,10 +33,22 @@ public class IgniteManager implements Closeable {
 		var cfgClient = new ClientConfiguration().setAddresses(getIgniteAddress());
 		cfgClient.setTimeout(TIMEOUTS);
 		igniteClient = Ignition.startClient(cfgClient);
+		System.out.println("======> ignite client has created!");
 
 		var cfg = new IgniteConfiguration();
 		cfg.setClientMode(true);
+		var spi = new TcpDiscoverySpi();
+
+		// Configure IP finder.
+		var ipFinder = new TcpDiscoveryMulticastIpFinder();
+		var host = getIgniteAddress().split(":")[0];
+		ipFinder.setAddresses(Collections.singletonList(host + ":47500..47509"));
+		spi.setIpFinder(ipFinder);
+
+		cfg.setDiscoverySpi(spi);
+
 		ignite = Ignition.start(cfg);
+		System.out.println("======> ignite has created!");
 	}
 
 	public void reinit() throws IOException {

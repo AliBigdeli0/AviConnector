@@ -4,3 +4,9 @@ spring:
 
 server:
   shutdown: graceful
+
+logging:
+  level:
+    org:
+      mongodb:
+        driver: ERROR

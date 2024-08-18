@@ -54,7 +54,7 @@ public class MessageParser {
 		}
 	}
 
-	private void depthActions(DbTime jsonTimeDbMsg) throws IOException {
+	private void depthActions(DbTime jsonTimeDbMsg) {
 		if(Strings.isNotBlank(jsonTimeDbMsg.TotalDepth)) {
 			var currentDepth = Double.parseDouble(jsonTimeDbMsg.TotalDepth);
 			if(lastDepth != currentDepth) {
@@ -63,16 +63,18 @@ public class MessageParser {
 
 				try(var dbMan = new DbManager()){
 					dbMan.insertDepth(dbDepth);
+				}catch (Exception ex){
+					log.error(ex.getMessage());
 				}
 
 				lastDepth = currentDepth;
 
-				ConsoleHelper.logIfVerbose(log, "==========> the depth value inserted : {}", jsonTimeDbMsg);
+				ConsoleHelper.logIfVerbose(log, "==========> the depth value inserted at depth: {}", jsonTimeDbMsg.TotalDepth);
 			}
 		}
 	}
 
-	private void commentActions(DbTime jsonTimeDbMsg) throws IOException {
+	private void commentActions(DbTime jsonTimeDbMsg) {
 		if(Strings.isNotEmpty(jsonTimeDbMsg.Comment))
 			if(!Objects.equals(jsonTimeDbMsg.Comment, lastComment))
 			{
@@ -81,7 +83,7 @@ public class MessageParser {
 			}
 	}
 
-	private void pushToComments(DbTime jsonTimeDbMsg) throws IOException {
+	private void pushToComments(DbTime jsonTimeDbMsg)  {
 		var commentStr = jsonTimeDbMsg.Comment;
 		var wellId = well.getID();
 		Optional<Double> totalDepth = Strings.isNotBlank(jsonTimeDbMsg.TotalDepth) ? Optional.empty() : Optional.of(Double.parseDouble(jsonTimeDbMsg.TotalDepth));
@@ -90,6 +92,8 @@ public class MessageParser {
 		var dbComment = new DbComment(commentStr, dateStr, totalDepth, wellId);
 		try(var dbMan = new DbManager()) {
 			dbMan.insertComment(dbComment);
+		}catch (Exception ex) {
+			log.error(ex.getMessage());
 		}
 	}
 
