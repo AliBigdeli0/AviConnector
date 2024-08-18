@@ -16,7 +16,7 @@ public class CommonEnvironmentVariables {
 	}
 
 	public static String getRedisAddress() {
-		return environmentOrDefault(Constants.MED_IGNITE_ADDRESS, "http://localhost:6379");
+		return environmentOrDefault(Constants.MED_REDIS_ADDRESS, "http://localhost:6379");
 	}
 
 	public static String getAMQPublisherSubscriberAddress() {
