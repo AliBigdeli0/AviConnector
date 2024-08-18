@@ -10,3 +10,8 @@ logging:
     org:
       mongodb:
         driver: ERROR
+
+med:
+  memory:
+    type: Ignite
+    document: "valid types are: 'Ignite', 'Redis'"

@@ -1,4 +1,4 @@
-package com.med.con_common.message;
+package com.med.con_common.message.memory;
 
 
 import com.med.con_common.model.DbTime;
@@ -7,23 +7,20 @@ import com.med.con_common.utility.CommonEnvironmentVariables;
 import com.med.con_common.utility.ConsoleHelper;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
-import org.apache.ignite.IgniteException;
 import org.apache.ignite.Ignition;
 import org.apache.ignite.configuration.IgniteConfiguration;
 import org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi;
 import org.apache.ignite.spi.discovery.tcp.ipfinder.multicast.TcpDiscoveryMulticastIpFinder;
 import org.slf4j.Logger;
 
-import javax.cache.CacheException;
-import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IgniteManager implements Closeable {
+public class IgniteMemory implements Memory {
 	Ignite ignite;
 
-	public void init(Logger log) throws IgniteException {
+	public void init(Logger log) throws Exception {
 		final int TIMEOUTS = 8000;
 
 		final var host = getIgniteAddress().split(":")[0];
@@ -44,12 +41,12 @@ public class IgniteManager implements Closeable {
 		ConsoleHelper.logIfVerbose(log, "ignite has created!");
 	}
 
-	public void reinit(Logger log) throws IOException {
+	public void reinit(Logger log) throws Exception {
 		close();
 		init(log);
 	}
 
-	public <K, V> void putCache(String cacheName, K key, V value) throws CacheException {
+	public <K, V> void putCache(String cacheName, K key, V value) throws Exception {
 		final IgniteCache<K, V> cache = ignite.getOrCreateCache(cacheName);
 		cache.put(key, value);
 	}

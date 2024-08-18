@@ -2,7 +2,7 @@ package com.med.con_data.queue;
 
 import com.med.con_common.db.DbManager;
 import com.med.con_common.message.AMQPublisherSubscriber;
-import com.med.con_common.message.IgniteManager;
+import com.med.con_common.message.memory.Memory;
 import com.med.con_common.model.DbComment;
 import com.med.con_common.model.DbDepth;
 import com.med.con_common.model.DbTime;
@@ -36,7 +36,7 @@ public class MessageParser {
 		this.well = well;
 	}
 
-	public void ParseQueue(final byte[] msg, final IgniteManager igniteManager) throws Exception {
+	public void ParseQueue(final byte[] msg, final Memory igniteMemory) throws Exception {
 		lock.lock();
 		try {
 			ConsoleHelper.logIfVerbose(log, "the message counter is : {}", counter.incrementAndGet());
@@ -48,7 +48,7 @@ public class MessageParser {
 
 			commentActions(jsonTimeDbMsg);
 			depthActions(jsonTimeDbMsg);
-			timeActions(jsonTimeDbMsg, igniteManager);
+			timeActions(jsonTimeDbMsg, igniteMemory);
 		} finally {
 			lock.unlock();
 		}
@@ -97,11 +97,11 @@ public class MessageParser {
 		}
 	}
 
-	private void timeActions(final DbTime jsonTimeDbMsg, IgniteManager igniteManager) throws IOException {
-		igniteManager.pushTimeToMemory(jsonTimeDbMsg, well);
-		if (igniteManager.sizeOfMemory(well) > CommonEnvironmentVariables.getDataCacheSize()) {
+	private void timeActions(final DbTime jsonTimeDbMsg, Memory igniteMemory) throws IOException {
+		igniteMemory.pushTimeToMemory(jsonTimeDbMsg, well);
+		if (igniteMemory.sizeOfMemory(well) > CommonEnvironmentVariables.getDataCacheSize()) {
 			try (var dbMan = new DbManager()) {
-				var list = igniteManager.readAllCache(well);
+				var list = igniteMemory.readAllCache(well);
 				dbMan.bulkTimeDb(list);
 			}
 		}
@@ -116,7 +116,7 @@ public class MessageParser {
 		return new String(decompressMsg);
 	}
 
-	public void ParseMessageStream(final ActiveMQStreamMessage stream, final IgniteManager igniteManager) throws Exception {
+	public void ParseMessageStream(final ActiveMQStreamMessage stream, final Memory igniteMemory) throws Exception {
 		try (var outputStream = new ByteArrayOutputStream()) {
 			final byte[] buffer = new byte[0xfffff];
 			int bytesRead;
@@ -125,7 +125,7 @@ public class MessageParser {
 				outputStream.write(buffer, 0, bytesRead);
 			}
 
-			ParseQueue(outputStream.toByteArray(), igniteManager);
+			ParseQueue(outputStream.toByteArray(), igniteMemory);
 		}
 	}
 }

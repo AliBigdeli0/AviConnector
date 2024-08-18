@@ -1,5 +1,6 @@
 package com.med.con_manager.utility;
 
+import com.med.con_common.message.memory.MemoryType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

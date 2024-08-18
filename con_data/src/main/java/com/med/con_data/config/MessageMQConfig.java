@@ -1,11 +1,13 @@
 package com.med.con_data.config;
 
+import com.med.con_common.message.memory.MemoryType;
 import com.med.con_common.model.DbWell;
 import com.med.con_data.queue.ClientConsumer;
 import com.med.con_data.queue.MessageParser;
 import com.med.con_data.utility.EnvironmentVariables;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,6 +23,9 @@ public class MessageMQConfig {
 	@Autowired
 	DbWell getWell;
 
+	@Value("${med.memory.type}")
+	public MemoryType memoryType;
+
 	@Bean
 	public MessageParser messageParser() throws IOException {
 		return new MessageParser(getWell);
@@ -28,6 +33,6 @@ public class MessageMQConfig {
 
 	@Bean
 	public ClientConsumer consumer() throws Exception {
-		return new ClientConsumer(messageParser(), environmentVariables, getWell);
+		return new ClientConsumer(messageParser(), environmentVariables, getWell, memoryType);
 	}
 }

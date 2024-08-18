@@ -1,17 +1,22 @@
 package com.med.con_data.queue;
 
-import com.med.con_common.message.IgniteManager;
+import com.med.con_common.message.memory.Memory;
+import com.med.con_common.message.memory.MemoryType;
+import com.med.con_common.model.DbTime;
 import com.med.con_common.model.DbWell;
 import com.med.con_common.utility.ConsoleHelper;
+import com.med.con_common.utility.MemoryUtil;
 import com.med.con_data.utility.EnvironmentVariables;
 import jakarta.jms.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQStreamMessage;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -24,13 +29,15 @@ public class ClientConsumer implements Runnable, MessageListener, Closeable {
 
 	private final MessageParser messageParser;
 	private final EnvironmentVariables environmentVariables;
-	private IgniteManager igniteManager = null;
+	private Memory memory = null;
 	private final DbWell well;
+	private final MemoryType memoryType;
 
-	public ClientConsumer(MessageParser msgParser, EnvironmentVariables environmentVariables, DbWell well) throws Exception {
+	public ClientConsumer(MessageParser msgParser, EnvironmentVariables environmentVariables, DbWell well , MemoryType memoryType) throws Exception {
 		messageParser = msgParser;
 		this.environmentVariables = environmentVariables;
 		this.well = well;
+		this.memoryType = memoryType;
 	}
 
 	private void ReinitConnections(String queueAddress) throws Exception {
@@ -52,16 +59,16 @@ public class ClientConsumer implements Runnable, MessageListener, Closeable {
 
 	private void initIgnite() throws IOException {
 		try {
-			if (this.igniteManager != null) {
-				this.igniteManager.close();
-				this.igniteManager = null;
+			if (this.memory != null) {
+				this.memory.close();
+				this.memory = null;
 				ConsoleHelper.logIfVerbose(log, "ignite is closed, going to create new connection!");
 			}
-			this.igniteManager = new IgniteManager();
-			this.igniteManager.init(log);
+			this.memory = MemoryUtil.createMemory(memoryType);
+			this.memory.init(log);
 			ConsoleHelper.logIfVerbose(log, "ignite manager created and initialized!");
 
-			if (this.igniteManager.isOffline(well)) throw new IOException("WARNING => the ignite is not available");
+			if (this.memory.isOffline(well)) throw new IOException("WARNING => the ignite is not available");
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
 			throw new IOException("WARNING => ignite is not available");
@@ -104,7 +111,7 @@ public class ClientConsumer implements Runnable, MessageListener, Closeable {
 				log.error("the received message is empty!");
 				break;
 			}
-			if (igniteManager.isOffline(well)) {
+			if (memory.isOffline(well)) {
 				throw new IOException("WARNING => error in get access to ignite");
 			}
 			else {
@@ -117,7 +124,7 @@ public class ClientConsumer implements Runnable, MessageListener, Closeable {
 	public void onMessage(Message message) {
 		if (message instanceof ActiveMQStreamMessage streamMessage) {
 			try {
-				messageParser.ParseMessageStream(streamMessage, igniteManager);
+				messageParser.ParseMessageStream(streamMessage, memory);
 			} catch (Exception e) {
 				log.error(e.getMessage());
 			}

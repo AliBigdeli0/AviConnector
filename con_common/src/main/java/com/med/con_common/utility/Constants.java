@@ -8,6 +8,7 @@ public final class Constants {
 	public static final String MONGO_WELL_NAME = "wells";
 	public static final String MED_MONGO_CONN_STR = "MED_MONGO_CONN_STR";
 	public static final String MED_IGNITE_ADDRESS = "MED_IGNITE_ADDRESS";
+	public static final String MED_REDIS_ADDRESS = "MED_REDIS_ADDRESS";
 	public static final String MED_VERBOSE = "MED_VERBOSE";
 
 	private static String getOs() {

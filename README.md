@@ -25,6 +25,10 @@
   - [ ] Add Recreate Jobs To The Web Configuration
   - [ ] Check Live Data by Send Health Check
 - [x] Separate Project in Different Path
+- [ ] Change Memory Catch to Redis
+  - [ ] Change In Connectors (JAVA)
+  - [ ] Change In AVIData (C#)
+  - [ ] Test Connections In Windows
 - [ ] Deploy
   - [x] Deploy Jar Files With Batch File
   - [x] Separate Lib Files From Con_Data
