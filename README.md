@@ -128,3 +128,10 @@ make dm # or make deploy_manager
 # to build the connector data
 make dd # or make deploy_data
 ```
+
+## Redis Connection Problem
+By default, you can not connect to its port from another host, to connect from another host on **Windows** the port should be forwarded to the `6369`(the redis default port). To do that run following command on powershell or cmd: 
+
+```shell
+PS C:\Users\Administrator> netsh interface portproxy add v4tov4 listenport=6380 listenaddress=0.0.0.0 connectport=6379 onnectaddress=127.0.0.1
+```
