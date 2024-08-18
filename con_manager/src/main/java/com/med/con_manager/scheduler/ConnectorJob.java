@@ -3,7 +3,7 @@ package com.med.con_manager.scheduler;
 import com.med.con_common.model.DbWell;
 import com.med.con_common.utility.CommonEnvironmentVariables;
 import com.med.con_common.utility.Constants;
-import com.med.con_manager.utility.ConsoleHelper;
+import com.med.con_common.utility.ConsoleHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.jobrunr.jobs.context.JobContext;
 

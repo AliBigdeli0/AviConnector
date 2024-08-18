@@ -9,6 +9,7 @@ import com.med.con_common.model.DbTime;
 import com.med.con_common.model.DbWell;
 import com.med.con_common.utility.CommonEnvironmentVariables;
 import com.med.con_common.utility.CompressionManager;
+import com.med.con_common.utility.ConsoleHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.activemq.command.ActiveMQStreamMessage;
 import org.apache.logging.log4j.util.Strings;
@@ -38,8 +39,7 @@ public class MessageParser {
 	public void ParseQueue(final byte[] msg, final IgniteManager igniteManager) throws Exception {
 		lock.lock();
 		try {
-			if (CommonEnvironmentVariables.getVerbose())
-				log.info("the message counter is : {}", counter.incrementAndGet());
+			ConsoleHelper.logIfVerbose(log, "the message counter is : {}", counter.incrementAndGet());
 
 			final var strMsg = getJsonFromBytes(msg);
 			final var jsonTimeDbMsg = DbTime.from(strMsg);
@@ -67,9 +67,7 @@ public class MessageParser {
 
 				lastDepth = currentDepth;
 
-				if(CommonEnvironmentVariables.getVerbose()){
-					log.info("==========> the depth value inserted : {}", jsonTimeDbMsg);
-				}
+				ConsoleHelper.logIfVerbose(log, "==========> the depth value inserted : {}", jsonTimeDbMsg);
 			}
 		}
 	}

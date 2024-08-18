@@ -2,6 +2,7 @@ package com.med.con_data.queue;
 
 import com.med.con_common.message.IgniteManager;
 import com.med.con_common.model.DbWell;
+import com.med.con_common.utility.ConsoleHelper;
 import com.med.con_data.utility.EnvironmentVariables;
 import jakarta.jms.*;
 import lombok.extern.slf4j.Slf4j;
@@ -39,11 +40,12 @@ public class ClientConsumer implements Runnable, MessageListener, Closeable {
 
 		this.conn = conFactory.createConnection();
 		this.conn.start();
+		ConsoleHelper.logIfVerbose(log, "AMQ connection is created!");
 
 		session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		final var destination = session.createQueue(this.environmentVariables.getQueueName());
 		consumer = session.createConsumer(destination);
-
+		ConsoleHelper.logIfVerbose(log, "AMQ consumer is created");
 
 		initIgnite();
 	}
@@ -53,9 +55,12 @@ public class ClientConsumer implements Runnable, MessageListener, Closeable {
 			if (this.igniteManager != null) {
 				this.igniteManager.close();
 				this.igniteManager = null;
+				ConsoleHelper.logIfVerbose(log, "ignite is closed, going to create new connection!");
 			}
 			this.igniteManager = new IgniteManager();
 			this.igniteManager.init();
+			ConsoleHelper.logIfVerbose(log, "ignite manager created and initialized!");
+
 			if (this.igniteManager.isOffline(well)) throw new IOException("WARNING => the ignite is not available");
 		} catch (IgniteException ex) {
 			log.error(ex.getMessage());
