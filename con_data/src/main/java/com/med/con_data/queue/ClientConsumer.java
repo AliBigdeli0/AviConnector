@@ -11,6 +11,7 @@ import org.apache.activemq.command.ActiveMQStreamMessage;
 import org.apache.ignite.IgniteException;
 import org.springframework.stereotype.Service;
 
+import javax.cache.Cache;
 import java.io.Closeable;
 import java.io.IOException;
 
@@ -58,11 +59,11 @@ public class ClientConsumer implements Runnable, MessageListener, Closeable {
 				ConsoleHelper.logIfVerbose(log, "ignite is closed, going to create new connection!");
 			}
 			this.igniteManager = new IgniteManager();
-			this.igniteManager.init();
+			this.igniteManager.init(log);
 			ConsoleHelper.logIfVerbose(log, "ignite manager created and initialized!");
 
 			if (this.igniteManager.isOffline(well)) throw new IOException("WARNING => the ignite is not available");
-		} catch (IgniteException ex) {
+		} catch (Exception ex) {
 			log.error(ex.getMessage());
 			throw new IOException("WARNING => ignite is not available");
 		}

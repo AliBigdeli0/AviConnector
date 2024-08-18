@@ -4,6 +4,7 @@ package com.med.con_common.message;
 import com.med.con_common.model.DbTime;
 import com.med.con_common.model.DbWell;
 import com.med.con_common.utility.CommonEnvironmentVariables;
+import com.med.con_common.utility.ConsoleHelper;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
 import org.apache.ignite.IgniteException;
@@ -14,11 +15,11 @@ import org.apache.ignite.configuration.ClientConfiguration;
 import org.apache.ignite.configuration.IgniteConfiguration;
 import org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi;
 import org.apache.ignite.spi.discovery.tcp.ipfinder.multicast.TcpDiscoveryMulticastIpFinder;
+import org.slf4j.Logger;
 
 import javax.cache.CacheException;
 import java.io.Closeable;
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,13 +28,13 @@ public class IgniteManager implements Closeable {
 	IgniteClient igniteClient;
 	Ignite ignite;
 
-	public void init() throws IgniteException {
+	public void init(Logger log) throws IgniteException {
 		final int TIMEOUTS = 2000;
 
 		var cfgClient = new ClientConfiguration().setAddresses(getIgniteAddress());
 		cfgClient.setTimeout(TIMEOUTS);
 		igniteClient = Ignition.startClient(cfgClient);
-		System.out.println("======> ignite client has created!");
+		ConsoleHelper.logIfVerbose(log, "ignite client has created!");
 
 		var cfg = new IgniteConfiguration();
 		cfg.setClientMode(true);
@@ -42,18 +43,18 @@ public class IgniteManager implements Closeable {
 		// Configure IP finder.
 		var ipFinder = new TcpDiscoveryMulticastIpFinder();
 		var host = getIgniteAddress().split(":")[0];
-		ipFinder.setAddresses(Collections.singletonList(host + ":47500..47509"));
+		ipFinder.setAddresses(Collections.singletonList(host + ":10000..10999"));
 		spi.setIpFinder(ipFinder);
 
 		cfg.setDiscoverySpi(spi);
 
 		ignite = Ignition.start(cfg);
-		System.out.println("======> ignite has created!");
+		ConsoleHelper.logIfVerbose(log, "ignite has created!");
 	}
 
-	public void reinit() throws IOException {
+	public void reinit(Logger log) throws IOException {
 		close();
-		init();
+		init(log);
 	}
 
 	public <K, V> void putCache(String cacheName, K key, V value) throws CacheException {

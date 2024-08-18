@@ -20,7 +20,7 @@ public class IgniteController {
 		try (var dbMan = new DbManager();
 		     var ignite = new IgniteManager();
 		) {
-			ignite.reinit();
+			ignite.reinit(log);
 			var well = dbMan.readWellWithId(wellId);
 			return Mono.just(ignite.sizeOfMemory(well));
 		} catch (Exception ex) {
@@ -32,7 +32,7 @@ public class IgniteController {
 	@GetMapping("/names")
 	public Mono<String> getNames() {
 		try (var ignite = new IgniteManager()) {
-			ignite.reinit();
+			ignite.reinit(log);
 			return Mono.just(Strings.join(ignite.getCacheNames(), ','));
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
@@ -43,7 +43,7 @@ public class IgniteController {
 	@GetMapping("/test")
 	public String testIgnite() {
 		try (var igniteManager = new IgniteManager()) {
-			igniteManager.init();
+			igniteManager.init(log);
 			igniteManager.putCache("test", "1", "13");
 			return igniteManager.getCache("test", "1");
 		} catch (Exception ex) {
