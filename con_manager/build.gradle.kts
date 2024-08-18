@@ -64,6 +64,9 @@ dependencies {
     // Mongodb
     implementation("org.mongodb:mongodb-driver-sync:5.1.3")
     implementation("org.mongodb:bson:5.1.3")
+
+    // Redis
+    implementation("redis.clients:jedis:5.1.4")
 }
 
 tasks.register<Copy>("moveJars") {

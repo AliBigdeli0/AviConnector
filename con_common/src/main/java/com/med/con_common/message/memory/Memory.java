@@ -12,7 +12,7 @@ public interface Memory extends Closeable {
 	void init(Logger log) throws Exception;
 	void reinit(Logger log) throws Exception;
 	<K, V> void putCache(String cacheName, K key, V value) throws Exception;
-	<K, V> V getCache(String cacheName, K key);
+	<K, V> V getCache(String cacheName, K key, Class<V> type) throws Exception;
 	boolean isOffline(DbWell well);
 	long sizeOfMemory(DbWell well);
 	void pushTimeToMemory(final DbTime newTimeData, final DbWell well) throws IOException;

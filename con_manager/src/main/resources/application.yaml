@@ -16,5 +16,5 @@ med:
       value: "InMemory"
       document: "valid types are: 'Mongodb','InMemory'"
   memory:
-    type: Ignite
+    type: Redis
     document: "valid types are: 'Ignite', 'Redis'"

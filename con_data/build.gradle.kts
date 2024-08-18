@@ -52,6 +52,9 @@ dependencies {
     // ignite
     implementation("org.apache.ignite:ignite-core:2.16.0")
     implementation("org.apache.ignite:ignite-spring:2.16.0")
+
+    // Redis
+    implementation("redis.clients:jedis:5.1.4")
 }
 
 tasks.register<Copy>("moveJars") {

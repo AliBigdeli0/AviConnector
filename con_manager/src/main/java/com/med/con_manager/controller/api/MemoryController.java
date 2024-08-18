@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/api/v1/ignite")
+@RequestMapping("/api/v1/memory")
 @Slf4j
-public class IgniteController {
+public class MemoryController {
 
 	@Value("${med.memory.type}")
 	public MemoryType memoryType;
@@ -23,11 +23,11 @@ public class IgniteController {
 	@GetMapping("/size")
 	public Mono<Long> getSize(@RequestParam("well_id") String wellId) {
 		try (var dbMan = new DbManager();
-		     var ignite = MemoryUtil.createMemory(memoryType);
+		     var memory = MemoryUtil.createMemory(memoryType);
 		) {
-			ignite.reinit(log);
+			memory.reinit(log);
 			var well = dbMan.readWellWithId(wellId);
-			return Mono.just(ignite.sizeOfMemory(well));
+			return Mono.just(memory.sizeOfMemory(well));
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
 		}
@@ -36,9 +36,9 @@ public class IgniteController {
 
 	@GetMapping("/names")
 	public Mono<String> getNames() {
-		try (var ignite = MemoryUtil.createMemory(memoryType)) {
-			ignite.reinit(log);
-			return Mono.just(Strings.join(ignite.getCacheNames(), ','));
+		try (var memory = MemoryUtil.createMemory(memoryType)) {
+			memory.reinit(log);
+			return Mono.just(Strings.join(memory.getCacheNames(), ','));
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
 		}
@@ -47,10 +47,10 @@ public class IgniteController {
 
 	@GetMapping("/test")
 	public String testIgnite() {
-		try (var igniteManager = MemoryUtil.createMemory(memoryType)) {
-			igniteManager.init(log);
-			igniteManager.putCache("test", "1", "13");
-			return igniteManager.getCache("test", "1");
+		try (var memory = MemoryUtil.createMemory(memoryType)) {
+			memory.init(log);
+			memory.putCache("test", "1", "13");
+			return memory.getCache("test", "1", String.class);
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
 		}

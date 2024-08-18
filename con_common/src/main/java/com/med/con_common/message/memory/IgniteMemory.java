@@ -51,7 +51,7 @@ public class IgniteMemory implements Memory {
 		cache.put(key, value);
 	}
 
-	public <K, V> V getCache(String cacheName, K key) {
+	public <K, V> V getCache(String cacheName, K key, Class<V> type) {
 		final IgniteCache<K, V> cache = ignite.getOrCreateCache(cacheName);
 		return cache.get(key);
 	}
