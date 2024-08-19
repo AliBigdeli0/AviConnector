@@ -38,7 +38,7 @@ module.exports = {
     plugins: [
         new ForkTSChecker(),
         new TSLintPlugin({
-        files: ['./src/**/*.ts', './src/**/*.tsx'],
+            files: ['./src/**/*.ts', './src/**/*.tsx'],
         })
     ]
 };
