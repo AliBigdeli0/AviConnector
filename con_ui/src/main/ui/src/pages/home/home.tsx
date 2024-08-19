@@ -1,10 +1,12 @@
 import './home.css';
 
 //
+// do not remove this
+import React from 'react';
 import { createRoot } from 'react-dom/client';
 
 const Home = () => {
-    return <div>home from react</div>;
+    return <div>home from react 111</div>;
 };
 
 const domNode = document.getElementById('root');
