@@ -8,13 +8,13 @@
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logs/con_manager.log</file>
+        <file>logs/con_ui.log</file>
         <encoder>
             <pattern>[%d{yyyy-MM-dd HH:mm:ss}] [%-5level] [%logger{36}] - %msg%n</pattern>
         </encoder>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>logs/con_manager-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>logs/con_ui-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxFileSize>1MB</maxFileSize>
             <maxHistory>10000</maxHistory> <!--in days-->
         </rollingPolicy>
