@@ -1,0 +1,5 @@
+application:
+  app: med_con_ui
+
+server:
+  port: ${MED_CON_UI_PORT:9005}
