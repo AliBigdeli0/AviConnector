@@ -82,6 +82,7 @@ tasks.named<JavaExec>("bootRun") {
     classpath = files(layout.buildDirectory.dir("lib_ui")) + sourceSets["main"].runtimeClasspath
     mainClass.set("com.med.con_ui.ConUI")
 
+    finalizedBy("moveJars")
 }
 
 tasks.withType<Test> {
