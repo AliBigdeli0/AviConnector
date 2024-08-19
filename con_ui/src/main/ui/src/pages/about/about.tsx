@@ -1,6 +1,7 @@
 import './about.css';
 
 //
+// do not remove this
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 

@@ -6,7 +6,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 
 const Home = () => {
-    return <div>home from react 111</div>;
+    return <div>home from react 777</div>;
 };
 
 const domNode = document.getElementById('root');
