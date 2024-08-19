@@ -2,12 +2,15 @@
 const path = require('path');
 
 module.exports = {
+    mode: "production",
+    
     entry: {
-        home: './src/pages/hoome/home.tsx',
-        about: './src/pages/About/home.tsx',
+        home: './src/pages/home/home.tsx',
+        about: './src/pages/about/about.tsx',
     },
+    
     output: {
-        path: path.resolve(__dirname, '/../resources/static/js'),
+        path: path.resolve(__dirname, '../resources/static/js'),
         filename: '[name].bundle.js',
     },
     resolve: {
