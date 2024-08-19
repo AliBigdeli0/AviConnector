@@ -33,10 +33,10 @@
   - [x] Deploy Jar Files With Batch File
   - [x] Separate Lib Files From Con_Data
   - [ ] Add Installer With ENV
-  - [ ] Test On Windows Server
+  - [x] Test On Windows Server
   - [ ] Test On Real Environment
-  - [ ] Distribute ActiveMQ On Server
-  - [ ] Check for Distributed RAM
+  - ~~Distribute ActiveMQ On Server~~
+  - [x] Check for Distributed RAM
 
 # General Notes
 
