@@ -3,14 +3,15 @@ import './menu.css';
 
 //
 import React, { useEffect, useMemo, useState } from 'react';
-import GraphbarIcon from '@atlaskit/icon/glyph/graph-bar';
 import UserIcon from '@atlaskit/icon/glyph/user-avatar-circle';
 
 import { IconButton } from '@atlaskit/button/new';
 import { Box, Inline, xcss, Stack, Text } from '@atlaskit/primitives';
-import Heading from '@atlaskit/heading';
+import { MainBodyProps } from './mainbody';
 
-export const menu = () => {
+export class MenuProps extends MainBodyProps {}
+
+export const menu = (props: MenuProps) => {
     const [timeStr, setTimeStr] = useState('');
 
     useEffect(() => {

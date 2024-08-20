@@ -8,9 +8,13 @@ import Button from '@atlaskit/button/new';
 import '@atlaskit/css-reset';
 import { Box } from '@atlaskit/primitives';
 import { InitTheme } from '../../utility/theme';
+import { CommonProps } from '../../utility/common_props';
 
-const Home = () => {
+export class HomeProps implements CommonProps {}
+
+const Home = (props: HomeProps) => {
     return InitTheme(
+        props,
         <Box padding="space.025">
             <Button appearance="primary" spacing="compact">
                 My Button inside theming
