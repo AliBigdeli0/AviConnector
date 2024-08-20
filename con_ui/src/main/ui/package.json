@@ -2,8 +2,7 @@
   "name": "con_ui",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {
-  },
+  "scripts": {},
   "keywords": [],
   "author": "Ali Bigdeli (email: alibigdeli66@gmail.com)",
   "license": "ISC",
@@ -35,6 +34,13 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
+    "@atlaskit/app-provider": "^1.4.0",
+    "@atlaskit/button": "^20.1.0",
+    "@atlaskit/css-reset": "^6.10.1",
+    "@atlaskit/primitives": "^12.0.1",
+    "@atlaskit/side-navigation": "^3.4.2",
+    "@atlaskit/theme": "^13.0.0",
+    "@atlaskit/tokens": "^1.59.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   }

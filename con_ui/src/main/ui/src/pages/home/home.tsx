@@ -4,9 +4,19 @@ import './home.css';
 // do not remove this
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import Button from '@atlaskit/button/new';
+import '@atlaskit/css-reset';
+import { Box } from '@atlaskit/primitives';
+import { InitTheme } from '../../utility/theme';
 
 const Home = () => {
-    return <div>home from react 777</div>;
+    return InitTheme(
+        <Box padding="space.025">
+            <Button appearance="primary" spacing="compact">
+                My Button inside theming
+            </Button>
+        </Box>
+    );
 };
 
 const domNode = document.getElementById('root');
