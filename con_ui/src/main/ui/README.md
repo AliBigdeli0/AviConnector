@@ -10,3 +10,4 @@ import { IconButton } from '@atlaskit/button/new';
 ```
 
 [Atlassian Icon Explorer](https://atlassian.design/components/icon/icon-explorer)
+[Atlassian Icon Object](https://atlassian.design/components/icon-object/icon-explorer)

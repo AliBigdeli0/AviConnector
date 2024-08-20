@@ -1,14 +1,14 @@
 // imports
 import ThemeProvider from '@atlaskit/app-provider';
 
-import { Box, Grid, Stack } from '@atlaskit/primitives';
-import React, { useEffect } from 'react';
-import { sidebar } from './sidebar';
+import { Grid } from '@atlaskit/primitives';
+import React from 'react';
+import { menu } from './menu';
 
 export const mainBody = (inside: React.ReactElement) => {
     return (
         <Grid gap="space.0">
-            {sidebar()}
+            {menu()}
             {inside}
         </Grid>
     );

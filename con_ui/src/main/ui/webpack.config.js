@@ -32,7 +32,20 @@ module.exports = {
             {
                 test: /\.svg$/,
                 use: ['@svgr/webpack', 'url-loader'],
-            }
+            },
+            {
+                test: /\.(woff|woff2|eot|ttf|otf)$/,  
+                use: [
+                {
+                    loader: 'file-loader',
+                    options: {
+                        name: '[name].[ext]',          
+                        outputPath: path.resolve(__dirname, "..", "resources", "fonts"),          
+                        publicPath: path.resolve(__dirname, "..", "resources", "fonts"),           
+                    },
+                },
+                ],
+            },
         ],
     },
     plugins: [
