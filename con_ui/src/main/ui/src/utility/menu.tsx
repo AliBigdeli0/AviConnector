@@ -2,7 +2,7 @@
 import './menu.css';
 
 //
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import GraphbarIcon from '@atlaskit/icon/glyph/graph-bar';
 import UserIcon from '@atlaskit/icon/glyph/user-avatar-circle';
 
@@ -11,16 +11,34 @@ import { Box, Inline, xcss, Stack, Text } from '@atlaskit/primitives';
 import Heading from '@atlaskit/heading';
 
 export const menu = () => {
+    const [timeStr, setTimeStr] = useState('');
+
+    useEffect(() => {
+        const updateTime = () => {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+
+            setTimeStr(`${hours}:${minutes}:${seconds}`);
+        };
+
+        updateTime();
+        const timerId = setInterval(updateTime, 1000);
+
+        return () => clearInterval(timerId);
+    }, []);
+
     const logoElements = () => {
         return (
             <>
                 <Inline>
-                    <IconButton
+                    {/* <IconButton
                         icon={GraphbarIcon}
                         color="var(--ds-background-brand-bold)"
                         label="Edit"
                         spacing="compact"
-                        appearance="subtle"></IconButton>
+                        appearance="subtle"></IconButton> */}
                     <span
                         style={{
                             fontSize: '30px',
@@ -49,7 +67,7 @@ export const menu = () => {
                             appearance="default"></IconButton>
 
                         <span style={{ fontFamily: 'orbitron' }}>
-                            Well Viewer
+                            {timeStr}
                         </span>
                     </Stack>
                 </Box>
