@@ -1,4 +1,7 @@
 //
+import HomeIcon from '@atlaskit/icon/glyph/home';
+import TeamsIcon from '@atlaskit/icon/glyph/teams';
+
 import './menu.css';
 
 //
@@ -6,10 +9,13 @@ import React, { useEffect, useMemo, useState } from 'react';
 import UserIcon from '@atlaskit/icon/glyph/user-avatar-circle';
 
 import { IconButton } from '@atlaskit/button/new';
+import Button from '@atlaskit/button/new';
 import { Box, Inline, xcss, Stack, Text } from '@atlaskit/primitives';
 import { MainBodyProps } from './mainbody';
+import Lozenge from '@atlaskit/lozenge';
+import { AtlassianNavigation } from '@atlaskit/atlassian-navigation';
 
-export class MenuProps extends MainBodyProps {}
+export interface MenuProps extends MainBodyProps {}
 
 export const menu = (props: MenuProps) => {
     const [timeStr, setTimeStr] = useState('');
@@ -46,7 +52,7 @@ export const menu = (props: MenuProps) => {
                             fontWeight: 'bold',
                             color: 'var(--ds-background-brand-bold)',
                         }}>
-                        Well Viewer
+                        Well Monitor
                     </span>
                 </Inline>
             </>
@@ -54,16 +60,25 @@ export const menu = (props: MenuProps) => {
     };
 
     const menuElements = () => {
-        return <></>;
+        return (
+            <Inline alignBlock="start" alignInline="start">
+                <></>
+            </Inline>
+        );
     };
 
     const rightSideElements = () => {
         return (
-            <Stack alignInline="center">
-                <Box
-                    xcss={xcss({
-                        display: 'flex',
-                    })}>
+            <Stack
+                alignInline="center"
+                xcss={xcss({
+                    borderLeftStyle: 'solid',
+                    borderLeftWidth: '1px',
+                    borderLeftColor: 'color.border.accent.gray',
+                    paddingLeft: 'space.100',
+                    marginTop: 'space.025',
+                })}>
+                <Box xcss={xcss({ display: 'flex' })}>
                     <Stack alignInline="center" alignBlock="end">
                         <IconButton
                             icon={UserIcon}
@@ -71,13 +86,9 @@ export const menu = (props: MenuProps) => {
                             spacing="compact"
                             appearance="default"></IconButton>
 
-                        <span
-                            style={{
-                                fontFamily: 'cursive',
-                                fontWeight: 'bold',
-                            }}>
+                        <Lozenge appearance="inprogress" isBold>
                             {timeStr}
-                        </span>
+                        </Lozenge>
                     </Stack>
                 </Box>
             </Stack>

@@ -6,7 +6,7 @@ import React from 'react';
 import { menu } from './menu';
 import { ThemeProps } from './theme';
 
-export class MainBodyProps extends ThemeProps {}
+export interface MainBodyProps extends ThemeProps {}
 
 export const mainBody = (props: MainBodyProps, inside: React.ReactElement) => {
     return (
