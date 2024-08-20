@@ -1,24 +1,26 @@
 //
-import HomeIcon from '@atlaskit/icon/glyph/home';
-import TeamsIcon from '@atlaskit/icon/glyph/teams';
-
+import MenuIcon from '@atlaskit/icon/glyph/menu';
 import './menu.css';
 
 //
-import React, { useEffect, useMemo, useState } from 'react';
+import React from 'react';
+import { useEffect, useState } from 'react';
 import UserIcon from '@atlaskit/icon/glyph/user-avatar-circle';
 
 import { IconButton } from '@atlaskit/button/new';
 import Button from '@atlaskit/button/new';
-import { Box, Inline, xcss, Stack, Text } from '@atlaskit/primitives';
+
+import { Box, Inline, xcss, Stack } from '@atlaskit/primitives';
 import { MainBodyProps } from './mainbody';
 import Lozenge from '@atlaskit/lozenge';
-import { AtlassianNavigation } from '@atlaskit/atlassian-navigation';
+import { ButtonItem, MenuGroup, Section } from '@atlaskit/menu';
+import Popup from '@atlaskit/popup';
 
 export interface MenuProps extends MainBodyProps {}
 
 export const Menu = (props: MenuProps) => {
     const [timeStr, setTimeStr] = useState('');
+    const [isOpenMenu, setIsOpenMenu] = useState(false);
 
     useEffect(() => {
         const updateTime = () => {
@@ -61,9 +63,21 @@ export const Menu = (props: MenuProps) => {
 
     const menuElements = () => {
         return (
-            <Inline alignBlock="start" alignInline="start">
-                <></>
-            </Inline>
+            <Popup
+                isOpen={isOpenMenu}
+                onClose={() => setIsOpenMenu(false)}
+                content={() => <></>}
+                placement="bottom-start"
+                trigger={(triggerProps) => (
+                    <Button
+                        {...triggerProps}
+                        isSelected={isOpenMenu}
+                        iconBefore={MenuIcon}
+                        onClick={() => setIsOpenMenu(!isOpenMenu)}>
+                        Menu
+                    </Button>
+                )}
+            />
         );
     };
 
