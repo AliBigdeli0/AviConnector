@@ -32,13 +32,13 @@ export const menu = () => {
     const logoElements = () => {
         return (
             <>
-                <Inline>
-                    {/* <IconButton
-                        icon={GraphbarIcon}
-                        color="var(--ds-background-brand-bold)"
-                        label="Edit"
-                        spacing="compact"
-                        appearance="subtle"></IconButton> */}
+                <Inline
+                    xcss={xcss({
+                        borderRightStyle: 'solid',
+                        borderRightWidth: '1px',
+                        borderRightColor: 'color.border.accent.gray',
+                        paddingRight: 'space.100',
+                    })}>
                     <span
                         style={{
                             fontSize: '30px',
@@ -50,6 +50,10 @@ export const menu = () => {
                 </Inline>
             </>
         );
+    };
+
+    const menuElements = () => {
+        return <></>;
     };
 
     const rightSideElements = () => {
@@ -86,6 +90,7 @@ export const menu = () => {
             })}>
             <Inline grow="fill" spread="space-between">
                 {logoElements()}
+                {menuElements()}
                 {rightSideElements()}
             </Inline>
         </Box>
