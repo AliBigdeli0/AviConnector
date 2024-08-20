@@ -70,7 +70,11 @@ export const menu = () => {
                             spacing="compact"
                             appearance="default"></IconButton>
 
-                        <span style={{ fontFamily: 'orbitron' }}>
+                        <span
+                            style={{
+                                fontFamily: 'cursive',
+                                fontWeight: 'bold',
+                            }}>
                             {timeStr}
                         </span>
                     </Stack>
