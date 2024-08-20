@@ -10,3 +10,7 @@ deploy_manager::
 dd:: deploy_data
 deploy_data::
 	@cd $(DEPLOY_PATH); make deploy_con_data_jar;
+
+run_connector::
+	@./build_copy_con_data.sh
+	@./gradlew -p con_manager bootRun
