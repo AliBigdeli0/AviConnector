@@ -27,17 +27,24 @@ export const InitTheme = (props: ThemeProps, inside: React.ReactElement) => {
 
     const showSpinner = () => {
         return (
-            <Stack
-                alignBlock="center"
-                alignInline="center"
-                xcss={xcss({
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    paddingTop: 'space.800',
-                })}>
-                <Spinner size="large" label="Loading" />
-                <Lozenge appearance="default">{props.showSpinner}</Lozenge>
-            </Stack>
+            <div
+                style={{
+                    position: 'absolute',
+                    top: '47%',
+                    left: '47%',
+                    transform: 'transform(-50%, -50%)',
+                }}>
+                <Stack
+                    alignBlock="center"
+                    alignInline="center"
+                    xcss={xcss({
+                        alignItems: 'center',
+                        textAlign: 'center',
+                    })}>
+                    <Spinner size="large" label="Loading" />
+                    <Lozenge appearance="default">{props.showSpinner}</Lozenge>
+                </Stack>
+            </div>
         );
     };
 
