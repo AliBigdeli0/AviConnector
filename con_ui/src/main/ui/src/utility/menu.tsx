@@ -17,7 +17,7 @@ import { AtlassianNavigation } from '@atlaskit/atlassian-navigation';
 
 export interface MenuProps extends MainBodyProps {}
 
-export const menu = (props: MenuProps) => {
+export const Menu = (props: MenuProps) => {
     const [timeStr, setTimeStr] = useState('');
 
     useEffect(() => {

@@ -4,7 +4,7 @@ import ThemeProvider from '@atlaskit/app-provider';
 import { css, jsx } from '@emotion/react';
 import { Grid, Inline, Stack, xcss } from '@atlaskit/primitives';
 import React from 'react';
-import { mainBody } from './mainbody';
+import { MainBody } from './mainbody';
 import { MsgType, ReactSetter } from './types';
 import { token } from '@atlaskit/tokens';
 import Spinner, { type Size } from '@atlaskit/spinner';
@@ -14,17 +14,10 @@ import Lozenge from '@atlaskit/lozenge';
 export interface ThemeProps {
     showSpinner: MsgType;
     setShowSpinner: ReactSetter<MsgType>;
+    inside: React.ReactElement;
 }
 
-export const InitTheme = (props: ThemeProps, inside: React.ReactElement) => {
-    const itemStyles = {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        gap: token('space.100', '8px'),
-        flexDirection: 'column',
-    };
-
+export const InitTheme = (props: ThemeProps) => {
     const showSpinner = () => {
         return (
             <div
@@ -52,7 +45,7 @@ export const InitTheme = (props: ThemeProps, inside: React.ReactElement) => {
         if (props.showSpinner?.trim() !== '') {
             return showSpinner();
         }
-        return mainBody(props, inside);
+        return <MainBody {...props} />;
     };
     return (
         <ThemeProvider defaultColorMode="dark">

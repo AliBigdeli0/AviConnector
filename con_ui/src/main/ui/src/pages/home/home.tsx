@@ -14,22 +14,28 @@ import { MsgType } from '../../utility/types';
 export interface HomeProps extends CommonProps {}
 
 const Home = (props: HomeProps) => {
-    const [showSpinner, setShowSpinner] = useState<MsgType>('show data...');
-    return InitTheme(
-        { showSpinner, setShowSpinner, ...props },
-        <Box padding="space.025">
-            <Button
-                appearance="primary"
-                spacing="compact"
-                onClick={() => {
-                    setShowSpinner('show data...');
-                    setTimeout(() => {
-                        setShowSpinner('');
-                    }, 5000);
-                }}>
-                My Button inside theming
-            </Button>
-        </Box>
+    const [showSpinner, setShowSpinner] = useState<MsgType>('');
+    return (
+        <InitTheme
+            showSpinner={showSpinner}
+            setShowSpinner={setShowSpinner}
+            {...props}
+            inside={
+                <Box padding="space.025">
+                    <Button
+                        appearance="primary"
+                        spacing="compact"
+                        onClick={() => {
+                            setShowSpinner('show data...');
+                            setTimeout(() => {
+                                setShowSpinner('');
+                            }, 5000);
+                        }}>
+                        My Button inside theming
+                    </Button>
+                </Box>
+            }
+        />
     );
 };
 

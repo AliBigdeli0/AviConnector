@@ -3,16 +3,16 @@ import ThemeProvider from '@atlaskit/app-provider';
 
 import { Grid } from '@atlaskit/primitives';
 import React from 'react';
-import { menu } from './menu';
+import { Menu } from './menu';
 import { ThemeProps } from './theme';
 
 export interface MainBodyProps extends ThemeProps {}
 
-export const mainBody = (props: MainBodyProps, inside: React.ReactElement) => {
+export const MainBody = (props: MainBodyProps) => {
     return (
         <Grid gap="space.0">
-            {menu(props)}
-            {inside}
+            {<Menu {...props} />}
+            {props.inside}
         </Grid>
     );
 };
