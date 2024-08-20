@@ -10,6 +10,7 @@ import { token } from '@atlaskit/tokens';
 import Spinner, { type Size } from '@atlaskit/spinner';
 import { CSSProperties } from '@atlaskit/atlassian-navigation/dist/types/theme/types';
 import Lozenge from '@atlaskit/lozenge';
+import Blanket from '@atlaskit/blanket';
 
 export interface ThemeProps {
     showSpinner: MsgType;
@@ -20,24 +21,40 @@ export interface ThemeProps {
 export const InitTheme = (props: ThemeProps) => {
     const showSpinner = () => {
         return (
-            <div
-                style={{
-                    position: 'absolute',
-                    top: '47%',
-                    left: '47%',
-                    transform: 'transform(-50%, -50%)',
-                }}>
-                <Stack
-                    alignBlock="center"
-                    alignInline="center"
-                    xcss={xcss({
-                        alignItems: 'center',
-                        textAlign: 'center',
-                    })}>
-                    <Spinner size="large" label="Loading" />
-                    <Lozenge appearance="default">{props.showSpinner}</Lozenge>
-                </Stack>
-            </div>
+            <>
+                <div
+                    style={{
+                        position: 'fixed',
+                        top: '0',
+                        left: '0',
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        zIndex: '700',
+                    }}>
+                    <Stack
+                        alignBlock="center"
+                        alignInline="center"
+                        xcss={xcss({
+                            alignItems: 'center',
+                            textAlign: 'center',
+                            zIndex: 'tooltip',
+                        })}>
+                        <Spinner
+                            size="large"
+                            label="Loading"
+                            appearance="inherit"
+                        />
+                        <Lozenge appearance="default">
+                            {props.showSpinner}
+                        </Lozenge>
+                    </Stack>
+                </div>
+                <Blanket
+                    isTinted={true}
+                    shouldAllowClickThrough={false}></Blanket>
+            </>
         );
     };
 
@@ -45,11 +62,12 @@ export const InitTheme = (props: ThemeProps) => {
         if (props.showSpinner?.trim() !== '') {
             return showSpinner();
         }
-        return <MainBody {...props} />;
+        return <>{/*nothing*/}</>;
     };
     return (
         <ThemeProvider defaultColorMode="dark">
             {showMainBodyOrSpinner()}
+            <MainBody {...props} />
         </ThemeProvider>
     );
 };

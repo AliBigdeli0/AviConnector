@@ -21,7 +21,7 @@ const Home = (props: HomeProps) => {
             setShowSpinner={setShowSpinner}
             {...props}
             inside={
-                <Box padding="space.025">
+                <Box padding="space.100">
                     <Button
                         appearance="primary"
                         spacing="compact"
@@ -31,7 +31,10 @@ const Home = (props: HomeProps) => {
                                 setShowSpinner('');
                             }, 5000);
                         }}>
-                        My Button inside theming
+                        Show Spinner
+                    </Button>
+                    <Button appearance="primary" onClick={() => {}}>
+                        Show Message
                     </Button>
                 </Box>
             }
