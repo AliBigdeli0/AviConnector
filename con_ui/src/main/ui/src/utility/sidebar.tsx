@@ -1,23 +1,65 @@
 //
 import React from 'react';
 
-import ChartIcon from '@atlaskit/icon/glyph/list';
+import GraphbarIcon from '@atlaskit/icon/glyph/graph-bar';
+import UserIcon from '@atlaskit/icon/glyph/user-avatar-circle';
+
 import { IconButton } from '@atlaskit/button/new';
-import { Bleed, Box, xcss } from '@atlaskit/primitives';
+import {
+    Bleed,
+    Box,
+    Inline,
+    xcss,
+    Text,
+    Stack,
+    Flex,
+} from '@atlaskit/primitives';
 
 export const sidebar = () => {
+    const logoElements = () => {
+        return (
+            <Inline>
+                <IconButton
+                    icon={GraphbarIcon}
+                    label="Edit"
+                    spacing="compact"
+                    appearance="subtle"></IconButton>
+                <Text size="large">Well Viewer</Text>
+            </Inline>
+        );
+    };
+
+    const rightSideElements = () => {
+        return (
+            <Stack alignInline="center">
+                <Box
+                    xcss={xcss({
+                        display: 'flex',
+                    })}>
+                    <Stack alignBlock="end">
+                        <IconButton
+                            icon={UserIcon}
+                            label="User"
+                            spacing="compact"
+                            appearance="default"></IconButton>
+                    </Stack>
+                </Box>
+            </Stack>
+        );
+    };
+
     return (
         <Box
-            backgroundColor="color.background.brand.subtlest"
             xcss={xcss({
-                borderRadius: 'border.radius.0',
+                borderBottomWidth: '1px',
+                borderBottomStyle: 'solid',
+                borderBottomColor: 'color.border.accent.gray',
                 width: '100%',
             })}>
-            <IconButton
-                icon={ChartIcon}
-                label="Edit"
-                spacing="compact"
-                appearance="subtle"></IconButton>
+            <Inline grow="fill" spread="space-between">
+                {logoElements()}
+                {rightSideElements()}
+            </Inline>
         </Box>
     );
 };
