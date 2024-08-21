@@ -72,3 +72,17 @@ setShowSpinner('show data...');
 // to hide spinner
 setShowSpinner('');
 ```
+
+## Full Size Screen
+
+to get full size screen is like:
+
+```javascript
+<Box
+    id="main_home"
+    padding="space.100"
+    xcss={xcss({
+        backgroundColor: 'color.background.accent.red.bolder',
+        height: `calc(100vh - ${Constant.MenuSize + 1}px)`,
+    })}></Box>
+```

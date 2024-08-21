@@ -19,13 +19,13 @@ import Lozenge from '@atlaskit/lozenge';
 import Popup from '@atlaskit/popup';
 import Button from '@atlaskit/button/new';
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
+import { Constant } from '../utility/constants';
 
 export interface MenuProps extends MainBodyProps {}
 
 export const Menu = (props: MenuProps) => {
     const [timeStr, setTimeStr] = useState('');
     const [isOpenMenu, setIsOpenMenu] = useState(false);
-    const headerHeight = '42px';
 
     useEffect(() => {
         const updateTime = () => {
@@ -59,7 +59,7 @@ export const Menu = (props: MenuProps) => {
 
                         verticalAlign: 'center',
                         alignContent: 'center',
-                        height: headerHeight,
+                        height: Constant.MenuSizePixcel,
                     })}>
                     <span
                         style={{
@@ -114,7 +114,7 @@ export const Menu = (props: MenuProps) => {
 
                     verticalAlign: 'center',
                     alignContent: 'center',
-                    height: headerHeight,
+                    height: Constant.MenuSizePixcel,
                 })}>
                 <Popup
                     isOpen={isOpenMenu}
@@ -149,7 +149,7 @@ export const Menu = (props: MenuProps) => {
 
                     verticalAlign: 'center',
                     alignContent: 'center',
-                    height: headerHeight,
+                    height: Constant.MenuSizePixcel,
                 })}>
                 <Breadcrumbs>
                     {props.PathItems.map((path) => {
@@ -171,7 +171,7 @@ export const Menu = (props: MenuProps) => {
 
                     paddingLeft: 'space.100',
 
-                    height: headerHeight,
+                    height: Constant.MenuSizePixcel,
                 })}>
                 <Box xcss={xcss({ display: 'flex' })}>
                     <Stack alignInline="center" alignBlock="end">
