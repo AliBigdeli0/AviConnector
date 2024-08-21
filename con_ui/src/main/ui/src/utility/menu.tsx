@@ -1,20 +1,23 @@
 //
 import MenuIcon from '@atlaskit/icon/glyph/menu';
+import UserIcon from '@atlaskit/icon/glyph/user-avatar-circle';
+import HomeIcon from '@atlaskit/icon/glyph/home';
+import InfoIcon from '@atlaskit/icon/glyph/info';
+
 import './menu.css';
 
 //
 import React from 'react';
-import { useEffect, useState } from 'react';
-import UserIcon from '@atlaskit/icon/glyph/user-avatar-circle';
-
+import { token } from '@atlaskit/tokens';
 import { IconButton } from '@atlaskit/button/new';
-import Button from '@atlaskit/button/new';
-
-import { Box, Inline, xcss, Stack } from '@atlaskit/primitives';
 import { MainBodyProps } from './mainbody';
+import { useEffect, useState } from 'react';
+import { MenuGroup, ButtonItem, Section } from '@atlaskit/menu';
+import { Box, Inline, xcss, Stack } from '@atlaskit/primitives';
+
 import Lozenge from '@atlaskit/lozenge';
-import { ButtonItem, MenuGroup, Section } from '@atlaskit/menu';
 import Popup from '@atlaskit/popup';
+import Button from '@atlaskit/button/new';
 
 export interface MenuProps extends MainBodyProps {}
 
@@ -38,46 +41,75 @@ export const Menu = (props: MenuProps) => {
         return () => clearInterval(timerId);
     }, []);
 
-    const logoElements = () => {
+    const leftElements = () => {
         return (
-            <>
-                <Inline
-                    xcss={xcss({
+            <Inline>
+                <span
+                    style={{
+                        fontSize: '30px',
+                        fontWeight: 'bold',
+                        color: token('color.background.brand.bold'),
                         borderRightStyle: 'solid',
                         borderRightWidth: '1px',
-                        borderRightColor: 'color.border.accent.gray',
-                        paddingRight: 'space.100',
-                    })}>
-                    <span
-                        style={{
-                            fontSize: '30px',
-                            fontWeight: 'bold',
-                            color: 'var(--ds-background-brand-bold)',
+                        borderRightColor: token('color.border.accent.gray'),
+                        paddingRight: token('space.100'),
+                        paddingLeft: token('space.100'),
+                    }}>
+                    Well Monitor
+                </span>
+
+                {menuElements()}
+            </Inline>
+        );
+    };
+
+    const menuItems = () => {
+        return (
+            <MenuGroup
+                maxWidth={400}
+                minWidth={150}
+                onClick={(e) => e.stopPropagation()}>
+                <Section>
+                    <ButtonItem iconBefore={<HomeIcon label="" />}>
+                        Home
+                    </ButtonItem>
+                </Section>
+                <Section hasSeparator>
+                    <ButtonItem
+                        iconBefore={<InfoIcon label="" />}
+                        onClick={() => {
+                            window.location.href = '/about';
                         }}>
-                        Well Monitor
-                    </span>
-                </Inline>
-            </>
+                        About
+                    </ButtonItem>
+                </Section>
+            </MenuGroup>
         );
     };
 
     const menuElements = () => {
         return (
-            <Popup
-                isOpen={isOpenMenu}
-                onClose={() => setIsOpenMenu(false)}
-                content={() => <></>}
-                placement="bottom-start"
-                trigger={(triggerProps) => (
-                    <Button
-                        {...triggerProps}
-                        isSelected={isOpenMenu}
-                        iconBefore={MenuIcon}
-                        onClick={() => setIsOpenMenu(!isOpenMenu)}>
-                        Menu
-                    </Button>
-                )}
-            />
+            <Box
+                xcss={xcss({
+                    marginTop: 'space.075',
+                })}>
+                <Popup
+                    isOpen={isOpenMenu}
+                    onClose={() => setIsOpenMenu(false)}
+                    content={menuItems}
+                    placement="bottom-start"
+                    trigger={(triggerProps) => (
+                        <Button
+                            {...triggerProps}
+                            isSelected={isOpenMenu}
+                            iconBefore={MenuIcon}
+                            appearance="subtle"
+                            onClick={() => setIsOpenMenu(!isOpenMenu)}>
+                            Menu
+                        </Button>
+                    )}
+                />
+            </Box>
         );
     };
 
@@ -119,8 +151,7 @@ export const Menu = (props: MenuProps) => {
                 paddingBottom: 'space.025',
             })}>
             <Inline grow="fill" spread="space-between">
-                {logoElements()}
-                {menuElements()}
+                {leftElements()}
                 {rightSideElements()}
             </Inline>
         </Box>
