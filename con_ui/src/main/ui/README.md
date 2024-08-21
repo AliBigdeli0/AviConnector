@@ -26,3 +26,49 @@ style={{
         zIndex: '700',
     }}
 ```
+
+## Alerts & Spinner
+
+### Alerts
+
+To create alerts first you need to add two variables in the parent `InitTheme` function.
+
+```js
+// for update
+const [updateParent, setUpdateParent] = useState(false);
+
+// stack of messages
+const [alertMsg, setAlertMsg] = useState < AlertMsgType > [];
+```
+
+To push message to alert section you can use the following code :
+
+```js
+alertMsg.push({
+    type: 'sucess',
+    title: 'test',
+    description: `${alertMsg.length}from description`,
+});
+setAlertMsg(alertMsg);
+
+// do not forget to update parent to see the alerts
+setUpdateParent(!updateParent);
+```
+
+### Spinner
+
+using spinner is much easier, just create a variable for `InitTheme` function :
+
+```js
+const [showSpinner, setShowSpinner] = useState < MsgType > '';
+```
+
+whenever you wanted to show alert fill it with a message:
+
+```js
+// to show message
+setShowSpinner('show data...');
+
+// to hide spinner
+setShowSpinner('');
+```

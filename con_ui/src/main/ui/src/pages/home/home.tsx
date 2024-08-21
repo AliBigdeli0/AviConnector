@@ -3,7 +3,7 @@ import '@atlaskit/css-reset';
 
 //
 // do not remove this
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 
 import { createRoot } from 'react-dom/client';
 import { Box } from '@atlaskit/primitives';
@@ -30,41 +30,13 @@ const Home = (props: HomeProps) => {
             setUpdate={setUpdateParent}
             PathItems={pathItems}
             {...props}
-            inside={
-                <Box padding="space.100">
-                    <Button
-                        appearance="primary"
-                        spacing="compact"
-                        onClick={() => {
-                            setShowSpinner('show data...');
-                            setTimeout(() => {
-                                setShowSpinner('');
-                            }, 5000);
-                        }}>
-                        Show Spinner
-                    </Button>
-                    <Button
-                        appearance="primary"
-                        onClick={() => {
-                            alertMsg.push({
-                                type: 'sucess',
-                                title: 'test',
-                                description: `${alertMsg.length}from description`,
-                            });
-                            setAlertMsg(alertMsg);
-                            setUpdateParent(!updateParent);
-                        }}>
-                        Show Message
-                    </Button>
-                </Box>
-            }
+            inside={<Box padding="space.100"></Box>}
         />
     );
 };
 
 const domNode = document.getElementById('root');
 if (domNode !== null) {
-    console.log('the api address is : ', CookieHelper.readApiAddress);
     const root = createRoot(domNode);
     root.render(<Home />);
 }
