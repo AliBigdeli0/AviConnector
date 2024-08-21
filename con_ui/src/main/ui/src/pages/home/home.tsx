@@ -1,4 +1,4 @@
-import './home.css';
+import '../../assets/scss/home.css';
 import '@atlaskit/css-reset';
 
 //
@@ -6,13 +6,10 @@ import '@atlaskit/css-reset';
 import React, { useState } from 'react';
 
 import { createRoot } from 'react-dom/client';
-import { Box } from '@atlaskit/primitives';
-import { InitTheme } from '../../utility/theme';
+import { Box, xcss } from '@atlaskit/primitives';
+import { InitTheme } from '../../header/theme';
 import { CommonProps } from '../../utility/common_props';
 import { MsgType, AlertMsgType } from '../../utility/types';
-
-import Button from '@atlaskit/button/new';
-import { CookieHelper } from '../../utility/cookie_helper';
 
 export interface HomeProps extends CommonProps {}
 
@@ -20,6 +17,7 @@ const Home = (props: HomeProps) => {
     const [showSpinner, setShowSpinner] = useState<MsgType>('');
     const [updateParent, setUpdateParent] = useState(false);
     const [alertMsg, setAlertMsg] = useState<AlertMsgType>([]);
+
     const pathItems = ['Home'];
     return (
         <InitTheme
@@ -30,7 +28,13 @@ const Home = (props: HomeProps) => {
             setUpdate={setUpdateParent}
             PathItems={pathItems}
             {...props}
-            inside={<Box padding="space.100"></Box>}
+            inside={
+                <Box
+                    padding="space.100"
+                    xcss={xcss({
+                        backgroundColor: 'color.background.accent.red.bolder',
+                    })}></Box>
+            }
         />
     );
 };

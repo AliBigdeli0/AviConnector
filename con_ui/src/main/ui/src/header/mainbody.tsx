@@ -1,8 +1,8 @@
 // imports
+import React from 'react';
 import ThemeProvider from '@atlaskit/app-provider';
 
 import { Grid } from '@atlaskit/primitives';
-import React from 'react';
 import { Menu } from './menu';
 import { ThemeProps } from './theme';
 

@@ -1,4 +1,4 @@
-import './about.css';
+import '../../assets/scss/about.css';
 import '@atlaskit/css-reset';
 
 //
@@ -6,7 +6,7 @@ import '@atlaskit/css-reset';
 import React, { useMemo, useState } from 'react';
 
 import { createRoot } from 'react-dom/client';
-import { InitTheme } from '../../utility/theme';
+import { InitTheme } from '../../header/theme';
 import { CommonProps } from '../../utility/common_props';
 import { MsgType, AlertMsgType } from '../../utility/types';
 

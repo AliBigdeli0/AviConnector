@@ -4,17 +4,18 @@ import DangerIcon from '@atlaskit/icon/glyph/select-clear';
 import InfoIcon from '@atlaskit/icon/glyph/warning';
 
 // imports
-import ThemeProvider from '@atlaskit/app-provider';
-
-import { Stack, xcss } from '@atlaskit/primitives';
-import React, { useEffect, useState } from 'react';
+import { token } from '@atlaskit/tokens';
+import { AlertMsg } from '../utility/models';
 import { MainBody } from './mainbody';
-import { AlertMsg, AlertMsgType, MsgType, ReactSetter } from './types';
+import { Stack, xcss } from '@atlaskit/primitives';
+import { AlertMsgType, MsgType, ReactSetter } from '../utility/types';
+import { AutoDismissFlag, FlagGroup } from '@atlaskit/flag';
+
+import React from 'react';
 import Spinner from '@atlaskit/spinner';
 import Lozenge from '@atlaskit/lozenge';
 import Blanket from '@atlaskit/blanket';
-import { AutoDismissFlag, FlagGroup } from '@atlaskit/flag';
-import { token } from '@atlaskit/tokens';
+import ThemeProvider from '@atlaskit/app-provider';
 
 export interface ThemeProps {
     showSpinner: MsgType;

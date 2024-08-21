@@ -4,17 +4,17 @@ import UserIcon from '@atlaskit/icon/glyph/user-avatar-circle';
 import HomeIcon from '@atlaskit/icon/glyph/home';
 import InfoIcon from '@atlaskit/icon/glyph/info';
 
-import './menu.css';
+import '../assets/scss/menu.css';
 
 //
-import React from 'react';
 import { token } from '@atlaskit/tokens';
 import { IconButton } from '@atlaskit/button/new';
-import { MainBodyProps } from './mainbody';
+import { MainBodyProps } from '../header/mainbody';
 import { useEffect, useState } from 'react';
 import { MenuGroup, ButtonItem, Section } from '@atlaskit/menu';
 import { Box, Inline, xcss, Stack, Text } from '@atlaskit/primitives';
 
+import React from 'react';
 import Lozenge from '@atlaskit/lozenge';
 import Popup from '@atlaskit/popup';
 import Button from '@atlaskit/button/new';

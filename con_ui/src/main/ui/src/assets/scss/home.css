@@ -1,0 +1,14 @@
+@font-face {
+    font-family: 'MyOrbitron';
+    src: url('../sfonts/orbitron-variablefont_wght-webfont.woff') format('woff'), url('../sfonts/orbitron-variablefont_wght-webfont.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'MyAnton';
+    src: url('../sfonts/Anton-Regular.woff') format('woff'),
+        url('../sfonts/Anton-Regular.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+}
