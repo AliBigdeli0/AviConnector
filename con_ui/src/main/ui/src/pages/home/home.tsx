@@ -42,7 +42,6 @@ const Home = (props: HomeProps) => {
                     id="main_home"
                     padding="space.100"
                     xcss={xcss({
-                        backgroundColor: 'color.background.accent.red.bolder',
                         height: `calc(100vh - ${Constant.MenuSize + 3}px)`,
                     })}></Box>
             }
