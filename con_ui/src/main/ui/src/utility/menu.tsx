@@ -181,7 +181,7 @@ export const Menu = (props: MenuProps) => {
                             spacing="compact"
                             appearance="default"></IconButton>
 
-                        <Lozenge appearance="inprogress" isBold>
+                        <Lozenge appearance="default" isBold>
                             {timeStr}
                         </Lozenge>
                     </Stack>

@@ -12,6 +12,7 @@ import { CommonProps } from '../../utility/common_props';
 import { MsgType, AlertMsgType } from '../../utility/types';
 
 import Button from '@atlaskit/button/new';
+import { CookieHelper } from '../../utility/cookie_helper';
 
 export interface HomeProps extends CommonProps {}
 
@@ -63,6 +64,7 @@ const Home = (props: HomeProps) => {
 
 const domNode = document.getElementById('root');
 if (domNode !== null) {
+    console.log('the api address is : ', CookieHelper.readApiAddress);
     const root = createRoot(domNode);
     root.render(<Home />);
 }
