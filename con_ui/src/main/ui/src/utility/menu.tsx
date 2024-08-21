@@ -13,7 +13,7 @@ import { IconButton } from '@atlaskit/button/new';
 import { MainBodyProps } from './mainbody';
 import { useEffect, useState } from 'react';
 import { MenuGroup, ButtonItem, Section } from '@atlaskit/menu';
-import { Box, Inline, xcss, Stack } from '@atlaskit/primitives';
+import { Box, Inline, xcss, Stack, Text } from '@atlaskit/primitives';
 
 import Lozenge from '@atlaskit/lozenge';
 import Popup from '@atlaskit/popup';
@@ -44,19 +44,29 @@ export const Menu = (props: MenuProps) => {
     const leftElements = () => {
         return (
             <Inline>
-                <span
-                    style={{
-                        fontSize: '30px',
-                        fontWeight: 'bold',
-                        color: token('color.background.brand.bold'),
+                <Box
+                    xcss={xcss({
+                        color: 'color.text.accent.blue',
+
                         borderRightStyle: 'solid',
                         borderRightWidth: '1px',
-                        borderRightColor: token('color.border.accent.gray'),
-                        paddingRight: token('space.100'),
-                        paddingLeft: token('space.100'),
-                    }}>
-                    Well Monitor
-                </span>
+                        borderRightColor: 'color.border.accent.gray',
+
+                        paddingRight: 'space.100',
+                        paddingLeft: 'space.100',
+
+                        verticalAlign: 'center',
+                        alignContent: 'center',
+                        height: '42px',
+                    })}>
+                    <span
+                        style={{
+                            color: token('color.text.accent.blue'),
+                            fontSize: 30,
+                        }}>
+                        Well Monitor
+                    </span>
+                </Box>
 
                 {menuElements()}
             </Inline>
@@ -91,7 +101,15 @@ export const Menu = (props: MenuProps) => {
         return (
             <Box
                 xcss={xcss({
-                    marginTop: 'space.075',
+                    // marginTop: 'space.075',
+
+                    borderRightStyle: 'solid',
+                    borderRightWidth: '1px',
+                    borderRightColor: 'color.border.accent.gray',
+
+                    verticalAlign: 'center',
+                    alignContent: 'center',
+                    height: '42px',
                 })}>
                 <Popup
                     isOpen={isOpenMenu}
