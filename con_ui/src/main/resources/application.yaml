@@ -3,3 +3,7 @@ application:
 
 server:
   port: ${MED_CON_UI_PORT:9005}
+
+med:
+  ui:
+    api: ${MED_CON_UI_API_ADDRESS:'http://localhost:8066'}
