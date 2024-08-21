@@ -83,7 +83,11 @@ export const Menu = (props: MenuProps) => {
                 minWidth={150}
                 onClick={(e) => e.stopPropagation()}>
                 <Section>
-                    <ButtonItem iconBefore={<HomeIcon label="" />}>
+                    <ButtonItem
+                        iconBefore={<HomeIcon label="" />}
+                        onClick={() => {
+                            window.location.href = '/';
+                        }}>
                         Home
                     </ButtonItem>
                 </Section>

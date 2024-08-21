@@ -1,15 +1,17 @@
 import './home.css';
+import '@atlaskit/css-reset';
 
 //
 // do not remove this
 import React, { useMemo, useState } from 'react';
+
 import { createRoot } from 'react-dom/client';
-import Button from '@atlaskit/button/new';
-import '@atlaskit/css-reset';
 import { Box } from '@atlaskit/primitives';
 import { InitTheme } from '../../utility/theme';
 import { CommonProps } from '../../utility/common_props';
 import { MsgType, AlertMsgType } from '../../utility/types';
+
+import Button from '@atlaskit/button/new';
 
 export interface HomeProps extends CommonProps {}
 
