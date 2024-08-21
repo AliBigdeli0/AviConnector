@@ -1,21 +1,28 @@
+// icons
+import SuccessIcon from '@atlaskit/icon/glyph/check-circle';
+import DangerIcon from '@atlaskit/icon/glyph/select-clear';
+import InfoIcon from '@atlaskit/icon/glyph/warning';
+
 // imports
 import ThemeProvider from '@atlaskit/app-provider';
 
-import { css, jsx } from '@emotion/react';
-import { Grid, Inline, Stack, xcss } from '@atlaskit/primitives';
-import React from 'react';
+import { Stack, xcss } from '@atlaskit/primitives';
+import React, { useEffect, useState } from 'react';
 import { MainBody } from './mainbody';
-import { MsgType, ReactSetter } from './types';
-import { token } from '@atlaskit/tokens';
-import Spinner, { type Size } from '@atlaskit/spinner';
-import { CSSProperties } from '@atlaskit/atlassian-navigation/dist/types/theme/types';
+import { AlertMsg, AlertMsgType, MsgType, ReactSetter } from './types';
+import Spinner from '@atlaskit/spinner';
 import Lozenge from '@atlaskit/lozenge';
 import Blanket from '@atlaskit/blanket';
+import { AutoDismissFlag, FlagGroup } from '@atlaskit/flag';
+import { token } from '@atlaskit/tokens';
 
 export interface ThemeProps {
     showSpinner: MsgType;
-    setShowSpinner: ReactSetter<MsgType>;
+    newAlerts: AlertMsgType;
+    setNewAlerts: ReactSetter<AlertMsgType>;
     inside: React.ReactElement;
+    update: boolean;
+    setUpdate: ReactSetter<boolean>;
 }
 
 export const InitTheme = (props: ThemeProps) => {
@@ -64,9 +71,65 @@ export const InitTheme = (props: ThemeProps) => {
         }
         return <>{/*nothing*/}</>;
     };
+
+    const alertToIcon = (alert: AlertMsg) => {
+        switch (alert.type) {
+            case 'sucess':
+                return (
+                    <SuccessIcon
+                        primaryColor={token('color.icon.success')}
+                        label="success"
+                        size="medium"
+                    />
+                );
+            case 'danger':
+                return (
+                    <DangerIcon
+                        primaryColor={token('color.icon.danger')}
+                        label="danger"
+                        size="medium"
+                    />
+                );
+            case 'info':
+                return (
+                    <InfoIcon
+                        primaryColor={token('color.icon.warning')}
+                        label="warning"
+                        size="medium"
+                    />
+                );
+            default:
+                return <></>;
+        }
+    };
+
+    const handleDismiss = () => {
+        const newArray = props.newAlerts.slice(1);
+        props.setNewAlerts(newArray);
+        props.setUpdate(!props.update);
+    };
+
+    const showAlerts = () => {
+        return (
+            <FlagGroup onDismissed={handleDismiss}>
+                {props.newAlerts.map((alert, index) => {
+                    return (
+                        <AutoDismissFlag
+                            id={`flag_${index}`}
+                            icon={alertToIcon(alert)}
+                            key={`key_flag_group_${index}`}
+                            title={alert.title}
+                            description={alert.description}
+                        />
+                    );
+                })}
+            </FlagGroup>
+        );
+    };
     return (
         <ThemeProvider defaultColorMode="dark">
             {showMainBodyOrSpinner()}
+            {showAlerts()}
             <MainBody {...props} />
         </ThemeProvider>
     );

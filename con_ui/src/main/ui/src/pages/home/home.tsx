@@ -9,16 +9,22 @@ import '@atlaskit/css-reset';
 import { Box } from '@atlaskit/primitives';
 import { InitTheme } from '../../utility/theme';
 import { CommonProps } from '../../utility/common_props';
-import { MsgType } from '../../utility/types';
+import { MsgType, AlertMsgType } from '../../utility/types';
 
 export interface HomeProps extends CommonProps {}
 
 const Home = (props: HomeProps) => {
     const [showSpinner, setShowSpinner] = useState<MsgType>('');
+    const [updateParent, setUpdateParent] = useState(false);
+    const [alertMsg, setAlertMsg] = useState<AlertMsgType>([]);
+
     return (
         <InitTheme
             showSpinner={showSpinner}
-            setShowSpinner={setShowSpinner}
+            newAlerts={alertMsg}
+            setNewAlerts={setAlertMsg}
+            update={updateParent}
+            setUpdate={setUpdateParent}
             {...props}
             inside={
                 <Box padding="space.100">
@@ -33,7 +39,17 @@ const Home = (props: HomeProps) => {
                         }}>
                         Show Spinner
                     </Button>
-                    <Button appearance="primary" onClick={() => {}}>
+                    <Button
+                        appearance="primary"
+                        onClick={() => {
+                            alertMsg.push({
+                                type: 'sucess',
+                                title: 'test',
+                                description: `${alertMsg.length}from description`,
+                            });
+                            setAlertMsg(alertMsg);
+                            setUpdateParent(!updateParent);
+                        }}>
                         Show Message
                     </Button>
                 </Box>
