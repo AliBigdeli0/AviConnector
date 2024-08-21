@@ -17,7 +17,7 @@ const Home = (props: HomeProps) => {
     const [showSpinner, setShowSpinner] = useState<MsgType>('');
     const [updateParent, setUpdateParent] = useState(false);
     const [alertMsg, setAlertMsg] = useState<AlertMsgType>([]);
-
+    const pathItems = ['Home'];
     return (
         <InitTheme
             showSpinner={showSpinner}
@@ -25,6 +25,7 @@ const Home = (props: HomeProps) => {
             setNewAlerts={setAlertMsg}
             update={updateParent}
             setUpdate={setUpdateParent}
+            PathItems={pathItems}
             {...props}
             inside={
                 <Box padding="space.100">

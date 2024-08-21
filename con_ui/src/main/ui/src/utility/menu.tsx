@@ -18,12 +18,14 @@ import { Box, Inline, xcss, Stack, Text } from '@atlaskit/primitives';
 import Lozenge from '@atlaskit/lozenge';
 import Popup from '@atlaskit/popup';
 import Button from '@atlaskit/button/new';
+import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
 
 export interface MenuProps extends MainBodyProps {}
 
 export const Menu = (props: MenuProps) => {
     const [timeStr, setTimeStr] = useState('');
     const [isOpenMenu, setIsOpenMenu] = useState(false);
+    const headerHeight = '42px';
 
     useEffect(() => {
         const updateTime = () => {
@@ -57,7 +59,7 @@ export const Menu = (props: MenuProps) => {
 
                         verticalAlign: 'center',
                         alignContent: 'center',
-                        height: '42px',
+                        height: headerHeight,
                     })}>
                     <span
                         style={{
@@ -69,6 +71,7 @@ export const Menu = (props: MenuProps) => {
                 </Box>
 
                 {menuElements()}
+                {breakCrumbs()}
             </Inline>
         );
     };
@@ -101,15 +104,13 @@ export const Menu = (props: MenuProps) => {
         return (
             <Box
                 xcss={xcss({
-                    // marginTop: 'space.075',
-
                     borderRightStyle: 'solid',
                     borderRightWidth: '1px',
                     borderRightColor: 'color.border.accent.gray',
 
                     verticalAlign: 'center',
                     alignContent: 'center',
-                    height: '42px',
+                    height: headerHeight,
                 })}>
                 <Popup
                     isOpen={isOpenMenu}
@@ -131,6 +132,30 @@ export const Menu = (props: MenuProps) => {
         );
     };
 
+    const breakCrumbs = () => {
+        return (
+            <Box
+                xcss={xcss({
+                    borderRightStyle: 'solid',
+                    borderRightWidth: '1px',
+                    borderRightColor: 'color.border.accent.gray',
+
+                    paddingRight: 'space.100',
+                    paddingLeft: 'space.100',
+
+                    verticalAlign: 'center',
+                    alignContent: 'center',
+                    height: headerHeight,
+                })}>
+                <Breadcrumbs>
+                    {props.PathItems.map((path) => {
+                        return <BreadcrumbsItem text={path} />;
+                    })}
+                </Breadcrumbs>
+            </Box>
+        );
+    };
+
     const rightSideElements = () => {
         return (
             <Stack
@@ -139,8 +164,10 @@ export const Menu = (props: MenuProps) => {
                     borderLeftStyle: 'solid',
                     borderLeftWidth: '1px',
                     borderLeftColor: 'color.border.accent.gray',
+
                     paddingLeft: 'space.100',
-                    marginTop: 'space.025',
+
+                    height: headerHeight,
                 })}>
                 <Box xcss={xcss({ display: 'flex' })}>
                     <Stack alignInline="center" alignBlock="end">

@@ -23,6 +23,7 @@ export interface ThemeProps {
     inside: React.ReactElement;
     update: boolean;
     setUpdate: ReactSetter<boolean>;
+    PathItems: string[];
 }
 
 export const InitTheme = (props: ThemeProps) => {
