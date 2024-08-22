@@ -29,12 +29,12 @@
   - [x] Change In Connectors (JAVA)
   - [x] Change In AVIData (C#)
   - [x] Test Connections In Windows
-- [ ] Deploy
+- [x] Deploy
   - [x] Deploy Jar Files With Batch File
   - [x] Separate Lib Files From Con_Data
-  - [ ] Add Installer With ENV
+  -  ~~Add Installer With ENV~~
   - [x] Test On Windows Server
-  - [ ] Test On Real Environment
+  - [x] Test On Real Environment
   - ~~Distribute ActiveMQ On Server~~
   - [x] Check for Distributed RAM
 
