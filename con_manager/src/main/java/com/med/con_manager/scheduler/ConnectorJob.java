@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jobrunr.jobs.context.JobContext;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class ConnectorJob {
 	private void createProcess() throws URISyntaxException {
 		final var processBuilder = new ProcessBuilder();
 
+		processBuilder.directory(new File(Constants.getDataPath().toAbsolutePath().toString()));
 		processBuilder.command(executionCommand());
 
 		setEnvironmentVariables(processBuilder);

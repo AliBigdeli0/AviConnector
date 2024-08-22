@@ -6,7 +6,6 @@ JAR_MANAGER_NAME=con_manager-1.0.0-plain.jar
 # paths
 DEPLOY_PATH=~/Desktop/share/update_med/updates
 
-
 BUILD_DATA_PATH=$(PWD)/../con_data/build
 LIB_DATA_PATH=$(BUILD_DATA_PATH)/lib_data
 RUN_DATA_FILE_PATH=$(PWD)/run_data.bat

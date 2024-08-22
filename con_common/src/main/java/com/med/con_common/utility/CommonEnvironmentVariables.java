@@ -31,6 +31,10 @@ public class CommonEnvironmentVariables {
 		return environmentOrDefault(Constants.MED_MONGO_CONN_STR, "mongodb://localhost:27017");
 	}
 
+	public static String getDataDirName() {
+		return environmentOrDefault("MED_DATA_DIR_NAME", "data");
+	}
+
 	public static String getMongoDbName() {
 		return environmentOrDefault("MED_MONGO_DB_NAME", "AVIDb");
 	}

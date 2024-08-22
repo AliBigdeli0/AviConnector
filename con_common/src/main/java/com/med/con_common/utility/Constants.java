@@ -23,10 +23,14 @@ public final class Constants {
 		}
 	}
 
+	public static Path getDataPath() {
+		var currentPath = System.getProperty("user.dir");
+		return Path.of(currentPath, CommonEnvironmentVariables.getDataDirName());
+	}
+
 	public static String getClassPathExecution() {
 		var os = getOs();
-		var currentPath = System.getProperty("user.dir");
-		var path ="./lib_data/*";
-		return String.format("%s%s%s", CON_DATA_JAR_NAME, os.contains("win") ? ";" : ":", path);
+		var libDataPath = "./lib_data/*";
+		return String.format("%s%s%s", CON_DATA_JAR_NAME, os.contains("win") ? ";" : ":", libDataPath);
 	}
 }
