@@ -51,7 +51,8 @@ public class JobRunrManager implements JobManager {
 
 	public boolean checkJobExist(DbWell well) {
 		var job = getJobWithWellName(well);
-		return job != null;
+		return job != null
+				&& (job.getJobState().getName() == StateName.PROCESSING || job.getJobState().getName() == StateName.ENQUEUED);
 	}
 
 	@EventListener
