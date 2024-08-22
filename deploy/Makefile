@@ -1,10 +1,13 @@
 # nemes
 CONTAINER_NAME=ubuntu_avi_connector
 JAR_DATA_NAME=con_data-1.0.0-plain.jar
+JAR_COMMON_NAME=con_common-1.0.0.jar
 JAR_MANAGER_NAME=con_manager-1.0.0-plain.jar
 
 # paths
 DEPLOY_PATH=~/Desktop/share/update_med/updates
+
+BUILD_COMMON_PATH=$(PWD)/../con_common/build
 
 BUILD_DATA_PATH=$(PWD)/../con_data/build
 LIB_DATA_PATH=$(BUILD_DATA_PATH)/lib_data
@@ -26,12 +29,19 @@ COPY=cp
 ## deploy package
 
 # con_manager
+deploy_updates::
+	@cd $(BUILD_MANAGER_PATH)/../..; 																																		\
+    ./build_all.sh ; 																																						\
+    cd $(BUILD_MANAGER_PATH);																																				\
+	$(ZIP) connectors_update.7z  $(BUILD_DATA_PATH)/libs/$(JAR_DATA_NAME) $(BUILD_MANAGER_PATH)/libs/$(JAR_MANAGER_NAME)   $(BUILD_COMMON_PATH)/libs/$(JAR_COMMON_NAME); 	\
+	$(MOVE) connectors_update.7z $(DEPLOY_PATH)
+
 deploy_con_manager_jar::
-	@cd $(BUILD_MANAGER_PATH)/../..; 																												\
-	./build_all.sh ; ./build_copy_con_data.sh ;																										\
-	cd $(BUILD_MANAGER_PATH);																														\
-	$(REMOVE) $(JAR_MANAGER_NAME).7z $(DEPLOY_PATH)/$(JAR_MANAGER_NAME).7z;																			\
-	$(ZIP) $(JAR_MANAGER_NAME).7z ./libs/$(JAR_MANAGER_NAME) $(LIB_MANAGER_PATH) $(RUN_MANAGER_FILE_PATH)  $(JAR_DATA_NAME) $(LIB_DATA_PATH);		\
+	@cd $(BUILD_MANAGER_PATH)/../..; 																																	\
+	./build_all.sh ; ./build_copy_con_data.sh ;																															\
+	cd $(BUILD_MANAGER_PATH);																																			\
+	$(REMOVE) $(JAR_MANAGER_NAME).7z $(DEPLOY_PATH)/$(JAR_MANAGER_NAME).7z;																								\
+	$(ZIP) $(JAR_MANAGER_NAME).7z ./libs/$(JAR_MANAGER_NAME) $(LIB_MANAGER_PATH) $(RUN_MANAGER_FILE_PATH)  $(BUILD_DATA_PATH)/libs/$(JAR_DATA_NAME) $(LIB_DATA_PATH);		\
 	$(MOVE) $(JAR_MANAGER_NAME).7z $(DEPLOY_PATH)		
 
 
