@@ -1,5 +1,16 @@
 //
 export class StringHelper {
+    static trim(msg: string, len: number) {
+        if (msg.length > len) {
+            return msg.substring(0, len) + '...';
+        }
+        return msg;
+    }
+
+    static appendSpace(msg: string, spaceLen: number) {
+        return msg + ' '.repeat(spaceLen - msg.length + 1);
+    }
+
     static get notApplicable() {
         return 'N/A';
     }
@@ -92,7 +103,7 @@ export class StringHelper {
             case '41':
                 return 'Other Waiting';
             case '20000':
-                return 'TEST';
+                return 'TEST Ali';
             default:
                 return this.notApplicable;
         }

@@ -13,13 +13,17 @@ import React, { useEffect, useMemo, useState } from 'react';
 const dayjs = require('dayjs');
 
 //
+import { token } from '@atlaskit/tokens';
 import { createRoot } from 'react-dom/client';
 import { Box, xcss } from '@atlaskit/primitives';
 import { HeadType, RowType } from '@atlaskit/dynamic-table/types';
 import Tabs, { Tab, TabList, TabPanel } from '@atlaskit/tabs';
+import Tag from '@atlaskit/tag';
 import Button, { IconButton } from '@atlaskit/button/new';
 import DynamicTable from '@atlaskit/dynamic-table';
 import Tooltip from '@atlaskit/tooltip';
+import Flag from '@atlaskit/flag';
+import Banner from '@atlaskit/banner';
 
 //
 import { InitTheme } from '../../header/theme';
@@ -37,7 +41,6 @@ export interface HomeProps extends CommonProps {}
 const Home = (props: HomeProps) => {
     const [showSpinner, setShowSpinner] = useState<MsgType>('');
     const [updateParent, setUpdateParent] = useState(false);
-    const [update, setUpdate] = useState(false);
     const [count, setCount] = useState(0);
     const [wells, setWells] = useState<WellData[]>([]);
     const [alertMsg, setAlertMsg] = useState<AlertMsgType>([]);
@@ -77,14 +80,11 @@ const Home = (props: HomeProps) => {
         };
 
         asyncStart();
-
-        getActivityCode();
     }, []);
 
     useEffect(() => {
         const timerId = setInterval(async () => {
             await getActivityCode();
-            setUpdate(!update);
             setCount(count + 1);
         }, 5000);
 
@@ -172,7 +172,6 @@ const Home = (props: HomeProps) => {
         );
 
         const diffTime = Math.abs(liveTime.diff(activityTime, 'milliseconds'));
-        console.log(well.Name, ':', diffTime);
         return diffTime >= Constant.FiveMinutes;
     };
 
@@ -184,6 +183,16 @@ const Home = (props: HomeProps) => {
         well: WellData
     ) => {
         return hasTimeReached(well) ? 'danger' : 'default';
+    };
+
+    const statusString = (well: WellData) => {
+        const str = StringHelper.activityConverter(
+            well.LiveData?.parameters[Constant.ActivityCode]
+        );
+        const MAX_LEN = 20;
+        if (str.length > MAX_LEN) return StringHelper.trim(str, MAX_LEN);
+        else if (str.length < 10) return StringHelper.appendSpace(str, 10);
+        else return str;
     };
 
     const showWellsOnDynamicTable = (
@@ -218,20 +227,17 @@ const Home = (props: HomeProps) => {
 
         const rows: RowType[] = [];
 
-        wellsToShow.forEach((well) => {
+        wellsToShow.forEach((well, index) => {
             rows.push({
                 cells: [
                     {
                         content: (
                             <Tooltip content={showWellTime(well)}>
                                 <Button
-                                    iconBefore={showWellIcon(well)}
-                                    appearance={showWellColor(well)}>
-                                    {StringHelper.activityConverter(
-                                        well.LiveData?.parameters[
-                                            Constant.ActivityCode
-                                        ]
-                                    )}
+                                    key={`key_flag_${well.ID}_${index}`}
+                                    appearance={showWellColor(well)}
+                                    iconBefore={showWellIcon(well)}>
+                                    {statusString(well)}
                                 </Button>
                             </Tooltip>
                         ),

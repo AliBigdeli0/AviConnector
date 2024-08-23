@@ -41,6 +41,7 @@
   "dependencies": {
     "@atlaskit/app-provider": "^1.4.0",
     "@atlaskit/atlassian-navigation": "^4.5.2",
+    "@atlaskit/banner": "^12.5.1",
     "@atlaskit/blanket": "^13.3.1",
     "@atlaskit/breadcrumbs": "^12.5.2",
     "@atlaskit/button": "^20.1.0",
@@ -58,6 +59,7 @@
     "@atlaskit/spinner": "^16.3.1",
     "@atlaskit/table-tree": "^9.12.2",
     "@atlaskit/tabs": "^16.4.1",
+    "@atlaskit/tag": "^12.5.2",
     "@atlaskit/theme": "^13.0.0",
     "@atlaskit/tokens": "^1.59.0",
     "@atlaskit/tooltip": "^18.7.1",
