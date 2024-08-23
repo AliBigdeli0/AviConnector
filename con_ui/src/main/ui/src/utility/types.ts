@@ -1,4 +1,4 @@
-import { AlertMsg } from './models';
+import { AlertMsg, ServerLiveModel, ServerLiveModelResponse } from './models';
 
 // types
 export type MsgType = string;
@@ -13,3 +13,9 @@ export type SignalROnReconnectted = (id: string | undefined) => void;
 export type SignalROnReconnecting = (err?: Error) => void;
 export type SignalROnRestart = () => void;
 export type SignalROnError = (err: any) => void;
+
+export type SignalROnErrorCallback = (data: string) => void;
+export type SignalROnWellsCallback = (wells: string[]) => void;
+export type SignalROnBulkLiveCallback = (
+    lives: ServerLiveModelResponse[]
+) => void;

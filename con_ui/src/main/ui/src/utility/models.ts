@@ -20,4 +20,20 @@ export interface WellData {
     AliasWellName: string;
     AliasRegionName: string;
     IsOffline: boolean;
+    LiveData: ServerLiveModelResponse | undefined;
+}
+
+export interface ServerLiveModel {
+    well_id: string;
+    times: { [key: string]: string };
+    parameters: { [key: string]: string };
+}
+
+export interface ServerLiveModelResponse {
+    wellId: string;
+    timeString: string;
+    liveTimes: { [key: string]: string };
+    parameters: { [key: string]: string };
+    isAvalible: boolean;
+    lastDepth: string;
 }

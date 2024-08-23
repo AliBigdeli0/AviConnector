@@ -1,65 +1,79 @@
 import { CookieHelper } from './cookie_helper';
 
 import * as signalR from '@microsoft/signalr';
-import { WellData } from './models';
+import { ServerLiveModel, ServerLiveModelResponse, WellData } from './models';
 import {
+    SignalROnBulkLiveCallback,
     SignalROnClose,
     SignalROnError,
+    SignalROnErrorCallback,
     SignalROnReconnecting,
     SignalROnReconnectted,
     SignalROnRestart as SignalROnStarted,
+    SignalROnWellsCallback,
 } from './types';
 import { TimeHelper } from './time_helper';
 
 export class SignalrService {
-    conn: signalR.HubConnection | undefined = undefined;
+    con: signalR.HubConnection | undefined = undefined;
+
     onclose: SignalROnClose | undefined = undefined;
     onreconnected: SignalROnReconnectted | undefined = undefined;
     onreconnecting: SignalROnReconnecting | undefined = undefined;
     onstarted: SignalROnStarted | undefined = undefined;
     onerror: SignalROnError | undefined = undefined;
 
-    onErrorCallback: ((data: string) => void) | undefined = undefined;
-    onWellsCallback: ((wells: string[]) => void) | undefined = undefined;
+    private onErrorCallback: SignalROnErrorCallback | undefined = undefined;
+    private onWellsCallback: SignalROnWellsCallback | undefined = undefined;
+    private OnBulkLiveCallback: SignalROnBulkLiveCallback | undefined =
+        undefined;
 
     async start() {
-        this.conn = undefined;
-        this.conn = new signalR.HubConnectionBuilder()
+        this.con = undefined;
+        this.con = new signalR.HubConnectionBuilder()
             .withUrl(this.uri, signalR.HttpTransportType.LongPolling)
             .configureLogging(signalR.LogLevel.Error)
             .withAutomaticReconnect([1000])
             .build();
-        await this.conn.start();
+        await this.con.start();
 
         this.loadEvents();
     }
 
     loadEvents() {
-        this.conn?.on('error_callback', (data) => {
+        this.con?.on('error_callback', (data) => {
             if (this.onErrorCallback !== undefined) this.onErrorCallback(data);
         });
 
-        this.conn?.on('wells_callback', (list) => {
+        this.con?.on(
+            'bulk_live_callback',
+            (liveData: ServerLiveModelResponse[]) => {
+                if (this.OnBulkLiveCallback !== undefined)
+                    this.OnBulkLiveCallback(liveData);
+            }
+        );
+
+        this.con?.on('wells_callback', (list) => {
             if (this.onWellsCallback !== undefined) this.onWellsCallback(list);
         });
     }
 
     async restart() {
         try {
-            if (this.conn !== undefined) {
-                await this.conn.stop();
+            if (this.con !== undefined) {
+                await this.con.stop();
             }
             await this.start();
 
             if (this.onstarted !== undefined) this.onstarted();
 
-            this.conn?.onclose(async (err) => {
+            this.con?.onclose(async (err) => {
                 if (this.onclose !== undefined) this.onclose(err);
             });
             if (this.onreconnected !== undefined)
-                this.conn?.onreconnected(this.onreconnected);
+                this.con?.onreconnected(this.onreconnected);
             if (this.onreconnecting !== undefined)
-                this.conn?.onreconnecting(this.onreconnecting);
+                this.con?.onreconnecting(this.onreconnecting);
         } catch (err) {
             console.error(err);
             if (this.onerror !== undefined) this.onerror(err);
@@ -93,12 +107,30 @@ export class SignalrService {
                 });
                 res(retList);
             };
-            await this.conn?.invoke('wells');
+            await this.con?.invoke('wells');
+        });
+    }
+
+    async bulkLive(
+        models: ServerLiveModel[]
+    ): Promise<ServerLiveModelResponse[]> {
+        const modelStrings = models.map((well) => JSON.stringify(well));
+
+        return new Promise(async (res, err) => {
+            this.onErrorCallback = (msg) => {
+                err(msg);
+            };
+
+            this.OnBulkLiveCallback = (lives) => {
+                res(lives);
+            };
+
+            await this.con?.invoke('bulk_live', modelStrings);
         });
     }
 
     state(): signalR.HubConnectionState {
-        return this.conn?.state ?? signalR.HubConnectionState.Disconnected;
+        return this.con?.state ?? signalR.HubConnectionState.Disconnected;
     }
 
     connected(): boolean {
