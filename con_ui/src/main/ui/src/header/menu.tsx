@@ -9,7 +9,6 @@ import '../assets/scss/menu.css';
 //
 import { token } from '@atlaskit/tokens';
 import { IconButton } from '@atlaskit/button/new';
-import { MainBodyProps } from '../header/mainbody';
 import { useEffect, useState } from 'react';
 import { MenuGroup, ButtonItem, Section } from '@atlaskit/menu';
 import { Box, Inline, xcss, Stack, Text } from '@atlaskit/primitives';
@@ -19,7 +18,12 @@ import Lozenge from '@atlaskit/lozenge';
 import Popup from '@atlaskit/popup';
 import Button from '@atlaskit/button/new';
 import Breadcrumbs, { BreadcrumbsItem } from '@atlaskit/breadcrumbs';
+import Tooltip from '@atlaskit/tooltip';
+import Toggle from '@atlaskit/toggle';
+
+import { MainBodyProps } from '../header/mainbody';
 import { Constant } from '../utility/constants';
+import { ThemeHelper } from '../utility/theme_helper';
 
 export interface MenuProps extends MainBodyProps {}
 
@@ -162,18 +166,51 @@ export const Menu = (props: MenuProps) => {
 
     const rightSideElements = () => {
         return (
-            <Stack
-                alignInline="center"
-                xcss={xcss({
-                    borderLeftStyle: 'solid',
-                    borderLeftWidth: '1px',
-                    borderLeftColor: 'color.border.accent.gray',
+            <Inline alignInline="center" xcss={xcss({})}>
+                <Box
+                    xcss={xcss({
+                        borderLeftStyle: 'solid',
+                        borderLeftWidth: '1px',
+                        borderLeftColor: 'color.border.accent.gray',
 
-                    paddingLeft: 'space.100',
+                        display: 'flex',
 
-                    height: Constant.MenuSizePixcel,
-                })}>
-                <Box xcss={xcss({ display: 'flex' })}>
+                        paddingLeft: 'space.100',
+                        paddingRight: 'space.100',
+                        alignContent: 'center',
+                        alignItems: 'center',
+                        height: Constant.MenuSizePixcel,
+                    })}>
+                    <Stack alignInline="center" alignBlock="end">
+                        <Tooltip content="Dark/Light Mode">
+                            <Toggle
+                                size="regular"
+                                isChecked={props.themeType === 'dark'}
+                                onChange={() => {
+                                    console.log(props.themeType);
+                                    if (props.themeType === 'dark') {
+                                        ThemeHelper.changeTheme('light');
+                                    } else {
+                                        ThemeHelper.changeTheme('dark');
+                                    }
+                                    window.location.href = '/';
+                                }}></Toggle>
+                        </Tooltip>
+                    </Stack>
+                </Box>
+
+                <Box
+                    xcss={xcss({
+                        borderLeftStyle: 'solid',
+                        borderLeftWidth: '1px',
+                        borderLeftColor: 'color.border.accent.gray',
+
+                        display: 'flex',
+
+                        paddingLeft: 'space.100',
+
+                        height: Constant.MenuSizePixcel,
+                    })}>
                     <Stack alignInline="center" alignBlock="end">
                         <IconButton
                             icon={UserIcon}
@@ -186,7 +223,7 @@ export const Menu = (props: MenuProps) => {
                         </Lozenge>
                     </Stack>
                 </Box>
-            </Stack>
+            </Inline>
         );
     };
 

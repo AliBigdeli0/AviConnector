@@ -8,7 +8,12 @@ import { token } from '@atlaskit/tokens';
 import { AlertMsg } from '../utility/models';
 import { MainBody } from './mainbody';
 import { Stack, xcss } from '@atlaskit/primitives';
-import { AlertMsgType, MsgType, ReactSetter } from '../utility/types';
+import {
+    AlertMsgType,
+    MsgType,
+    ReactSetter,
+    ThemeType,
+} from '../utility/types';
 import { AutoDismissFlag, FlagGroup } from '@atlaskit/flag';
 
 import React from 'react';
@@ -25,6 +30,8 @@ export interface ThemeProps {
     update: boolean;
     setUpdate: ReactSetter<boolean>;
     PathItems: string[];
+    themeType: ThemeType;
+    setThemeType: ReactSetter<ThemeType>;
 }
 
 export const InitTheme = (props: ThemeProps) => {
@@ -129,7 +136,7 @@ export const InitTheme = (props: ThemeProps) => {
         );
     };
     return (
-        <ThemeProvider defaultColorMode="dark">
+        <ThemeProvider defaultColorMode={props.themeType}>
             {showMainBodyOrSpinner()}
             {showAlerts()}
             <MainBody {...props} />

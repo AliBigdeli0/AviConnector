@@ -12,7 +12,7 @@ export class StringHelper {
     }
 
     static get notApplicable() {
-        return 'Not Applicable';
+        return 'N/A';
     }
 
     static activityConverter(str?: string) {
@@ -105,7 +105,7 @@ export class StringHelper {
             case '20000':
                 return 'TEST Ali';
             default:
-                return this.notApplicable;
+                return 'Not Assigned';
         }
     }
 }

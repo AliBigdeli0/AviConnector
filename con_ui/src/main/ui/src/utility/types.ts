@@ -3,6 +3,8 @@ import { AlertMsg, ServerLiveModel, ServerLiveModelResponse } from './models';
 // types
 export type MsgType = string;
 
+export type ThemeType = 'dark' | 'light';
+
 export type ReactSetter<T> = React.Dispatch<React.SetStateAction<T>>;
 export type SpinnerSetter = ReactSetter<string>;
 

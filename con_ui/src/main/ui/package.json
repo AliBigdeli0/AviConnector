@@ -62,6 +62,7 @@
     "@atlaskit/tag": "^12.5.2",
     "@atlaskit/textfield": "^6.5.1",
     "@atlaskit/theme": "^13.0.0",
+    "@atlaskit/toggle": "^13.3.1",
     "@atlaskit/tokens": "^1.59.0",
     "@atlaskit/tooltip": "^18.7.1",
     "@emotion/react": "^11.13.0",

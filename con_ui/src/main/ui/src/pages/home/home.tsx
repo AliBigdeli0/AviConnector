@@ -29,12 +29,13 @@ import Banner from '@atlaskit/banner';
 //
 import { InitTheme } from '../../header/theme';
 import { CommonProps } from '../../utility/common_props';
-import { MsgType, AlertMsgType } from '../../utility/types';
+import { MsgType, AlertMsgType, ThemeType } from '../../utility/types';
 import { Constant } from '../../utility/constants';
 import { SignalrService } from '../../utility/signalr_service';
 import { ServerLiveModel, WellData } from '../../utility/models';
 import { TimeHelper } from '../../utility/time_helper';
 import { StringHelper } from '../../utility/string_helper';
+import { ThemeHelper } from '../../utility/theme_helper';
 
 //
 export interface HomeProps extends CommonProps {}
@@ -46,6 +47,7 @@ const Home = (props: HomeProps) => {
     const [wells, setWells] = useState<WellData[]>([]);
     const [alertMsg, setAlertMsg] = useState<AlertMsgType>([]);
     const [search, setSearch] = useState('');
+    const [theme, setTheme] = useState<ThemeType>(ThemeHelper.getTheme());
 
     const pathItems = ['Home'];
 
@@ -325,11 +327,18 @@ const Home = (props: HomeProps) => {
             <input type="hidden" value={`${count}`}></input>
             <InitTheme
                 showSpinner={showSpinner}
+                //
                 newAlerts={alertMsg}
                 setNewAlerts={setAlertMsg}
+                //
                 update={updateParent}
                 setUpdate={setUpdateParent}
+                //
                 PathItems={pathItems}
+                //
+                themeType={theme}
+                setThemeType={setTheme}
+                //
                 {...props}
                 inside={
                     <Box

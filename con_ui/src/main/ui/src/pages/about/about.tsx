@@ -8,7 +8,7 @@ import React, { useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { InitTheme } from '../../header/theme';
 import { CommonProps } from '../../utility/common_props';
-import { MsgType, AlertMsgType } from '../../utility/types';
+import { MsgType, AlertMsgType, ThemeType } from '../../utility/types';
 import { SignalrService } from '../../utility/signalr_service';
 
 export interface AboutProps extends CommonProps {}
@@ -18,6 +18,7 @@ const About = (props: AboutProps) => {
     const [updateParent, setUpdateParent] = useState(false);
     const [alertMsg, setAlertMsg] = useState<AlertMsgType>([]);
     const pathItems = ['About'];
+    const [theme, setTheme] = useState<ThemeType>('dark');
 
     return (
         <InitTheme
@@ -26,6 +27,10 @@ const About = (props: AboutProps) => {
             setNewAlerts={setAlertMsg}
             update={updateParent}
             setUpdate={setUpdateParent}
+            //
+            themeType={theme}
+            setThemeType={setTheme}
+            //
             PathItems={pathItems}
             {...props}
             inside={<>about page</>}
