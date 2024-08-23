@@ -1,3 +1,33 @@
+# UI Plan
+
+here is the plan parts:
+
+-   [ ] UI Page
+    -   [ ] UI Components
+        -   [ ] Charts (Chartjs)
+        -   [ ] Numeric
+        -   [ ] Guages
+        -   [ ] Pits
+        -   [ ] Playback Scroll (for both time/depth based)
+    -   [ ] UI Page Settings
+    -   [ ] UI Time Base
+    -   [ ] UI Depth Page
+    -   [ ] Home Page
+    -   [ ] About Page
+    -   [ ] Login Page
+    -   [ ] Settings Page
+    -   [ ] Exports Page
+    -   [ ] Utility
+        -   [ ] SignalR Connection
+        -   [ ] Time Helper
+        -   [ ] Playback Actions
+            -   [ ] Time Base
+            -   [ ] Depth Base
+-   [ ] Backend
+    -   [ ] Well's Parameter Sync (For each Wells Separately)
+    -   [ ] Page Security
+    -   [ ] Save Components In Database (Mongo)
+
 # Atlassian Component
 
 To get icons from icons, implement following command:
@@ -94,5 +124,3 @@ before anything pull docker protoc image with following command :
 ```shell
 docker pull znly/protoc
 ```
-
-##
