@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+
+option csharp_namespace = "AviData.GRPC";
+
+service Version {
+    rpc getVersion(VersionRequest) returns (VersionReply);
+}
+
+message VersionRequest {
+    string name = 1;
+}
+
+message VersionReply {
+    string message = 1;
+}

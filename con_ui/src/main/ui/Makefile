@@ -11,7 +11,7 @@ os:: open_selenimum
 open_selenimum:: compile
 	@npx node ./test/home_test.mjs
 
-compile:: compile_webpack
+compile:: proto_compile compile_webpack
 
 compile_webpack::
 	@npx webpack --config webpack.config.js
@@ -21,3 +21,8 @@ compile_webpack::
 
 run_browser::
 	@echo nothing
+
+proto_compile::	
+	@docker run --rm -v ./:/work znly/protoc \
+		--js_out=import_style=commonjs,binary:/work/src/proto_out \
+		--proto_path=/work/proto/ /work/proto/version.proto
