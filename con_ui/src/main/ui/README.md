@@ -107,7 +107,7 @@ setShowSpinner('');
 
 to get full size screen is like:
 
-```javascript
+```tsx
 <Box
     id="main_home"
     padding="space.100"
@@ -115,6 +115,13 @@ to get full size screen is like:
         backgroundColor: 'color.background.accent.red.bolder',
         height: `calc(100vh - ${Constant.MenuSize + 1}px)`,
     })}></Box>
+```
+
+and go get size :
+
+```js
+const size = SizeHelper.getElementSize('main_home');
+console.log('the size is: ', size);
 ```
 
 ## GRPC

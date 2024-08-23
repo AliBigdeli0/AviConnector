@@ -9,6 +9,7 @@ import { createRoot } from 'react-dom/client';
 import { InitTheme } from '../../header/theme';
 import { CommonProps } from '../../utility/common_props';
 import { MsgType, AlertMsgType } from '../../utility/types';
+import { SignalrService } from '../../utility/signalr_service';
 
 export interface AboutProps extends CommonProps {}
 
@@ -35,5 +36,7 @@ const About = (props: AboutProps) => {
 const domNode = document.getElementById('root');
 if (domNode !== null) {
     const root = createRoot(domNode);
-    root.render(<About />);
+
+    const signalRService = new SignalrService();
+    root.render(<About signalRService={signalRService} />);
 }

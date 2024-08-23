@@ -1,1 +1,5 @@
-export interface CommonProps {}
+import { SignalrService } from './signalr_service';
+
+export interface CommonProps {
+    signalRService: SignalrService;
+}

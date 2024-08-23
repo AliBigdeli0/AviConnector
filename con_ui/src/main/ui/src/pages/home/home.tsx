@@ -7,11 +7,14 @@ import React, { useEffect, useState } from 'react';
 
 import { createRoot } from 'react-dom/client';
 import { Box, xcss } from '@atlaskit/primitives';
+
 import { InitTheme } from '../../header/theme';
 import { CommonProps } from '../../utility/common_props';
 import { MsgType, AlertMsgType } from '../../utility/types';
-import { SizeHelper } from '../../utility/size_helper';
 import { Constant } from '../../utility/constants';
+import { SignalrService } from '../../utility/signalr_service';
+import { WellData } from '../../utility/models';
+import { TimeHelper } from '../../utility/time_helper';
 
 export interface HomeProps extends CommonProps {}
 
@@ -19,13 +22,55 @@ const Home = (props: HomeProps) => {
     const [showSpinner, setShowSpinner] = useState<MsgType>('');
     const [updateParent, setUpdateParent] = useState(false);
     const [alertMsg, setAlertMsg] = useState<AlertMsgType>([]);
+    const [wells, setWells] = useState<WellData[]>([]);
     const pathItems = ['Home'];
 
     //
     useEffect(() => {
-        const size = SizeHelper.getElementSize('main_home');
-        console.log('the size is: ', size);
-    });
+        props.signalRService.callbacks(
+            async () => {
+                await loadWells();
+                setShowSpinner('');
+            },
+            async () => {
+                setShowSpinner('Problem In Connection!');
+                await TimeHelper.delay(4000);
+                await props.signalRService.restart();
+            },
+            async (err) => {
+                console.error(err);
+                setShowSpinner('Disconnected!');
+                await TimeHelper.delay(4000);
+                await props.signalRService.restart();
+            },
+            async () => {
+                setShowSpinner('');
+                await loadWells();
+            },
+            (err) => {
+                console.error(err);
+                setShowSpinner('Reconnecting!');
+            }
+        );
+
+        const asyncStart = async () => {
+            await props.signalRService.restart();
+        };
+
+        asyncStart();
+
+        return () => {
+            /*nothing*/
+        };
+    }, []);
+
+    const loadWells = async () => {
+        if (props.signalRService.connected()) {
+            const rwells = await props.signalRService.wells();
+            console.log('wells recieved: ', rwells);
+            setWells(rwells);
+        }
+    };
 
     //
     return (
@@ -52,5 +97,7 @@ const Home = (props: HomeProps) => {
 const domNode = document.getElementById('root');
 if (domNode !== null) {
     const root = createRoot(domNode);
-    root.render(<Home />);
+
+    const signalRService = new SignalrService();
+    root.render(<Home signalRService={signalRService} />);
 }
