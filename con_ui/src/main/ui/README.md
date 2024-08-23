@@ -18,8 +18,8 @@ here is the plan parts:
     -   [ ] Settings Page
     -   [ ] Exports Page
     -   [ ] Utility
-        -   [ ] SignalR Connection
-        -   [ ] Time Helper
+        -   [x] SignalR Connection
+        -   [x] Time Helper
         -   [ ] Playback Actions
             -   [ ] Time Base
             -   [ ] Depth Base

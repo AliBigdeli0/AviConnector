@@ -20,7 +20,7 @@ export class SignalrService {
     onerror: SignalROnError | undefined = undefined;
 
     onErrorCallback: ((data: string) => void) | undefined = undefined;
-    onWellsCallback: ((wells: WellData[]) => void) | undefined = undefined;
+    onWellsCallback: ((wells: string[]) => void) | undefined = undefined;
 
     async start() {
         this.conn = undefined;
@@ -87,7 +87,11 @@ export class SignalrService {
             };
 
             this.onWellsCallback = (list) => {
-                res(list);
+                const retList: WellData[] = [];
+                list.forEach((well) => {
+                    retList.push(JSON.parse(well));
+                });
+                res(retList);
             };
             await this.conn?.invoke('wells');
         });
