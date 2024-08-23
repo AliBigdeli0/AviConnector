@@ -5,6 +5,7 @@ import RecentIcon from '@atlaskit/icon/glyph/recent';
 import EditorNumberListIcon from '@atlaskit/icon/glyph/editor/number-list';
 import CrossCircleIcon from '@atlaskit/icon/glyph/cross-circle';
 import CheckCircleIcon from '@atlaskit/icon/glyph/check-circle';
+import SearchIcon from '@atlaskit/icon/glyph/search';
 
 //
 // do not remove this
@@ -18,11 +19,11 @@ import { createRoot } from 'react-dom/client';
 import { Box, xcss } from '@atlaskit/primitives';
 import { HeadType, RowType } from '@atlaskit/dynamic-table/types';
 import Tabs, { Tab, TabList, TabPanel } from '@atlaskit/tabs';
-import Tag from '@atlaskit/tag';
 import Button, { IconButton } from '@atlaskit/button/new';
 import DynamicTable from '@atlaskit/dynamic-table';
 import Tooltip from '@atlaskit/tooltip';
-import Flag from '@atlaskit/flag';
+import Textfield from '@atlaskit/textfield';
+
 import Banner from '@atlaskit/banner';
 
 //
@@ -44,6 +45,7 @@ const Home = (props: HomeProps) => {
     const [count, setCount] = useState(0);
     const [wells, setWells] = useState<WellData[]>([]);
     const [alertMsg, setAlertMsg] = useState<AlertMsgType>([]);
+    const [search, setSearch] = useState('');
 
     const pathItems = ['Home'];
 
@@ -136,16 +138,24 @@ const Home = (props: HomeProps) => {
         const archived = wells.filter((well) => well.IsOffline);
         return (
             <Box>
+                <Textfield
+                    appearance="standard"
+                    onChange={(e) => {
+                        e.stopPropagation();
+                        setSearch((e.target as any).value);
+                    }}
+                    placeholder="Search"
+                    elemBeforeInput={
+                        <SearchIcon size="small" label="search" />
+                    }></Textfield>
                 <Tabs id="wells_tab">
                     <TabList>
                         <Tab>Online Wells</Tab>
                         <Tab>Archived Wells</Tab>
                     </TabList>
+                    <TabPanel>{showWellsOnDynamicTable(true, online)}</TabPanel>
                     <TabPanel>
-                        {showWellsOnDynamicTable('Online Wells', online)}
-                    </TabPanel>
-                    <TabPanel>
-                        {showWellsOnDynamicTable('Archived Wells', archived)}
+                        {showWellsOnDynamicTable(false, archived)}
                     </TabPanel>
                 </Tabs>
             </Box>
@@ -179,10 +189,10 @@ const Home = (props: HomeProps) => {
         return hasTimeReached(well) ? CrossCircleIcon : CheckCircleIcon;
     };
 
-    const showWellColor: (well: WellData) => 'danger' | 'default' = (
+    const showWellColor: (well: WellData) => 'danger' | 'subtle' = (
         well: WellData
     ) => {
-        return hasTimeReached(well) ? 'danger' : 'default';
+        return hasTimeReached(well) ? 'danger' : 'subtle';
     };
 
     const statusString = (well: WellData) => {
@@ -196,7 +206,7 @@ const Home = (props: HomeProps) => {
     };
 
     const showWellsOnDynamicTable = (
-        caption: string,
+        isOnline: boolean,
         wellsToShow: WellData[]
     ) => {
         const header: HeadType = {
@@ -226,50 +236,70 @@ const Home = (props: HomeProps) => {
         };
 
         const rows: RowType[] = [];
-
-        wellsToShow.forEach((well, index) => {
-            rows.push({
-                cells: [
-                    {
-                        content: (
-                            <Tooltip content={showWellTime(well)}>
+        wellsToShow
+            .filter((well) => {
+                if (search.trim() === '') {
+                    return true;
+                }
+                return (
+                    well.Name.toLocaleLowerCase().includes(search) ||
+                    well.AliasWellName.toLocaleLowerCase().includes(search) ||
+                    well.ID.toLocaleLowerCase().includes(search) ||
+                    well.IP.toLocaleLowerCase().includes(search)
+                );
+            })
+            .forEach((well, index) => {
+                rows.push({
+                    cells: [
+                        {
+                            content: isOnline ? (
+                                <Tooltip content={showWellTime(well)}>
+                                    <Button
+                                        key={`key_flag_${well.ID}_${index}`}
+                                        appearance={showWellColor(well)}
+                                        iconBefore={showWellIcon(well)}>
+                                        {statusString(well)}
+                                    </Button>
+                                </Tooltip>
+                            ) : (
                                 <Button
-                                    key={`key_flag_${well.ID}_${index}`}
-                                    appearance={showWellColor(well)}
-                                    iconBefore={showWellIcon(well)}>
-                                    {statusString(well)}
+                                    key={`key_flag_archive_${well.ID}_${index}`}
+                                    appearance="default">
+                                    disable
                                 </Button>
-                            </Tooltip>
-                        ),
-                    },
-                    {
-                        content: <Box as="span">{well.Name}</Box>,
-                    },
-                    {
-                        content: <Box as="span">{well.AliasWellName}</Box>,
-                    },
-                    {
-                        content: <Box as="span">{well.ID}</Box>,
-                    },
-                    {
-                        content: <Box as="span">{well.IP}</Box>,
-                    },
-                    {
-                        content: (
-                            <IconButton icon={RecentIcon} label="Live View" />
-                        ),
-                    },
-                    {
-                        content: (
-                            <IconButton
-                                icon={EditorNumberListIcon}
-                                label="Depth View"
-                            />
-                        ),
-                    },
-                ],
+                            ),
+                        },
+                        {
+                            content: <Box as="span">{well.Name}</Box>,
+                        },
+                        {
+                            content: <Box as="span">{well.AliasWellName}</Box>,
+                        },
+                        {
+                            content: <Box as="span">{well.ID}</Box>,
+                        },
+                        {
+                            content: <Box as="span">{well.IP}</Box>,
+                        },
+                        {
+                            content: (
+                                <IconButton
+                                    icon={RecentIcon}
+                                    label="Live View"
+                                />
+                            ),
+                        },
+                        {
+                            content: (
+                                <IconButton
+                                    icon={EditorNumberListIcon}
+                                    label="Depth View"
+                                />
+                            ),
+                        },
+                    ],
+                });
             });
-        });
 
         return (
             <Box
@@ -277,9 +307,9 @@ const Home = (props: HomeProps) => {
                 xcss={xcss({
                     width: '100%',
                     overflow: 'auto',
+                    paddingTop: 'space.050',
                 })}>
                 <DynamicTable
-                    caption={caption}
                     rowsPerPage={100}
                     defaultPage={1}
                     head={header}

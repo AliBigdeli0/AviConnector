@@ -12,7 +12,7 @@ export class StringHelper {
     }
 
     static get notApplicable() {
-        return 'N/A';
+        return 'Not Applicable';
     }
 
     static activityConverter(str?: string) {
