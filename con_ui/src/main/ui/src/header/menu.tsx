@@ -193,7 +193,7 @@ export const Menu = (props: MenuProps) => {
                                     } else {
                                         ThemeHelper.changeTheme('dark');
                                     }
-                                    window.location.href = '/';
+                                    window.location.href = window.location.href;
                                 }}></Toggle>
                         </Tooltip>
                     </Stack>

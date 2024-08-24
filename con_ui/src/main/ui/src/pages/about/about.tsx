@@ -10,6 +10,7 @@ import { InitTheme } from '../../header/theme';
 import { CommonProps } from '../../utility/common_props';
 import { MsgType, AlertMsgType, ThemeType } from '../../utility/types';
 import { SignalrService } from '../../utility/signalr_service';
+import { ThemeHelper } from '../../utility/theme_helper';
 
 export interface AboutProps extends CommonProps {}
 
@@ -18,7 +19,7 @@ const About = (props: AboutProps) => {
     const [updateParent, setUpdateParent] = useState(false);
     const [alertMsg, setAlertMsg] = useState<AlertMsgType>([]);
     const pathItems = ['About'];
-    const [theme, setTheme] = useState<ThemeType>('dark');
+    const [theme, setTheme] = useState<ThemeType>(ThemeHelper.getTheme());
 
     return (
         <InitTheme

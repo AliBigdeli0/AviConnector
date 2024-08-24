@@ -7,7 +7,7 @@ export class ThemeHelper {
 
     static getTheme(): ThemeType {
         const theme = localStorage.getItem('theme') as ThemeType;
-        if (theme == null) {
+        if (theme === null) {
             this.changeTheme('dark');
         }
         return localStorage.getItem('theme') as ThemeType;
