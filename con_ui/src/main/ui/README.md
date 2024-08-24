@@ -10,10 +10,10 @@ here is the plan parts:
         -   [ ] Pits
         -   [ ] Playback Scroll (for both time/depth based)
     -   [ ] UI Page Settings
-    -   [ ] UI Time Base
-    -   [ ] UI Depth Page
-    -   [ ] Home Page
-    -   [ ] About Page
+    -   [ ] UI Time Layout
+    -   [ ] UI Depth Layout
+    -   [x] Home Page
+    -   [x] About Page
     -   [ ] Login Page
     -   [ ] Settings Page
     -   [ ] Exports Page

@@ -37,3 +37,9 @@ export interface ServerLiveModelResponse {
     isAvalible: boolean;
     lastDepth: string;
 }
+
+// timeview ui
+export enum Timelayouts {
+    OnChartLayout = 1,
+    TwoChartLayout = 2,
+}

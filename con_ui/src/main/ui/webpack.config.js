@@ -9,6 +9,7 @@ module.exports = {
     entry: {
         home: './src/pages/home/home.tsx',
         about: './src/pages/about/about.tsx',
+        time_view: './src/pages/time_view/time_view.tsx',
     },
     
     output: {

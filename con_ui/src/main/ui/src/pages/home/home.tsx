@@ -193,16 +193,6 @@ const Home = (props: HomeProps) => {
         );
     };
 
-    const showWellColor: (
-        well: WellData
-    ) =>
-        | 'color.background.accent.teal.subtler.pressed'
-        | 'color.background.accent.red.subtler.pressed' = (well: WellData) => {
-        return hasTimeReached(well)
-            ? 'color.background.accent.red.subtler.pressed'
-            : 'color.background.accent.teal.subtler.pressed';
-    };
-
     const statusString = (well: WellData) => {
         const str = StringHelper.activityConverter(
             well.LiveData?.parameters[Constant.ActivityCode]
@@ -307,6 +297,10 @@ const Home = (props: HomeProps) => {
                                     appearance="primary"
                                     icon={RecentIcon}
                                     label="Live View"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        window.location.href = `/time_view?well_id=${well.ID}`;
+                                    }}
                                 />
                             ),
                         },
