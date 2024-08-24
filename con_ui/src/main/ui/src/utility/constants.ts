@@ -17,4 +17,12 @@ export class Constant {
     static get MenuSizePixcel(): string {
         return `${this.MenuSize}px`;
     }
+
+    static get Version() {
+        return '0.1.0';
+    }
+
+    static get AppName() {
+        return 'Well Monitor';
+    }
 }

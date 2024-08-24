@@ -24,8 +24,6 @@ import DynamicTable from '@atlaskit/dynamic-table';
 import Tooltip from '@atlaskit/tooltip';
 import Textfield from '@atlaskit/textfield';
 
-import Banner from '@atlaskit/banner';
-
 //
 import { InitTheme } from '../../header/theme';
 import { CommonProps } from '../../utility/common_props';

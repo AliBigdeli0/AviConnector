@@ -70,7 +70,7 @@ export const Menu = (props: MenuProps) => {
                             color: token('color.text.accent.blue'),
                             fontSize: 30,
                         }}>
-                        Well Monitor
+                        {Constant.AppName}
                     </span>
                 </Box>
 
