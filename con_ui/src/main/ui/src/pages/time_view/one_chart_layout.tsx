@@ -49,9 +49,7 @@ export const OneChartLayout = (props: OneChartLayoutProps) => {
                         backgroundColor: 'color.background.accent.red.subtle',
                         width: '100%',
                         height: '15%',
-                    })}>
-                    part 2
-                </Box>
+                    })}></Box>
                 <Box
                     xcss={xcss({
                         backgroundColor: 'color.background.accent.blue.subtler',
