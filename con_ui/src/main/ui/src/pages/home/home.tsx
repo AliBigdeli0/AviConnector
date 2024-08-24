@@ -16,7 +16,7 @@ const dayjs = require('dayjs');
 //
 import { token } from '@atlaskit/tokens';
 import { createRoot } from 'react-dom/client';
-import { Box, xcss } from '@atlaskit/primitives';
+import { Box, Inline, Text, xcss } from '@atlaskit/primitives';
 import { HeadType, RowType } from '@atlaskit/dynamic-table/types';
 import Tabs, { Tab, TabList, TabPanel } from '@atlaskit/tabs';
 import Button, { IconButton } from '@atlaskit/button/new';
@@ -188,13 +188,21 @@ const Home = (props: HomeProps) => {
     };
 
     const showWellIcon = (well: WellData) => {
-        return hasTimeReached(well) ? CrossCircleIcon : CheckCircleIcon;
+        return hasTimeReached(well) ? (
+            <CrossCircleIcon label="" primaryColor="#FF5630" />
+        ) : (
+            <CheckCircleIcon label="" primaryColor="#36B37E" />
+        );
     };
 
-    const showWellColor: (well: WellData) => 'danger' | 'subtle' = (
+    const showWellColor: (
         well: WellData
-    ) => {
-        return hasTimeReached(well) ? 'danger' : 'subtle';
+    ) =>
+        | 'color.background.accent.teal.subtler.pressed'
+        | 'color.background.accent.red.subtler.pressed' = (well: WellData) => {
+        return hasTimeReached(well)
+            ? 'color.background.accent.red.subtler.pressed'
+            : 'color.background.accent.teal.subtler.pressed';
     };
 
     const statusString = (well: WellData) => {
@@ -256,12 +264,24 @@ const Home = (props: HomeProps) => {
                         {
                             content: isOnline ? (
                                 <Tooltip content={showWellTime(well)}>
-                                    <Button
-                                        key={`key_flag_${well.ID}_${index}`}
-                                        appearance={showWellColor(well)}
-                                        iconBefore={showWellIcon(well)}>
-                                        {statusString(well)}
-                                    </Button>
+                                    <Inline
+                                        xcss={xcss({
+                                            width: '100%',
+                                        })}>
+                                        <Box
+                                            xcss={xcss({
+                                                paddingLeft: 'space.100',
+                                            })}>
+                                            {showWellIcon(well)}
+                                        </Box>
+                                        <Box
+                                            as="span"
+                                            xcss={xcss({
+                                                paddingTop: 'space.025',
+                                            })}>
+                                            {statusString(well)}
+                                        </Box>
+                                    </Inline>
                                 </Tooltip>
                             ) : (
                                 <Button
@@ -286,6 +306,7 @@ const Home = (props: HomeProps) => {
                         {
                             content: (
                                 <IconButton
+                                    appearance="primary"
                                     icon={RecentIcon}
                                     label="Live View"
                                 />
@@ -294,6 +315,7 @@ const Home = (props: HomeProps) => {
                         {
                             content: (
                                 <IconButton
+                                    appearance="primary"
                                     icon={EditorNumberListIcon}
                                     label="Depth View"
                                 />
