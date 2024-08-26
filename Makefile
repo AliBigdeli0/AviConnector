@@ -15,6 +15,13 @@ du:: deploy_updates
 deploy_updates::
 	@cd $(DEPLOY_PATH); make deploy_updates
 
+deploy_ui_updates::
+	@cd $(DEPLOY_PATH); make deploy_con_ui_updates
+
+dui:: deploy_ui 
+deploy_ui:: 
+	@cd $(DEPLOY_PATH); make deploy_con_ui_jar
+
 run_connector::
 	@./build_copy_con_data.sh
 	@./gradlew -p con_manager bootRun

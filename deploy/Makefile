@@ -3,6 +3,7 @@ CONTAINER_NAME=ubuntu_avi_connector
 JAR_DATA_NAME=con_data-1.0.0-plain.jar
 JAR_COMMON_NAME=con_common-1.0.0.jar
 JAR_MANAGER_NAME=con_manager-1.0.0-plain.jar
+JAR_UI_NAME=con_ui-1.0.0-plain.jar
 
 # paths
 DEPLOY_PATH=~/Desktop/share/update_med/updates
@@ -17,6 +18,9 @@ BUILD_MANAGER_PATH=$(PWD)/../con_manager/build
 LIB_MANAGER_PATH=$(BUILD_MANAGER_PATH)/lib_manager
 RUN_MANAGER_FILE_PATH=$(PWD)/run_manager.bat
 
+BUILD_UI_PATH=$(PWD)/../con_ui/build
+LIB_UI_PATH=$(BUILD_UI_PATH)/lib_ui
+
 TASK_DATA_FILE_PATH=$(PWD)/task_run.sh
 RUN_DOCKER_FILE_PATH=$(PWD)/run_docker.bat
 
@@ -27,6 +31,21 @@ MOVE=mv
 COPY=cp
 ##########################
 ## deploy package
+
+# con_ui
+deploy_con_ui_jar::
+	@cd $(BUILD_UI_PATH)/../..;  															\
+	./build_all.sh; 																		\
+	cd $(BUILD_UI_PATH);																	\
+	$(ZIP) connector_ui.7z $(BUILD_UI_PATH)/libs/$(JAR_UI_NAME) 	$(LIB_UI_PATH);			\
+	$(MOVE) connector_ui.7z $(DEPLOY_PATH)
+
+deploy_con_ui_updates::
+	@cd $(BUILD_UI_PATH)/../..;  															\
+	./build_all.sh; 																		\
+	cd $(BUILD_UI_PATH);																	\
+	$(ZIP) connector_update_ui.7z $(BUILD_UI_PATH)/libs/$(JAR_UI_NAME);						\
+	$(MOVE) connector_update_ui.7z $(DEPLOY_PATH)
 
 # con_manager
 deploy_updates::
@@ -43,7 +62,6 @@ deploy_con_manager_jar::
 	$(REMOVE) $(JAR_MANAGER_NAME).7z $(DEPLOY_PATH)/$(JAR_MANAGER_NAME).7z;																								\
 	$(ZIP) $(JAR_MANAGER_NAME).7z ./libs/$(JAR_MANAGER_NAME) $(LIB_MANAGER_PATH) $(RUN_MANAGER_FILE_PATH)  $(BUILD_DATA_PATH)/libs/$(JAR_DATA_NAME) $(LIB_DATA_PATH);		\
 	$(MOVE) $(JAR_MANAGER_NAME).7z $(DEPLOY_PATH)		
-
 
 # con_data
 deploy_con_data_container:: deploy_con_data_jar
