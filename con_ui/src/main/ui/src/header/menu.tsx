@@ -156,8 +156,13 @@ export const Menu = (props: MenuProps) => {
                     height: Constant.MenuSizePixcel,
                 })}>
                 <Breadcrumbs>
-                    {props.PathItems.map((path) => {
-                        return <BreadcrumbsItem text={path} />;
+                    {props.PathItems.map((path, index) => {
+                        return (
+                            <BreadcrumbsItem
+                                key={'menu_break_crumbs_' + index}
+                                text={path}
+                            />
+                        );
                     })}
                 </Breadcrumbs>
             </Box>

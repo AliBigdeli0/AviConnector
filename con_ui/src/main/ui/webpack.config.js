@@ -4,7 +4,7 @@ const ForkTSChecker = require('fork-ts-checker-webpack-plugin');
 const TSLintPlugin = require('tslint-webpack-plugin');
 
 module.exports = {
-    mode: "production",
+    mode: "development",
     
     entry: {
         home: './src/pages/home/home.tsx',
