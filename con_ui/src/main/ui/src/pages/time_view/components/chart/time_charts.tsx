@@ -62,7 +62,7 @@ export const TimeChart = (props: TimeChartProp) => {
                 },
                 ticks: {
                     display: false,
-                    stepSize: sizeOfArray / 12,
+                    stepSize: 9,
                     padding: 0,
                     autoSkipPadding: 0,
                     autoSkip: true,
@@ -128,7 +128,7 @@ export const TimeChart = (props: TimeChartProp) => {
                     x: getRandomInRange(0, 100),
                 };
                 dataList.unshift(newPoint);
-                if (dataList.length > sizeOfArray + 1) {
+                if (dataList.length > sizeOfArray) {
                     dataList.pop();
                 }
                 chart.update();
