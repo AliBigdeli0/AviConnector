@@ -43,3 +43,8 @@ export enum Timelayouts {
     OnChartLayout = 1,
     TwoChartLayout = 2,
 }
+
+export interface Point {
+    y: Date;
+    x: number;
+}
