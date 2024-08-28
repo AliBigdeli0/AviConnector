@@ -44,7 +44,17 @@ export enum Timelayouts {
     TwoChartLayout = 2,
 }
 
-export interface Point {
+// chart
+export interface ChartPoint {
     y: Date;
     x: number;
+}
+
+export interface ChartData {
+    startTimer(): any;
+}
+
+export enum ChartDataType {
+    Fake = 0,
+    Real = 1,
 }

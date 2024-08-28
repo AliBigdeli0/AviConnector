@@ -13,15 +13,16 @@ import ChartStreaming from 'chartjs-plugin-streaming';
 
 // local
 import { BaseLayoutProps } from '../../base_layout_props';
-import { NumHelper } from '../../../../utility/number_helper';
 import { getChartOption } from './chart_options';
 import { chartPlugins } from './chart_plugins';
 import { getChartLines } from './chart_lines';
+import { getChartData } from './chart_data';
+import { ChartDataType } from '../../../../utility/models';
+import { TimeChartType } from '../../../../utility/types';
 
 // props
 export interface TimeChartProp extends BaseLayoutProps {}
 
-const sizeOfArray = 600;
 const chartScale = 3600_000;
 
 // TimeChart
@@ -37,39 +38,17 @@ export const TimeChart = (props: TimeChartProp) => {
         if (ctx) {
             Chart.register(...registerables);
             Chart.register(ChartStreaming);
-            const chart = new Chart(ctx, {
+            const chart: TimeChartType = new Chart(ctx, {
                 type: 'line',
                 data: getChartLines({}),
                 options: getChartOption({ chartScale, gridLinesColor }),
                 plugins: chartPlugins({ textColor, textFontSize }),
             });
 
-            chart.data.datasets[0].data = NumHelper.generateRandomPoints(
-                sizeOfArray
-            ) as any;
-            chart.data.datasets[1].data = NumHelper.generateRandomPoints(
-                sizeOfArray
-            ) as any;
-            chart.update();
-
-            const counter: number[] = new Array(2).fill(0);
-            const randValues: number[] = new Array(2).fill(0);
-            const timerID = setInterval(() => {
-                chart.data.datasets.forEach((item, index) => {
-                    const dataList = item.data;
-
-                    if (counter[index]++ > 100) {
-                        randValues[index] = NumHelper.getRandomInRange(0, 100);
-                        counter[index] = 0;
-                    }
-                    if (dataList.length > sizeOfArray) {
-                        dataList.pop();
-                    }
-
-                    dataList.unshift({ y: Date.now(), x: randValues[index] });
-                });
-                chart.update();
-            }, 1000);
+            const timerID = getChartData(
+                { chart, refreshRate: 1000 },
+                ChartDataType.Fake
+            ).startTimer();
 
             return () => {
                 clearInterval(timerID);

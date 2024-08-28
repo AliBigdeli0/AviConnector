@@ -1,8 +1,8 @@
 // chart
-import { ChartOptions } from 'chart.js';
+import { Chart, ChartEvent, ChartOptions } from 'chart.js';
 
 // local
-import { Point } from '../../../../utility/models';
+import { ChartPoint } from '../../../../utility/models';
 import { TimeHelper } from '../../../../utility/time_helper';
 
 export interface ChartOptionProps {
@@ -65,25 +65,37 @@ export const getChartOption = (
             tooltip: {
                 callbacks: {
                     title: (tooltipeItems) => {
-                        const data = tooltipeItems[0].raw as Point;
+                        const data = tooltipeItems[0].raw as ChartPoint;
                         return `Time: ${TimeHelper.showTime(data.y)}`;
                     },
                     label: (tooltipItem) => {
-                        return `${(tooltipItem.raw as Point).x.toFixed(2)}`;
+                        return `${(tooltipItem.raw as ChartPoint).x.toFixed(
+                            2
+                        )}`;
                     },
                 },
             },
             streaming: {
                 duration: props.chartScale,
-                frameRate: 30,
+                // frameRate: 30,
             },
         },
         animation: {
             duration: 0,
         },
-        events: ['mousemove'],
-        onHover: (event, chartElement) => {
-            console.log(event, chartElement);
+        events: ['mouseleave', 'mousemove'],
+        onHover: (event: ChartEvent, chartElement) => {
+            const chart: Chart = (event as any).chart;
+            if (event.y === null) return;
+
+            chart.ctx.save();
+            chart.ctx.beginPath();
+            chart.ctx.moveTo(chart.chartArea.left, event.y);
+            chart.ctx.lineTo(chart.chartArea.right, event.y);
+            chart.ctx.lineWidth = 1;
+            chart.ctx.strokeStyle = 'red';
+            chart.ctx.stroke();
+            chart.ctx.restore();
         },
     };
 };

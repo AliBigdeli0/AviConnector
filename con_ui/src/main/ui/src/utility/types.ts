@@ -1,3 +1,7 @@
+// out
+import { Chart, ScatterDataPoint } from 'chart.js';
+
+// local
 import { AlertMsg, ServerLiveModel, ServerLiveModelResponse } from './models';
 
 // types
@@ -21,3 +25,9 @@ export type SignalROnWellsCallback = (wells: string[]) => void;
 export type SignalROnBulkLiveCallback = (
     lives: ServerLiveModelResponse[]
 ) => void;
+
+export type TimeChartType = Chart<
+    'line',
+    (number | ScatterDataPoint | null)[],
+    unknown
+>;
