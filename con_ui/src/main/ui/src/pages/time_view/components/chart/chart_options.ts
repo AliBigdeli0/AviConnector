@@ -69,9 +69,10 @@ export const getChartOption = (
                         return `Time: ${TimeHelper.showTime(data.y)}`;
                     },
                     label: (tooltipItem) => {
-                        return `${(tooltipItem.raw as ChartPoint).x.toFixed(
-                            2
-                        )}`;
+                        const label = tooltipItem.dataset.label;
+                        return `${label} : ${(
+                            tooltipItem.raw as ChartPoint
+                        ).x.toFixed(2)}`;
                     },
                 },
             },
@@ -85,17 +86,16 @@ export const getChartOption = (
         },
         events: ['mouseleave', 'mousemove'],
         onHover: (event: ChartEvent, chartElement) => {
-            const chart: Chart = (event as any).chart;
-            if (event.y === null) return;
-
-            chart.ctx.save();
-            chart.ctx.beginPath();
-            chart.ctx.moveTo(chart.chartArea.left, event.y);
-            chart.ctx.lineTo(chart.chartArea.right, event.y);
-            chart.ctx.lineWidth = 1;
-            chart.ctx.strokeStyle = 'red';
-            chart.ctx.stroke();
-            chart.ctx.restore();
+            // const chart: Chart = (event as any).chart;
+            // if (event.y === null) return;
+            // chart.ctx.save();
+            // chart.ctx.beginPath();
+            // chart.ctx.moveTo(chart.chartArea.left, event.y);
+            // chart.ctx.lineTo(chart.chartArea.right, event.y);
+            // chart.ctx.lineWidth = 1;
+            // chart.ctx.strokeStyle = 'red';
+            // chart.ctx.stroke();
+            // chart.ctx.restore();
         },
     };
 };

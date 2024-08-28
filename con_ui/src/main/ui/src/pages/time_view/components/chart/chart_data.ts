@@ -61,7 +61,10 @@ const fakeChartGenerator = (props: ChartDataProps): ChartData => {
     return chartData;
 };
 
-export const getChartData = (props: ChartDataProps, type: ChartDataType) => {
+export const getChartDataReceiver = (
+    props: ChartDataProps,
+    type: ChartDataType
+) => {
     switch (type) {
         case ChartDataType.Fake:
             return fakeChartGenerator(props);

@@ -16,7 +16,7 @@ import { BaseLayoutProps } from '../../base_layout_props';
 import { getChartOption } from './chart_options';
 import { chartPlugins } from './chart_plugins';
 import { getChartLines } from './chart_lines';
-import { getChartData } from './chart_data';
+import { getChartDataReceiver } from './chart_data';
 import { ChartDataType } from '../../../../utility/models';
 import { TimeChartType } from '../../../../utility/types';
 
@@ -45,7 +45,7 @@ export const TimeChart = (props: TimeChartProp) => {
                 plugins: chartPlugins({ textColor, textFontSize }),
             });
 
-            const timerID = getChartData(
+            const timerID = getChartDataReceiver(
                 { chart, refreshRate: 1000 },
                 ChartDataType.Fake
             ).startTimer();
