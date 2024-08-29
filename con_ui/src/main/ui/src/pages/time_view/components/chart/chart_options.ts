@@ -4,6 +4,7 @@ import { Chart, ChartEvent, ChartOptions } from 'chart.js';
 // local
 import { ChartPoint } from '../../../../utility/models';
 import { TimeHelper } from '../../../../utility/time_helper';
+import { setLastEvent } from './chart_shared';
 
 export interface ChartOptionProps {
     gridLinesColor: string;
@@ -63,6 +64,7 @@ export const getChartOption = (
                 display: false,
             },
             tooltip: {
+                mode: 'index',
                 callbacks: {
                     title: (tooltipeItems) => {
                         const data = tooltipeItems[0].raw as ChartPoint;
@@ -73,6 +75,9 @@ export const getChartOption = (
                         return `${label} : ${(
                             tooltipItem.raw as ChartPoint
                         ).x.toFixed(2)}`;
+                    },
+                    afterLabel: (_tooltipItem) => {
+                        return '';
                     },
                 },
             },
@@ -86,16 +91,9 @@ export const getChartOption = (
         },
         events: ['mouseleave', 'mousemove'],
         onHover: (event: ChartEvent, chartElement) => {
-            // const chart: Chart = (event as any).chart;
-            // if (event.y === null) return;
-            // chart.ctx.save();
-            // chart.ctx.beginPath();
-            // chart.ctx.moveTo(chart.chartArea.left, event.y);
-            // chart.ctx.lineTo(chart.chartArea.right, event.y);
-            // chart.ctx.lineWidth = 1;
-            // chart.ctx.strokeStyle = 'red';
-            // chart.ctx.stroke();
-            // chart.ctx.restore();
+            const chart: Chart = (event as any).chart;
+            setLastEvent(event);
+            /* emtpy */
         },
     };
 };

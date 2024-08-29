@@ -30,6 +30,7 @@ export const TimeChart = (props: TimeChartProp) => {
     const canvasChartRef = useRef<HTMLCanvasElement>(null);
     const gridLinesColor = '#9FADBC1F';
     const textColor = colors.DN400;
+    const tooltipLineHoverColor = textColor;
     const textFontSize = 12;
 
     // effects
@@ -42,7 +43,11 @@ export const TimeChart = (props: TimeChartProp) => {
                 type: 'line',
                 data: getChartLines({}),
                 options: getChartOption({ chartScale, gridLinesColor }),
-                plugins: chartPlugins({ textColor, textFontSize }),
+                plugins: chartPlugins({
+                    textColor,
+                    textFontSize,
+                    tooltipLineHoverColor,
+                }),
             });
 
             const timerID = getChartDataReceiver(

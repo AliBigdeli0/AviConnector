@@ -58,3 +58,8 @@ export enum ChartDataType {
     Fake = 0,
     Real = 1,
 }
+
+export interface ChartLastEventPoint {
+    x: number | null;
+    y: number | null;
+}

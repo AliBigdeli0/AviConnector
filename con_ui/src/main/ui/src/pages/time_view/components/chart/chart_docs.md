@@ -11,7 +11,7 @@
     -   [ ] Custom Legend
         -   [ ] Convert to 1 to 100
         -   [ ] Convert Back from 1 to 100 to real value
-    -   ~~[ ] Line Over Text~~
+    -   [ ] Line Over Text
 -   [ ] Chart Online Data
 -   [ ] Chart View Points
 -   [ ] Numeric Part
