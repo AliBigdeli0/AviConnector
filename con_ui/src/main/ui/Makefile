@@ -11,7 +11,7 @@ os:: open_selenimum
 open_selenimum:: compile
 	@npx node ./test/home_test.mjs
 
-compile:: proto_compile compile_webpack
+compile:: compile_webpack
 
 compile_webpack::
 	@npx webpack --config webpack.config.js
