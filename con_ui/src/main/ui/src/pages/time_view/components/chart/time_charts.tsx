@@ -19,6 +19,7 @@ import { getChartLines } from './chart_lines';
 import { getChartDataReceiver } from './chart_data';
 import { ChartDataType } from '../../../../utility/models';
 import { TimeChartType } from '../../../../utility/types';
+import { backgroundColorMap } from '@atlaskit/primitives/dist/types/xcss/style-maps.partial';
 
 // props
 export interface TimeChartProp extends BaseLayoutProps {}
@@ -31,6 +32,7 @@ export const TimeChart = (props: TimeChartProp) => {
     const gridLinesColor = '#9FADBC1F';
     const textColor = colors.DN400;
     const tooltipLineHoverColor = textColor;
+    const borderColor = textColor;
     const textFontSize = 12;
 
     // effects
@@ -68,16 +70,26 @@ export const TimeChart = (props: TimeChartProp) => {
                 xcss={xcss({
                     width: '100%',
                     height: '20%',
-                    paddingLeft: 'space.050',
-                    paddingRight: 'space.050',
-                    paddingBottom: 'space.0',
+                    borderColor: 'color.border.accent.gray',
+                    borderWidth: '1px',
+                    borderStyle: 'solid',
+
+                    borderBottomWidth: '0px',
                 })}>
                 <Box
                     xcss={xcss({
                         height: '100%',
                         backgroundColor: 'color.background.neutral',
+                        margin: 'space.050',
+                        flexDirection: 'column',
+                        display: 'flex',
                     })}>
-                    numeric
+                    <Box
+                        xcss={xcss({
+                            flex: 1,
+                        })}>
+                        Numerics
+                    </Box>
                 </Box>
             </Box>
             <Box
@@ -87,6 +99,12 @@ export const TimeChart = (props: TimeChartProp) => {
                     padding: 'space.0',
 
                     overflow: 'hidden',
+
+                    borderColor: 'color.border.accent.gray',
+                    borderWidth: '1px',
+                    borderStyle: 'solid',
+
+                    borderTopWidth: '0px',
                 })}>
                 <canvas
                     ref={canvasChartRef}
