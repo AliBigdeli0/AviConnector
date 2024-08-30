@@ -4,7 +4,7 @@
     -   [x] Background Grid Color
     -   [x] Fix Grid movments
     -   [x] lines for 1 hour data
-    -   [ ] Fix Background Outfit
+    -   [x] Fix Background Outfit
     -   [ ] Comments
     -   [x] Show Time
     -   [ ] raise event with time to the other forms
@@ -12,6 +12,11 @@
         -   [ ] Convert to 1 to 100
         -   [ ] Convert Back from 1 to 100 to real value
     -   [x] Line Over Text
+    -   [ ] Create Properties Box
+        -   [ ] Open its modal
+        -   [ ] Lines Properties
+        -   [ ] Parameters
+        -   [ ] Total Properties
 -   [ ] Chart Online Data
 -   [ ] Chart View Points
 -   [ ] Numeric Part

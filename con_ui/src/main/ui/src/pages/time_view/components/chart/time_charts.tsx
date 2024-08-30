@@ -1,9 +1,14 @@
 // icons
+import SettingsIcon from '@atlaskit/icon/glyph/settings';
+
+// React
+import React, { useEffect, useRef, useState } from 'react';
 
 // atlassian
-import React, { useEffect, useRef } from 'react';
 import { Box, xcss } from '@atlaskit/primitives';
 import { colors } from '@atlaskit/theme';
+import { IconButton } from '@atlaskit/button/new';
+import { token } from '@atlaskit/tokens';
 
 // chart
 import { Chart, registerables } from 'chart.js';
@@ -19,7 +24,7 @@ import { getChartLines } from './chart_lines';
 import { getChartDataReceiver } from './chart_data';
 import { ChartDataType } from '../../../../utility/models';
 import { TimeChartType } from '../../../../utility/types';
-import { backgroundColorMap } from '@atlaskit/primitives/dist/types/xcss/style-maps.partial';
+import { ChartSettings } from './chart_settings';
 
 // props
 export interface TimeChartProp extends BaseLayoutProps {}
@@ -28,6 +33,8 @@ const chartScale = 3600_000;
 
 // TimeChart
 export const TimeChart = (props: TimeChartProp) => {
+    const [openSettings, setOpenSettings] = useState(false);
+
     const canvasChartRef = useRef<HTMLCanvasElement>(null);
     const gridLinesColor = '#9FADBC1F';
     const textColor = colors.DN400;
@@ -63,9 +70,34 @@ export const TimeChart = (props: TimeChartProp) => {
         }
     }, []);
 
-    // return
-    return (
-        <>
+    const settingsItems = () => {
+        return (
+            <Box
+                xcss={xcss({
+                    position: 'absolute',
+                    right: '0',
+
+                    zIndex: 'layer',
+                })}>
+                <IconButton
+                    appearance="subtle"
+                    icon={SettingsIcon}
+                    label=""
+                    onClick={() => {
+                        setOpenSettings(true);
+                    }}></IconButton>
+
+                <ChartSettings
+                    open={openSettings}
+                    setOpen={setOpenSettings}
+                    {...props}
+                />
+            </Box>
+        );
+    };
+
+    const numericPart = () => {
+        return (
             <Box
                 xcss={xcss({
                     width: '100%',
@@ -75,23 +107,44 @@ export const TimeChart = (props: TimeChartProp) => {
                     borderStyle: 'solid',
 
                     borderBottomWidth: '0px',
+                    overflow: 'auto',
                 })}>
                 <Box
                     xcss={xcss({
                         height: '100%',
                         backgroundColor: 'color.background.neutral',
                         margin: 'space.050',
-                        flexDirection: 'column',
-                        display: 'flex',
+                        position: 'relative',
                     })}>
-                    <Box
-                        xcss={xcss({
-                            flex: 1,
-                        })}>
-                        Numerics
-                    </Box>
+                    {settingsItems()}
+                    <Box xcss={xcss({ width: '100%' })}>Numerics1</Box>
+                    <Box xcss={xcss({})}>Numerics1</Box>
+                    <Box xcss={xcss({})}>Numerics1</Box>
+                    <Box xcss={xcss({})}>Numerics1</Box>
+                    <Box xcss={xcss({})}>Numerics1</Box>
+                    <Box xcss={xcss({})}>Numerics1</Box>
+                    <Box xcss={xcss({})}>Numerics1</Box>
+                    <Box xcss={xcss({})}>Numerics1</Box>
+                    <Box xcss={xcss({})}>Numerics1</Box>
+                    <Box xcss={xcss({})}>Numerics1</Box>
+                    <Box xcss={xcss({})}>Numerics1</Box>
+                    <Box xcss={xcss({})}>Numerics1</Box>
+                    <Box xcss={xcss({})}>Numerics1</Box>
+                    <Box xcss={xcss({})}>Numerics1</Box>
+                    <Box xcss={xcss({})}>Numerics1</Box>
+                    <Box xcss={xcss({})}>Numerics1</Box>
+                    <Box xcss={xcss({})}>Numerics1</Box>
+                    <Box xcss={xcss({})}>Numerics1</Box>
+                    <Box xcss={xcss({})}>Numerics1</Box>
                 </Box>
             </Box>
+        );
+    };
+
+    // return
+    return (
+        <>
+            {numericPart()}
             <Box
                 xcss={xcss({
                     width: '100%',

@@ -47,6 +47,7 @@
     "@atlaskit/breadcrumbs": "^12.5.2",
     "@atlaskit/button": "^20.1.0",
     "@atlaskit/css-reset": "^6.10.1",
+    "@atlaskit/drawer": "^7.14.2",
     "@atlaskit/dynamic-table": "^14.20.2",
     "@atlaskit/flag": "^15.8.2",
     "@atlaskit/heading": "^2.4.5",
