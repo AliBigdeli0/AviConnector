@@ -1,3 +1,8 @@
+// icons
+import CheckIcon from '@atlaskit/icon/glyph/check';
+import EditorBackgroundColorIcon from '@atlaskit/icon/glyph/editor/background-color';
+import EditorTextColorIcon from '@atlaskit/icon/glyph/editor/text-color';
+
 // react
 import React, { Fragment, useEffect, useRef } from 'react';
 import { css, jsx } from '@emotion/react';
@@ -6,6 +11,12 @@ import { css, jsx } from '@emotion/react';
 import Drawer from '@atlaskit/drawer';
 import { token } from '@atlaskit/tokens';
 import Tabs, { Tab, TabList, TabPanel } from '@atlaskit/tabs';
+import { Stack, Box, xcss, Inline, Grid, Text } from '@atlaskit/primitives';
+import Button from '@atlaskit/button/new';
+import DropdownMenu, {
+    DropdownItem,
+    DropdownItemGroup,
+} from '@atlaskit/dropdown-menu';
 
 // local
 import { TimeChartProp } from './time_charts';
@@ -42,18 +53,60 @@ export const ChartSettings = (props: ChartSettingsProps) => {
         insetInlineStart: 0,
     };
 
+    const others = () => {
+        return (
+            <Stack xcss={xcss({ width: '100%', paddingTop: 'space.100' })}>
+                <Grid xcss={xcss({ paddingBottom: 'space.050' })}>
+                    <Grid templateColumns="1fr 2fr">
+                        <Box>
+                            <Text align="center">Comment Color</Text>
+                        </Box>
+                        <Box
+                            xcss={xcss({
+                                width: '100%',
+                            })}>
+                            <DropdownMenu trigger="Select The Color">
+                                <DropdownItemGroup>
+                                    <DropdownItem
+                                        elemBefore={
+                                            <EditorTextColorIcon
+                                                label=""
+                                                primaryColor="red"
+                                            />
+                                        }>
+                                        Color Name
+                                    </DropdownItem>
+                                </DropdownItemGroup>
+                            </DropdownMenu>
+                        </Box>
+                    </Grid>
+                </Grid>
+                <Stack
+                    alignBlock="end"
+                    alignInline="end"
+                    xcss={xcss({
+                        width: '100%',
+                    })}>
+                    <Button appearance="primary" iconBefore={CheckIcon}>
+                        Apply Changes
+                    </Button>
+                </Stack>
+            </Stack>
+        );
+    };
+
     const tabs = () => {
         return (
             <Tabs id="chart_settings_id">
                 <TabList>
                     <Tab>Lines</Tab>
                     <Tab>Parameters</Tab>
-                    <Tab>Total</Tab>
+                    <Tab>Others</Tab>
                 </TabList>
 
                 <TabPanel>lines</TabPanel>
                 <TabPanel>parameters</TabPanel>
-                <TabPanel>total</TabPanel>
+                <TabPanel>{others()}</TabPanel>
             </Tabs>
         );
     };

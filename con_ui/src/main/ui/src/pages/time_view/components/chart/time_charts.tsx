@@ -5,7 +5,7 @@ import SettingsIcon from '@atlaskit/icon/glyph/settings';
 import React, { useEffect, useRef, useState } from 'react';
 
 // atlassian
-import { Box, xcss } from '@atlaskit/primitives';
+import { Box, Stack, xcss } from '@atlaskit/primitives';
 import { colors } from '@atlaskit/theme';
 import { IconButton } from '@atlaskit/button/new';
 import { token } from '@atlaskit/tokens';
@@ -106,28 +106,18 @@ export const TimeChart = (props: TimeChartProp) => {
                     borderWidth: '1px',
                     borderStyle: 'solid',
 
+                    position: 'relative',
                     borderBottomWidth: '0px',
-                    overflow: 'auto',
                 })}>
                 <Box
                     xcss={xcss({
-                        height: '100%',
                         backgroundColor: 'color.background.neutral',
                         margin: 'space.050',
-                        position: 'relative',
+                        height: '100%',
+
+                        overflow: 'hidden',
                     })}>
                     {settingsItems()}
-                    <Box xcss={xcss({ width: '100%' })}>Numerics1</Box>
-                    <Box xcss={xcss({})}>Numerics1</Box>
-                    <Box xcss={xcss({})}>Numerics1</Box>
-                    <Box xcss={xcss({})}>Numerics1</Box>
-                    <Box xcss={xcss({})}>Numerics1</Box>
-                    <Box xcss={xcss({})}>Numerics1</Box>
-                    <Box xcss={xcss({})}>Numerics1</Box>
-                    <Box xcss={xcss({})}>Numerics1</Box>
-                    <Box xcss={xcss({})}>Numerics1</Box>
-                    <Box xcss={xcss({})}>Numerics1</Box>
-                    <Box xcss={xcss({})}>Numerics1</Box>
                     <Box xcss={xcss({})}>Numerics1</Box>
                     <Box xcss={xcss({})}>Numerics1</Box>
                     <Box xcss={xcss({})}>Numerics1</Box>
