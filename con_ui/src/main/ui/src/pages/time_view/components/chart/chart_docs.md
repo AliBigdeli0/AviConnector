@@ -13,7 +13,7 @@
         -   [ ] Convert Back from 1 to 100 to real value
     -   [x] Line Over Text
     -   [ ] Create Properties Box
-        -   [ ] Open its modal
+        -   [x] Open its modal
         -   [ ] Lines Properties
         -   [ ] Parameters
         -   [ ] Total Properties
