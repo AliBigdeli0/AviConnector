@@ -16,6 +16,7 @@ import Button from '@atlaskit/button/new';
 import { TimeChartProp } from './time_charts';
 import { ColorBoxChangeEvent, ReactSetter } from '../../../../utility/types';
 import { ColorBox } from '../../../common/colorbox';
+import { ColorHelper } from '../../../../utility/color_helper';
 
 // interface
 
@@ -67,6 +68,7 @@ export const ChartSettings = (props: ChartSettingsProps) => {
                         <ColorBox
                             current={props.stringsColor}
                             handleCurrentChange={props.handleStringsColor}
+                            colors={ColorHelper.getAllColors()}
                         />{' '}
                     </Grid>
                 </Grid>

@@ -17,12 +17,13 @@ import DropdownMenu, {
 } from '@atlaskit/dropdown-menu';
 
 // local
-import { ColorBoxChangeEvent } from '../../utility/types';
+import { ColorBoxChangeEvent, ColorBoxColors } from '../../utility/types';
 
 //
 export interface ColorBoxProps {
     current: string;
     handleCurrentChange: ColorBoxChangeEvent;
+    colors: ColorBoxColors;
 }
 
 //
@@ -53,32 +54,20 @@ export const ColorBox = (props: ColorBoxProps) => {
                         {props.current}
                     </Button>
                 )}
-                options={[
-                    {
+                options={Object.entries(props.colors).map((key, value) => {
+                    return {
                         label: (
                             <Inline>
                                 <EditorTextColorIcon
                                     label=""
-                                    primaryColor="red"
+                                    primaryColor={key[1] as any}
                                 />
-                                <Text>red</Text>
+                                <Text>{key[1]}</Text>
                             </Inline>
                         ),
-                        value: 'red',
-                    },
-                    {
-                        label: (
-                            <Inline>
-                                <EditorTextColorIcon
-                                    label=""
-                                    primaryColor="blue"
-                                />
-                                <Text>blue</Text>
-                            </Inline>
-                        ),
-                        value: 'blue',
-                    },
-                ]}></PopupSelect>
+                        value: key[1],
+                    };
+                })}></PopupSelect>
         </Box>
     );
 };
