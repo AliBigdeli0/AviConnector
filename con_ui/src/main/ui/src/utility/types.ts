@@ -31,3 +31,5 @@ export type TimeChartType = Chart<
     (number | ScatterDataPoint | null)[],
     unknown
 >;
+
+export type ColorBoxChangeEvent = (color: string) => void;

@@ -1,7 +1,5 @@
 // icons
 import CheckIcon from '@atlaskit/icon/glyph/check';
-import EditorBackgroundColorIcon from '@atlaskit/icon/glyph/editor/background-color';
-import EditorTextColorIcon from '@atlaskit/icon/glyph/editor/text-color';
 
 // react
 import React, { Fragment, useEffect, useRef } from 'react';
@@ -13,20 +11,20 @@ import { token } from '@atlaskit/tokens';
 import Tabs, { Tab, TabList, TabPanel } from '@atlaskit/tabs';
 import { Stack, Box, xcss, Inline, Grid, Text } from '@atlaskit/primitives';
 import Button from '@atlaskit/button/new';
-import DropdownMenu, {
-    DropdownItem,
-    DropdownItemGroup,
-} from '@atlaskit/dropdown-menu';
 
 // local
 import { TimeChartProp } from './time_charts';
-import { ReactSetter } from '../../../../utility/types';
+import { ColorBoxChangeEvent, ReactSetter } from '../../../../utility/types';
+import { ColorBox } from '../../../common/colorbox';
 
 // interface
 
 export interface ChartSettingsProps extends TimeChartProp {
     open: boolean;
     setOpen: ReactSetter<boolean>;
+
+    stringsColor: string;
+    handleStringsColor: ColorBoxChangeEvent;
 }
 
 //
@@ -57,40 +55,21 @@ export const ChartSettings = (props: ChartSettingsProps) => {
         return (
             <Stack xcss={xcss({ width: '100%', paddingTop: 'space.100' })}>
                 <Grid xcss={xcss({ paddingBottom: 'space.050' })}>
-                    <Grid templateColumns="1fr 2fr">
-                        <Box>
-                            <Text align="center">Comment Color</Text>
-                        </Box>
+                    <Grid templateColumns="1fr 3fr">
                         <Box
                             xcss={xcss({
-                                width: '100%',
+                                alignContent: 'center',
+                                verticalAlign: 'center',
+                                alignItems: 'center',
                             })}>
-                            <DropdownMenu trigger="Select The Color">
-                                <DropdownItemGroup>
-                                    <DropdownItem
-                                        elemBefore={
-                                            <EditorTextColorIcon
-                                                label=""
-                                                primaryColor="red"
-                                            />
-                                        }>
-                                        Color Name
-                                    </DropdownItem>
-                                </DropdownItemGroup>
-                            </DropdownMenu>
+                            <Text align="center">Strings Color</Text>
                         </Box>
+                        <ColorBox
+                            current={props.stringsColor}
+                            handleCurrentChange={props.handleStringsColor}
+                        />{' '}
                     </Grid>
                 </Grid>
-                <Stack
-                    alignBlock="end"
-                    alignInline="end"
-                    xcss={xcss({
-                        width: '100%',
-                    })}>
-                    <Button appearance="primary" iconBefore={CheckIcon}>
-                        Apply Changes
-                    </Button>
-                </Stack>
             </Stack>
         );
     };
