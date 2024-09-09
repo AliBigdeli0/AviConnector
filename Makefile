@@ -15,6 +15,10 @@ du:: deploy_updates
 deploy_updates::
 	@cd $(DEPLOY_PATH); make deploy_updates
 
+de:: deploy_export
+deploy_export:: 
+	@cd $(DEPLOY_PATH); make deploy_con_export_jar
+
 deploy_ui_updates::
 	@cd $(DEPLOY_PATH); make deploy_con_ui_updates
 

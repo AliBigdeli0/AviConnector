@@ -4,6 +4,7 @@ JAR_DATA_NAME=con_data-1.0.0-plain.jar
 JAR_COMMON_NAME=con_common-1.0.0.jar
 JAR_MANAGER_NAME=con_manager-1.0.0-plain.jar
 JAR_UI_NAME=con_ui-1.0.0-plain.jar
+JAR_EXPORT_NAME=con_export-1.0.0-plain.jar
 
 # paths
 DEPLOY_PATH=~/Desktop/share/update_med/updates
@@ -21,6 +22,9 @@ RUN_MANAGER_FILE_PATH=$(PWD)/run_manager.bat
 BUILD_UI_PATH=$(PWD)/../con_ui/build
 LIB_UI_PATH=$(BUILD_UI_PATH)/lib_ui
 
+BUILD_EXPORT_PATH=$(PWD)/../con_export/build
+LIB_EXPORT_PATH=$(BUILD_EXPORT_PATH)/lib_export
+
 TASK_DATA_FILE_PATH=$(PWD)/task_run.sh
 RUN_DOCKER_FILE_PATH=$(PWD)/run_docker.bat
 
@@ -31,6 +35,14 @@ MOVE=mv
 COPY=cp
 ##########################
 ## deploy package
+
+# con_export
+deploy_con_export_jar:: 
+	@cd $(BUILD_EXPORT_PATH)/../..;  																	\
+	./build_all.sh; 																					\
+	cd $(BUILD_EXPORT_PATH);																			\
+	$(ZIP) connector_export.7z $(BUILD_EXPORT_PATH)/libs/$(JAR_EXPORT_NAME) $(LIB_EXPORT_PATH);			\
+	$(MOVE) connector_export.7z $(DEPLOY_PATH)
 
 # con_ui
 deploy_con_ui_jar::
