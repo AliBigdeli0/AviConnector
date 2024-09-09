@@ -1,8 +1,5 @@
-// icons
-import CheckIcon from '@atlaskit/icon/glyph/check';
-
 // react
-import React, { Fragment, useEffect, useRef } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { css, jsx } from '@emotion/react';
 
 // atlassian
@@ -10,13 +7,13 @@ import Drawer from '@atlaskit/drawer';
 import { token } from '@atlaskit/tokens';
 import Tabs, { Tab, TabList, TabPanel } from '@atlaskit/tabs';
 import { Stack, Box, xcss, Inline, Grid, Text } from '@atlaskit/primitives';
-import Button from '@atlaskit/button/new';
 
 // local
 import { TimeChartProp } from './time_charts';
 import { ColorBoxChangeEvent, ReactSetter } from '../../../../utility/types';
 import { ColorBox } from '../../../common/colorbox';
 import { ColorHelper } from '../../../../utility/color_helper';
+import { Parameters } from '../../../common/parameters';
 
 // interface
 
@@ -50,6 +47,10 @@ export const ChartSettings = (props: ChartSettingsProps) => {
         insetBlockStart: 0,
         insetInlineEnd: 0,
         insetInlineStart: 0,
+    };
+
+    const parameters = () => {
+        return <Parameters max={16} />;
     };
 
     const others = () => {
@@ -86,7 +87,7 @@ export const ChartSettings = (props: ChartSettingsProps) => {
                 </TabList>
 
                 <TabPanel>lines</TabPanel>
-                <TabPanel>parameters</TabPanel>
+                <TabPanel>{parameters()}</TabPanel>
                 <TabPanel>{others()}</TabPanel>
             </Tabs>
         );
