@@ -1,8 +1,10 @@
 package com.med.con_common.utility;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
+
+import java.io.*;
+import java.util.zip.Deflater;
 import java.util.zip.GZIPInputStream;
 
 public class CompressionManager {
@@ -20,6 +22,24 @@ public class CompressionManager {
 			}
 
 			return byteArrayOutputStream.toByteArray();
+		}
+	}
+
+	public static void compress7Z(File sevenZFile, File... filesToZip) throws Exception {
+		try(var fos = new FileOutputStream(sevenZFile);
+		    var zipOut = new ZipArchiveOutputStream(fos);
+		){
+			zipOut.setMethod(ZipArchiveOutputStream.DEFLATED);
+			zipOut.setLevel(Deflater.BEST_COMPRESSION);
+
+			for(var file : filesToZip) {
+				var zipEntry = new ZipArchiveEntry(file.getName());
+				zipOut.putArchiveEntry(zipEntry);
+				zipOut.write(java.nio.file.Files.readAllBytes(file.toPath()));
+				zipOut.closeArchiveEntry();
+			}
+
+			zipOut.finish();
 		}
 	}
 }

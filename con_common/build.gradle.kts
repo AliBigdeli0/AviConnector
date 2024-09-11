@@ -36,5 +36,8 @@ dependencies {
 
     // Colored Output
     implementation("org.fusesource.jansi:jansi:2.4.1")
+
+    // 7Z
+    implementation("org.apache.commons:commons-compress:1.27.1")
 }
 

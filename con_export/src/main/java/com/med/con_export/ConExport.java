@@ -31,7 +31,7 @@ public class ConExport {
 
 	private static ConfigurableApplicationContext context;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		ConsoleHelper.successNewLine("system started!!!");
 		context = SpringApplication.run(ConExport.class, args);
 	}
@@ -50,7 +50,7 @@ public class ConExport {
 			taskExecutor.shutdown();
 		}
 
-		log.info("going to shutdown all application.");
+		log.info("going to shutting down application.");
 		SpringApplication.exit(context, ()->0);
 	}
 }

@@ -51,6 +51,10 @@ public class DbManager implements Closeable {
 		return DbWell.toDbWell(Objects.requireNonNull(document));
 	}
 
+	public List<String> readAllWellsTime(String wellId) {
+		return List.of("");
+	}
+
 	public void insertComment(DbComment comment) throws IOException {
 		final var commentCol = db.getCollection(comment.generateCollectionName(), BsonDocument.class);
 		commentCol.insertOne(comment.toBsonDocument());
