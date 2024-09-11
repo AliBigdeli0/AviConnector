@@ -51,8 +51,25 @@ public class DbManager implements Closeable {
 		return DbWell.toDbWell(Objects.requireNonNull(document));
 	}
 
-	public List<String> readAllWellsTime(String wellId) {
-		return List.of("");
+	public List<String> readAllWellsTimeCollection(String wellId) {
+		var retList = new ArrayList<String>();
+
+		for (var coll : db.listCollectionNames()) {
+			if (coll.startsWith(String.format("c_%s_", wellId))) retList.add(coll);
+		}
+
+		return retList;
+	}
+
+	public List<DbTime> readAllCollection(String colName) throws Exception {
+		final var timeCol = db.getCollection(colName, BsonDocument.class);
+		final var retList = new ArrayList<DbTime>();
+
+		for (var doc : timeCol.find()) {
+			retList.add(DbTime.toDbTime(doc));
+		}
+
+		return retList;
 	}
 
 	public void insertComment(DbComment comment) throws IOException {

@@ -1,26 +1,91 @@
 package com.med.con_export.task;
 
+import com.med.con_common.db.DbManager;
+import com.med.con_common.model.DbTime;
+import com.med.con_common.utility.CompressionManager;
 import com.med.con_common.utility.ConsoleHelper;
+import com.med.con_common.utility.FileHelper;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Random;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 public class ExportTaskImpl implements ExportTask {
+
+	public List<String> readCollectionNames(String wellId) throws IOException {
+		try (final var dbMan = new DbManager()) {
+			return dbMan.readAllWellsTimeCollection(wellId);
+		}
+	}
+
+
+	public List<DbTime> readColData(String colName) throws Exception {
+		try (final var dbMan = new DbManager()) {
+			return dbMan.readAllCollection(colName);
+		}
+	}
+
 	@Override
-	public void execute(String wellId, String wellName) {
+	public void execute(String wellId, String wellName) throws Exception {
 		try {
-			log.info("going to start task on well : {}", wellName);
 			ConsoleHelper.successNewLine("the task has been created!!");
-			Thread.sleep(10000 + (new Random().nextInt(1000, 5000)));
-			for(var i = 0; i < 100; i++) {
-				Thread.sleep(100);
-				ConsoleHelper.drawProgressBar(i, 100);
+			final var collectionNames = readCollectionNames(wellId);
+			final var lenCollections = collectionNames.size();
+
+			log.info("number of collections in '{}':{}", wellName, lenCollections);
+			log.info("going to start task on well : {}", wellName);
+
+			try {
+				for (var i = 0; i < lenCollections; i++) {
+					final var colName = collectionNames.get(i);
+					ConsoleHelper.drawProgressBar(i, lenCollections);
+					final var colDataList = readColData(colName);
+
+					final var xmlFileName = new File(String.format("./tmp_exports/%s.xml", colName));
+					final var sevenZFileName = new File(String.format("./exports/%s/%s.7z", wellName, colName));
+
+					writeInFile(xmlFileName, colDataList);
+					compressFile(sevenZFileName, xmlFileName);
+
+					java.nio.file.Files.delete(Path.of(xmlFileName.getAbsolutePath()));
+				}
+			} catch (Exception ex) {
+				log.error(ex.getMessage());
 			}
-			log.info("the well with id : {} has finished", wellId);
-			ConsoleHelper.error("the task finished!");
+
+			log.info("the well '{}({})' has finished!", wellName, wellId);
+			ConsoleHelper.error("\nthe task finished!\n");
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
 		}
+	}
+
+	private void compressFile(File sevenZFileName, File xmlFileName) throws Exception {
+		FileHelper.createPathIfNotExist(sevenZFileName.getParentFile());
+		CompressionManager.compress7Z(sevenZFileName, xmlFileName);
+	}
+
+	private void writeInFile(File fileName, List<DbTime> colDataList) throws Exception {
+		FileHelper.createPathIfNotExist(fileName.getParentFile());
+		var builder = new StringBuilder();
+
+		for (final var dbTime : colDataList) {
+			for (final Map.Entry<String, String> entry : dbTime.GetAllDbData.entrySet()) {
+				builder.append(entry.getKey()).append(":").append(entry.getValue()).append(",");
+			}
+
+			builder.append("\n\r");
+		}
+
+		Files.write(Path.of(fileName.getAbsolutePath()),
+				builder.toString().getBytes(),
+				StandardOpenOption.CREATE,
+				StandardOpenOption.APPEND);
 	}
 }

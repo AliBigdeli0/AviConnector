@@ -42,7 +42,11 @@ public class ConExport {
 
 		wellsConfig.getWells().forEach((wellId, wellName)->{
 			taskExecutor.execute(()->{
-				exportTask.execute(wellId, wellName);
+				try {
+					exportTask.execute(wellId, wellName);
+				} catch (Exception ex) {
+					log.error(ex.getMessage());
+				}
 			});
 		});
 

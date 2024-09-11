@@ -1,3 +1,6 @@
+application:
+  app: med_con_export
+
 spring:
   output:
     ansi:

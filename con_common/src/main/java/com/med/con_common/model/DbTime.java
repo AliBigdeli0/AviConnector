@@ -7,6 +7,7 @@ import org.bson.BsonDateTime;
 import org.bson.BsonDocument;
 import org.bson.codecs.pojo.annotations.BsonIgnore;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.Instant;
@@ -30,6 +31,12 @@ public class DbTime {
 		return Instant.parse(this.Date);
 	}
 
+	private static String convertDateString(BsonDateTime bsonDateTime) {
+		final var instant = Instant.ofEpochMilli(bsonDateTime.getValue());
+		final var formatter = DateTimeFormatter.ISO_INSTANT;
+		return formatter.format(instant);
+	}
+
 	public static DbTime from(String msgStr) {
 		return new Gson().fromJson(msgStr, DbTime.class);
 	}
@@ -43,6 +50,19 @@ public class DbTime {
 			document.append("d", new BsonDateTime(convertDate().toEpochMilli()));
 			return document;
 		}
+	}
+
+	public static DbTime toDbTime(BsonDocument doc) throws Exception {
+		final var bsonList = doc.get("l").asBinary();
+		final var binInputStream = new ByteArrayInputStream(bsonList.getData());
+
+		final var date = doc.get("d").asDateTime();
+
+		final var retDbTime = new DbTime();
+		retDbTime.Date = convertDateString(date);
+		retDbTime.GetAllDbData = SerializeManager.fastDeserialize(binInputStream);
+
+		return retDbTime;
 	}
 
 	public String collectionName() {

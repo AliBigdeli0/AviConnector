@@ -4,5 +4,5 @@ import org.springframework.scheduling.annotation.Async;
 
 public interface ExportTask {
 	@Async
-	void execute(String wellId, String wellName);
+	void execute(String wellId, String wellName) throws Exception ;
 }

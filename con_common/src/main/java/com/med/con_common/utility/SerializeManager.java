@@ -8,6 +8,7 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 
 public class SerializeManager {
@@ -25,6 +26,37 @@ public class SerializeManager {
 			}
 			writer.flush();
 		}
+	}
+
+	public static Map<String, String> fastDeserialize(InputStream stream) throws Exception {
+		try (DataInputStream reader = new DataInputStream(stream)) {
+			final Map<String, String> retMap = new HashMap<>();
+			final var count = reverseBytes(reader);
+
+			for (var i = 0; i < count; i++) {
+				final var key = extractData(reader);
+				final var value = extractData(reader);
+				retMap.put(key, value);
+			}
+
+			return retMap;
+		}
+	}
+
+	private static String extractData(DataInputStream reader) throws IOException {
+		final int dataLen = reader.readUnsignedByte();
+		final byte[] dataBytes = new byte[dataLen];
+		reader.readFully(dataBytes);
+		return new String(dataBytes, StandardCharsets.UTF_8);
+	}
+
+	private static int reverseBytes(DataInputStream reader) throws IOException {
+		final byte[] bufLen = new byte[4];
+		reader.readFully(bufLen);
+		return ((bufLen[0] & 0xFF)) |
+				((bufLen[1] & 0xFF) << 8) |
+				((bufLen[2] & 0xFF) << 16) |
+				((bufLen[3] & 0xFF) << 24);
 	}
 
 	private static byte[] intToLittleEndianBytes(int value) {
