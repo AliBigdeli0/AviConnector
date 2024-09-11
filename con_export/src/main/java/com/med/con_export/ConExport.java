@@ -1,5 +1,6 @@
 package com.med.con_export;
 
+import com.med.con_common.utility.ConsoleHelper;
 import com.med.con_export.config.WellsConfig;
 import com.med.con_export.task.ExportTask;
 import jakarta.annotation.PostConstruct;
@@ -27,6 +28,7 @@ public class ConExport {
 	private ExecutorService taskExecutor;
 
 	public static void main(String[] args) {
+		ConsoleHelper.successNewLine("system started!!!");
 		SpringApplication.run(ConExport.class, args);
 	}
 

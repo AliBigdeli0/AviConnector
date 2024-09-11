@@ -32,5 +32,9 @@ dependencies {
     // XMl serializer
     implementation("javax.xml.bind:jaxb-api:2.3.1")
     implementation("org.glassfish.jaxb:jaxb-runtime:2.3.1")
+
+
+    // Colored Output
+    implementation("org.fusesource.jansi:jansi:2.4.1")
 }
 

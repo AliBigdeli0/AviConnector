@@ -26,6 +26,7 @@ dependencyManagement {
 dependencies {
     // spring
     implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter-logging")
 
     // lombok
     compileOnly("org.projectlombok:lombok")
@@ -48,6 +49,9 @@ dependencies {
     // XMl serializer
     implementation("javax.xml.bind:jaxb-api:2.3.1")
     implementation("org.glassfish.jaxb:jaxb-runtime:2.3.1")
+
+    // Colored Output
+    implementation("org.fusesource.jansi:jansi:2.4.1")
 }
 
 tasks.register<Copy>("moveJars") {
