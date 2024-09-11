@@ -83,8 +83,12 @@ public class ExportTaskImpl implements ExportTask {
 
 			for (final var dbTime : colDataList) {
 				for (final Map.Entry<String, String> entry : dbTime.GetAllDbData.entrySet()) {
-					var valueString = jsonWitsArray.getRecord(entry.getKey());
-					builder.append(valueString.getLongMnemonic()).append(":").append(entry.getValue()).append(",");
+					var witsRecord = jsonWitsArray.getRecord(entry.getKey());
+					if (witsRecord == null) {
+						ConsoleHelper.logIfVerbose(log, "record with key {} can not be found!!!", entry.getKey());
+					} else {
+						builder.append(witsRecord.getDescription()).append(":").append(entry.getValue()).append(",");
+					}
 				}
 
 				builder.append("\n\r");

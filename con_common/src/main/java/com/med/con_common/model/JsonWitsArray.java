@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 public class JsonWitsArray {
 	public List<JsonWits> WitsJson;
@@ -19,9 +18,9 @@ public class JsonWitsArray {
 		}
 	}
 
-	public JsonWits getRecord(int record, int item) throws NoSuchElementException {
+	public JsonWits getRecord(int record, int item) {
 		var first = WitsJson.stream().filter(w -> w.getRecord() == record && w.getItem() == item).findFirst();
-		return first.orElseThrow();
+		return first.orElse(null);
 	}
 
 	public JsonWits getRecord(String itemStr) {

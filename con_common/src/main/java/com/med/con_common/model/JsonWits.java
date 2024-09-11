@@ -3,7 +3,7 @@ package com.med.con_common.model;
 public class JsonWits {
 	public Integer Identifier;
 	public Integer Record;
-	public Double Item;
+	public Integer Item;
 	public String Description;
 	public String LongMnemonic;
 	public String ShortMnemonic;
@@ -28,11 +28,11 @@ public class JsonWits {
 		this.Record = record;
 	}
 
-	public Double getItem() {
+	public Integer getItem() {
 		return Item;
 	}
 
-	public void setItem(Double item) {
+	public void setItem(Integer item) {
 		this.Item = item;
 	}
 
