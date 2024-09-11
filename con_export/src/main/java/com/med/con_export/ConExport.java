@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @SpringBootApplication
@@ -27,9 +29,11 @@ public class ConExport {
 	@Autowired
 	private ExecutorService taskExecutor;
 
+	private static ConfigurableApplicationContext context;
+
 	public static void main(String[] args) {
 		ConsoleHelper.successNewLine("system started!!!");
-		SpringApplication.run(ConExport.class, args);
+		context = SpringApplication.run(ConExport.class, args);
 	}
 
 	@PostConstruct
@@ -41,5 +45,12 @@ public class ConExport {
 				exportTask.execute(wellId, wellName);
 			});
 		});
+
+		if(!taskExecutor.awaitTermination(Integer.MAX_VALUE - 1, TimeUnit.SECONDS)) {
+			taskExecutor.shutdown();
+		}
+
+		log.info("going to shutdown all application.");
+		SpringApplication.exit(context, ()->0);
 	}
 }
