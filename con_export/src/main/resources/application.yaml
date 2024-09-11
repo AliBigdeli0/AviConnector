@@ -6,6 +6,12 @@ spring:
     ansi:
       enabled: ALWAYS
 
+logging:
+  level:
+    org:
+      mongodb:
+        driver: ERROR
+
 app:
   wells:
     2345415781: Well Test 1
