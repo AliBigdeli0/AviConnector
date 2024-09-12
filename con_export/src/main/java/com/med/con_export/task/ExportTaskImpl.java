@@ -6,6 +6,7 @@ import com.med.con_common.model.JsonWitsArray;
 import com.med.con_common.utility.CompressionManager;
 import com.med.con_common.utility.ConsoleHelper;
 import com.med.con_common.utility.FileHelper;
+import com.med.con_export.wrapper.LogWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,12 +17,15 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 public class ExportTaskImpl implements ExportTask {
 
 	@Autowired
 	JsonWitsArray jsonWitsArray;
+
+	final UUID fakeUUID = UUID.randomUUID();
 
 	public List<String> readCollectionNames(String wellId) throws IOException {
 		try (final var dbMan = new DbManager()) {
@@ -55,7 +59,8 @@ public class ExportTaskImpl implements ExportTask {
 					final var tempXmlFile = new File(String.format("./exports_temp/%s.xml", colName));
 					final var sevenZFileName = new File(String.format("./exports/%s/%s.7z", wellName, colName));
 
-					writeInFile(tempXmlFile, colDataList);
+//					writeInFile(tempXmlFile, colDataList);
+					dbTimeToWitsmlFile(tempXmlFile, colDataList, wellName);
 					compressFile(sevenZFileName, tempXmlFile);
 
 					java.nio.file.Files.delete(Path.of(tempXmlFile.getAbsolutePath()));
@@ -69,6 +74,13 @@ public class ExportTaskImpl implements ExportTask {
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
 		}
+	}
+
+	private void dbTimeToWitsmlFile(File tempXmlFile, List<DbTime> colDataList, String wellName) {
+		var logWrapper = new LogWrapper()
+				.addWellBore(fakeUUID, wellName)
+				.addChannelSet(colDataList, jsonWitsArray);
+		// todo: add to tempXmlFile
 	}
 
 	private void compressFile(File sevenZFileName, File xmlFileName) throws Exception {
