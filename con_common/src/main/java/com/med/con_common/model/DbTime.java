@@ -6,6 +6,7 @@ import org.bson.BsonBinary;
 import org.bson.BsonDateTime;
 import org.bson.BsonDocument;
 import org.bson.codecs.pojo.annotations.BsonIgnore;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -15,7 +16,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
-public class DbTime {
+public class DbTime implements Comparable<DbTime> {
 
 	@BsonIgnore
 	public Map<String, String> GetAllDbData;
@@ -91,5 +92,10 @@ public class DbTime {
 				", TotalDepth='" + TotalDepth + '\'' +
 				", WellName='" + WellName + '\'' +
 				'}';
+	}
+
+	@Override
+	public int compareTo(@NotNull DbTime o) {
+		return Integer.compare(o.GetAllDbData.size(), this.GetAllDbData.size());
 	}
 }

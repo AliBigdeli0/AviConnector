@@ -17,7 +17,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
@@ -57,23 +56,16 @@ public class ExportTaskImpl implements ExportTask {
 
 					final var colDataList = readColData(colName);
 
-					final var tempXmlFile = new File(String.format("./exports_temp/%s.xml", colName));
-					final var sevenZFile = new File(String.format("./exports/%s/%s.7z", wellName, colName));
+					final var tempXmlFile = new File(String.format("./exports/%s/%s.xml", wellName, colName));
 
 					FileHelper.createPathIfNotExist(tempXmlFile.getParentFile());
-
-					if (dbTimeToWitsmlFile(tempXmlFile, colDataList, wellName)) {
-						FileHelper.createPathIfNotExist(sevenZFile.getParentFile());
-						compressFile(sevenZFile, tempXmlFile);
-
-						Files.delete(Path.of(tempXmlFile.getAbsolutePath()));
-					}
+					dbTimeToWitsmlFile(tempXmlFile, colDataList, wellName);
 				}
 			} catch (Exception ex) {
 				log.error(ex.getMessage());
 			}
 
-			log.info("the well '{}({})' has finished!", wellName, wellId);
+			log.info("the well '{}({}): {}' has finished!", wellName, wellId, lenCollections);
 			ConsoleHelper.error("\nthe task finished!\n");
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
@@ -81,23 +73,22 @@ public class ExportTaskImpl implements ExportTask {
 	}
 
 	private boolean dbTimeToWitsmlFile(File fileName, List<DbTime> colDataList, String wellName) {
+		LogWrapper logWrapper = null;
+		String objectToWrite = "";
 		try {
-			var logWrapper = new LogWrapper().addWellBore(fakeUUID, wellName).addChannelSet(colDataList, jsonWitsArray);
+			logWrapper = new LogWrapper().addWellBore(fakeUUID, wellName).addChannelSet(colDataList, jsonWitsArray);
 
-			var objectToWrite = SerializeManager.serializeXml(logWrapper);
+			objectToWrite = SerializeManager.serializeXml(logWrapper);
 
-			try {
-				Files.write(Path.of(fileName.getAbsolutePath()), objectToWrite.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-				return true;
-			} finally {
-				logWrapper = null;
-				objectToWrite = null;
-			}
+			Files.write(Path.of(fileName.getAbsolutePath()), objectToWrite.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+			return true;
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
 			return false;
 		} finally {
 			colDataList.clear();
+			if (logWrapper != null) logWrapper = null;
+			if (!objectToWrite.isEmpty()) objectToWrite = null;
 		}
 	}
 

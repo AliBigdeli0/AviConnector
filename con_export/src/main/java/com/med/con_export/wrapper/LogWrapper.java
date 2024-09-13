@@ -43,9 +43,9 @@ public class LogWrapper {
 	}
 
 	public LogWrapper addChannelSet(List<DbTime> dbTimes, JsonWitsArray jsonWitsArray) throws Exception {
-		var firstNotEmptyList = dbTimes.stream().filter(t -> !t.GetAllDbData.isEmpty()).findFirst().orElse(null);
+		var firstNotEmptyList = dbTimes.stream().filter(t -> !t.GetAllDbData.isEmpty()).max(DbTime::compareTo).stream().findFirst().orElse(null);
 
-		if (firstNotEmptyList == null) throw new Exception("all objects in GetAllDbData is empty!");
+		if (firstNotEmptyList == null) throw new Exception("all objects in GetAllDbData is empty");
 
 		var header = separateHeader(firstNotEmptyList, jsonWitsArray);
 
