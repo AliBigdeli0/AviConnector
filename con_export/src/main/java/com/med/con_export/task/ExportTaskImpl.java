@@ -6,6 +6,7 @@ import com.med.con_common.model.JsonWitsArray;
 import com.med.con_common.utility.CompressionManager;
 import com.med.con_common.utility.ConsoleHelper;
 import com.med.con_common.utility.FileHelper;
+import com.med.con_common.utility.SerializeManager;
 import com.med.con_export.wrapper.LogWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,13 +58,16 @@ public class ExportTaskImpl implements ExportTask {
 					final var colDataList = readColData(colName);
 
 					final var tempXmlFile = new File(String.format("./exports_temp/%s.xml", colName));
-					final var sevenZFileName = new File(String.format("./exports/%s/%s.7z", wellName, colName));
+					final var sevenZFile = new File(String.format("./exports/%s/%s.7z", wellName, colName));
 
-//					writeInFile(tempXmlFile, colDataList);
-					dbTimeToWitsmlFile(tempXmlFile, colDataList, wellName);
-					compressFile(sevenZFileName, tempXmlFile);
+					FileHelper.createPathIfNotExist(tempXmlFile.getParentFile());
 
-					java.nio.file.Files.delete(Path.of(tempXmlFile.getAbsolutePath()));
+					if (dbTimeToWitsmlFile(tempXmlFile, colDataList, wellName)) {
+						FileHelper.createPathIfNotExist(sevenZFile.getParentFile());
+						compressFile(sevenZFile, tempXmlFile);
+
+						Files.delete(Path.of(tempXmlFile.getAbsolutePath()));
+					}
 				}
 			} catch (Exception ex) {
 				log.error(ex.getMessage());
@@ -76,42 +80,28 @@ public class ExportTaskImpl implements ExportTask {
 		}
 	}
 
-	private void dbTimeToWitsmlFile(File tempXmlFile, List<DbTime> colDataList, String wellName) {
-		var logWrapper = new LogWrapper()
-				.addWellBore(fakeUUID, wellName)
-				.addChannelSet(colDataList, jsonWitsArray);
-		// todo: add to tempXmlFile
-	}
-
-	private void compressFile(File sevenZFileName, File xmlFileName) throws Exception {
-		FileHelper.createPathIfNotExist(sevenZFileName.getParentFile());
-		CompressionManager.compress7Z(sevenZFileName, xmlFileName);
-	}
-
-	private void writeInFile(File fileName, List<DbTime> colDataList) throws Exception {
+	private boolean dbTimeToWitsmlFile(File fileName, List<DbTime> colDataList, String wellName) {
 		try {
-			FileHelper.createPathIfNotExist(fileName.getParentFile());
-			var builder = new StringBuilder();
+			var logWrapper = new LogWrapper().addWellBore(fakeUUID, wellName).addChannelSet(colDataList, jsonWitsArray);
 
-			for (final var dbTime : colDataList) {
-				for (final Map.Entry<String, String> entry : dbTime.GetAllDbData.entrySet()) {
-					var witsRecord = jsonWitsArray.getRecord(entry.getKey());
-					if (witsRecord == null) {
-						ConsoleHelper.logIfVerbose(log, "record with key {} can not be found!!!", entry.getKey());
-					} else {
-						builder.append(witsRecord.getDescription()).append(":").append(entry.getValue()).append(",");
-					}
-				}
+			var objectToWrite = SerializeManager.serializeXml(logWrapper);
 
-				builder.append("\n\r");
+			try {
+				Files.write(Path.of(fileName.getAbsolutePath()), objectToWrite.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+				return true;
+			} finally {
+				logWrapper = null;
+				objectToWrite = null;
 			}
-
-			Files.write(Path.of(fileName.getAbsolutePath()),
-					builder.toString().getBytes(),
-					StandardOpenOption.CREATE,
-					StandardOpenOption.APPEND);
+		} catch (Exception ex) {
+			log.error(ex.getMessage());
+			return false;
 		} finally {
 			colDataList.clear();
 		}
+	}
+
+	private void compressFile(File sevenZFileName, File xmlFileName) throws Exception {
+		CompressionManager.compress7Z(sevenZFileName, xmlFileName);
 	}
 }

@@ -11,6 +11,8 @@ public final class Constants {
 	public static final String MED_REDIS_ADDRESS = "MED_REDIS_ADDRESS";
 	public static final String MED_VERBOSE = "MED_VERBOSE";
 
+	public static final String WITSML_EMPTY_VALUE = "-999";
+
 	private static String getOs() {
 		return System.getProperty("os.name").toLowerCase();
 	}
