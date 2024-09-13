@@ -99,7 +99,7 @@ public class LogWrapper {
 	}
 
 	private Map<String, String> separateHeader(DbTime firstNonEmptyElement, JsonWitsArray jsonWitsArray) {
-		var retMap = new HashMap<String, String>();
+		final var retMap = new HashMap<String, String>();
 		firstNonEmptyElement.GetAllDbData.forEach((key, value) -> {
 			var witsElement = jsonWitsArray.getRecord(key);
 			if (witsElement == null) return;
@@ -110,7 +110,7 @@ public class LogWrapper {
 	}
 
 	private List<Channel> convertFirstElementToChannel(DbTime firstNonEmptyElement, Map<String, String> headers) {
-		var retList = new ArrayList<Channel>();
+		final var retList = new ArrayList<Channel>();
 		for (var entry : headers.entrySet()) {
 
 			retList.add(new Channel() {{

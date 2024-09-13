@@ -43,7 +43,7 @@ public class ExportTaskImpl implements ExportTask {
 	public void execute(String wellId, String wellName) throws Exception {
 		try {
 			ConsoleHelper.successNewLine("the task has been created!!");
-			final var collectionNames = readCollectionNames(wellId);
+			var collectionNames = readCollectionNames(wellId);
 			final var lenCollections = collectionNames.size();
 
 			log.info("number of collections in '{}':{}", wellName, lenCollections);
@@ -54,17 +54,24 @@ public class ExportTaskImpl implements ExportTask {
 					final var colName = collectionNames.get(i);
 					ConsoleHelper.drawProgressBar(i, lenCollections);
 
-					final var colDataList = readColData(colName);
+					var colDataList = readColData(colName);
 
 					final var tempXmlFile = new File(String.format("./exports/%s/%s.xml", wellName, colName));
 
 					FileHelper.createPathIfNotExist(tempXmlFile.getParentFile());
-					dbTimeToWitsmlFile(tempXmlFile, colDataList, wellName);
+
+					if (!dbTimeToWitsmlFile(tempXmlFile, colDataList, wellName))
+						log.error("collection with name '{}' has problem", colName);
+
+					colDataList = null;
+					System.gc();
 				}
 			} catch (Exception ex) {
 				log.error(ex.getMessage());
+			} finally {
+				collectionNames = null;
+				System.gc();
 			}
-
 			log.info("the well '{}({}): {}' has finished!", wellName, wellId, lenCollections);
 			ConsoleHelper.error("\nthe task finished!\n");
 		} catch (Exception ex) {
