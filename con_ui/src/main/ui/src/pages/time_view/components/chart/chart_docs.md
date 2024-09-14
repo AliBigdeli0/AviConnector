@@ -19,7 +19,7 @@
         -   [ ] Total Properties
     -   [ ] Read Parameters
         -   [x] read parameters
-        -   [ ] read units
+        -   [x] read units
         -   [ ] save current page configurations to server
 -   [ ] Chart Online Data
 -   [ ] Chart View Points
