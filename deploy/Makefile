@@ -64,7 +64,8 @@ deploy_updates::
 	@cd $(BUILD_MANAGER_PATH)/../..; 																																		\
     ./build_all.sh ; 																																						\
     cd $(BUILD_MANAGER_PATH);																																				\
-	$(ZIP) connectors_update.7z  $(BUILD_DATA_PATH)/libs/$(JAR_DATA_NAME) $(BUILD_MANAGER_PATH)/libs/$(JAR_MANAGER_NAME)   $(BUILD_COMMON_PATH)/libs/$(JAR_COMMON_NAME); 	\
+	$(ZIP) connectors_update.7z  $(BUILD_DATA_PATH)/libs/$(JAR_DATA_NAME) $(BUILD_MANAGER_PATH)/libs/$(JAR_MANAGER_NAME)   $(BUILD_COMMON_PATH)/libs/$(JAR_COMMON_NAME)     \
+	$(BUILD_UI_PATH)/libs/$(JAR_UI_NAME)  $(BUILD_EXPORT_PATH)/libs/$(JAR_EXPORT_NAME);																						\
 	$(MOVE) connectors_update.7z $(DEPLOY_PATH)
 
 deploy_con_manager_jar::
