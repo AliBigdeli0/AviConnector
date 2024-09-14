@@ -11,7 +11,12 @@ import { Box, xcss } from '@atlaskit/primitives';
 //
 import { CommonProps } from '../../utility/common_props';
 import { MsgType, AlertMsgType, ThemeType } from '../../utility/types';
-import { PageConfigureData, Timelayouts, WellData } from '../../utility/models';
+import {
+    PageConfigureData,
+    Timelayouts,
+    UnitStatisCategories,
+    WellData,
+} from '../../utility/models';
 import { ThemeHelper } from '../../utility/theme_helper';
 import { SignalrService } from '../../utility/signalr_service';
 import { InitTheme } from '../../header/theme';
@@ -31,6 +36,7 @@ const TimeView = (props: TimeViewProps) => {
     const [pageConfigure, setPageConfigure] = useState<
         PageConfigureData | undefined
     >();
+    const [units, setUnits] = useState<UnitStatisCategories[] | undefined>();
     const [alertMsg, setAlertMsg] = useState<AlertMsgType>([]);
     const [theme, setTheme] = useState<ThemeType>(ThemeHelper.getTheme());
     const [pathItems, setPathItems] = useState<string[]>([]);
@@ -72,8 +78,19 @@ const TimeView = (props: TimeViewProps) => {
         loadPageConfigure();
     }, [well]);
 
+    useEffect(() => {
+        loadUnits();
+    }, [pageConfigure]);
+
     const loadPageInitData = async () => {
         await loadWell();
+    };
+
+    const loadUnits = async () => {
+        if (props.signalRService.connected()) {
+            const u = await props.signalRService.loadUnits();
+            setUnits(u);
+        }
     };
 
     const loadPageConfigure = async () => {

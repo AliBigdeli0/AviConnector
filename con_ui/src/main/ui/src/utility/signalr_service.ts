@@ -5,6 +5,7 @@ import {
     PageConfigureData,
     ServerLiveModel,
     ServerLiveModelResponse,
+    UnitStatisCategories,
     WellData,
 } from './models';
 import {
@@ -16,6 +17,7 @@ import {
     SignalROnReconnecting,
     SignalROnReconnectted,
     SignalROnRestart as SignalROnStarted,
+    SignalROnStaticUnitsCallback,
     SignalROnWellsCallback,
 } from './types';
 import { TimeHelper } from './time_helper';
@@ -34,6 +36,8 @@ export class SignalrService {
     private OnBulkLiveCallback: SignalROnBulkLiveCallback | undefined =
         undefined;
     private onPageConfigCallback: SignalROnPageConfigCallback | undefined =
+        undefined;
+    private onStaticUnitCallback: SignalROnStaticUnitsCallback | undefined =
         undefined;
 
     async start() {
@@ -68,6 +72,12 @@ export class SignalrService {
         this.con?.on('page_configure_callback', (data) => {
             if (this.onPageConfigCallback !== undefined)
                 this.onPageConfigCallback(data);
+        });
+
+        this.con?.on('load_static_units_callback', (arr) => {
+            if (this.onStaticUnitCallback !== undefined) {
+                this.onStaticUnitCallback(arr);
+            }
         });
     }
 
@@ -131,6 +141,15 @@ export class SignalrService {
                 res(JSON.parse(deserializedData.json_parser));
             };
             await this.con?.invoke('page_configure', wellID);
+        });
+    }
+
+    async loadUnits(): Promise<UnitStatisCategories[]> {
+        return new Promise(async (res, err) => {
+            this.onStaticUnitCallback = (data) => {
+                res(data);
+            };
+            await this.con?.invoke('load_static_units');
         });
     }
 

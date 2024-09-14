@@ -7,6 +7,7 @@ import {
     PageConfigureData,
     ServerLiveModel,
     ServerLiveModelResponse,
+    UnitStatisCategories,
 } from './models';
 
 // types
@@ -31,6 +32,9 @@ export type SignalROnBulkLiveCallback = (
     lives: ServerLiveModelResponse[]
 ) => void;
 export type SignalROnPageConfigCallback = (data: any) => void;
+export type SignalROnStaticUnitsCallback = (
+    arr: UnitStatisCategories[]
+) => void;
 
 export type TimeChartType = Chart<
     'line',

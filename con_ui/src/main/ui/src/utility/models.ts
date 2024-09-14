@@ -36,6 +36,20 @@ export interface PageConfigureBaseData {
     Elements: PageConfigureBaseData[];
 }
 
+export interface UnitStatisCategories {
+    id: number;
+    name: string;
+    details: UnitStaticDetails[];
+}
+
+export interface UnitStaticDetails {
+    id: number;
+    name: string;
+    coef: number;
+    offset: number;
+    codes: string[];
+}
+
 export interface ServerLiveModel {
     well_id: string;
     times: { [key: string]: string };
