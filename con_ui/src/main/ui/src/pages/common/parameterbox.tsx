@@ -1,5 +1,4 @@
 // icons
-import EditorTextColorIcon from '@atlaskit/icon/glyph/editor/text-color';
 import ChevronDownIcon from '@atlaskit/icon/glyph/chevron-down';
 
 // react
@@ -31,21 +30,8 @@ export interface ParameterBoxProps {
 
 //
 export const ParameterBox = (props: ParameterBoxProps) => {
-    const [currentShowValue, setCurrentShowValue] = useState<JSX.Element>(
-        <Text>Select Parameter</Text>
-    );
-
     const showName = (parameter: ParameterBaseData) => {
-        return (
-            <Flex justifyContent="space-between">
-                <Stack alignInline="start">
-                    <Text size="medium">{parameter.ShowName}</Text>
-                </Stack>
-                <Stack alignInline="end">
-                    <Text size="small">{'(' + parameter.ID + ')'}</Text>
-                </Stack>
-            </Flex>
-        );
+        return parameter.ShowName + '     (' + parameter.ID + ')';
     };
     // ui
     const showBox = () => {
@@ -61,7 +47,6 @@ export const ParameterBox = (props: ParameterBoxProps) => {
                     if (props.handleChangeDefault !== undefined) {
                         props.handleChangeDefault(item.value.ID, item.value);
                     }
-                    setCurrentShowValue(item.label);
                 }}
                 target={({ isOpen, ...triggerprops }) => (
                     <Button
@@ -85,6 +70,7 @@ export const ParameterBox = (props: ParameterBoxProps) => {
             />
         );
     };
+
     return (
         <Box
             as="div"

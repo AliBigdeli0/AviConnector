@@ -8,6 +8,7 @@ import {
     ParameterData,
     ServerLiveModel,
     ServerLiveModelResponse,
+    UnitStaticDetails,
     UnitStatisCategories,
 } from './models';
 
@@ -50,3 +51,5 @@ export type ParameterBoxChangeEvent = (
     id: string,
     parameter: ParameterBaseData
 ) => void;
+
+export type UnitBoxChangeEvent = (currentUnit: UnitStaticDetails) => void;

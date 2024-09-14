@@ -124,7 +124,13 @@ const TimeView = (props: TimeViewProps) => {
     const mainLayout = (layout: Timelayouts) => {
         switch (layout) {
             case Timelayouts.OnChartLayout:
-                return <OneChartLayout parameters={parameterData} {...props} />;
+                return (
+                    <OneChartLayout
+                        units={units}
+                        parameters={parameterData}
+                        {...props}
+                    />
+                );
             case Timelayouts.TwoChartLayout:
                 return <></>;
             default:

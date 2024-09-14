@@ -15,7 +15,13 @@ import { ColorBox } from '../../../common/colorbox';
 import { ColorHelper } from '../../../../utility/color_helper';
 import { Parameters } from '../../../common/parameters';
 import { ParameterBox } from '../../../common/parameterbox';
-import { ParameterBaseData, ParameterData } from '../../../../utility/models';
+import {
+    ParameterBaseData,
+    ParameterData,
+    UnitStaticDetails,
+    UnitStatisCategories,
+} from '../../../../utility/models';
+import { UnitBox } from '../../../common/unitbox';
 
 // interface
 
@@ -27,11 +33,14 @@ export interface ChartSettingsProps extends TimeChartProp {
     handleStringsColor: ColorBoxChangeEvent;
 
     parameters: ParameterData | undefined;
+
+    units: UnitStatisCategories[] | undefined;
 }
 
 //
 export const ChartSettings = (props: ChartSettingsProps) => {
     const [parameter, setParameter] = useState<ParameterBaseData | undefined>();
+    const [unit, setUnit] = useState<UnitStaticDetails | undefined>();
 
     const wrapperStyles: React.CSSProperties = {
         position: 'relative',
@@ -76,7 +85,7 @@ export const ChartSettings = (props: ChartSettingsProps) => {
                             current={props.stringsColor}
                             handleCurrentChange={props.handleStringsColor}
                             colors={ColorHelper.getAllColors()}
-                        />{' '}
+                        />
                     </Grid>
                     <Grid templateColumns="1fr 3fr">
                         <Box
@@ -96,7 +105,28 @@ export const ChartSettings = (props: ChartSettingsProps) => {
                                 setParameter(param);
                             }}
                             parameters={props.parameters}
-                        />{' '}
+                        />
+                    </Grid>
+                    <Grid templateColumns="1fr 3fr">
+                        <Box
+                            xcss={xcss({
+                                alignContent: 'center',
+                                verticalAlign: 'center',
+                                alignItems: 'center',
+                            })}>
+                            <Text align="center">
+                                {unit === undefined
+                                    ? 'Select The Unit'
+                                    : unit.name}
+                            </Text>
+                        </Box>
+                        <UnitBox
+                            selectedParameter={parameter}
+                            handleChange={(u) => {
+                                setUnit(u);
+                            }}
+                            {...props}
+                        />
                     </Grid>
                 </Grid>
             </Stack>
