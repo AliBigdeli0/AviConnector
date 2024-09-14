@@ -15,7 +15,7 @@ import { ColorBox } from '../../../common/colorbox';
 import { ColorHelper } from '../../../../utility/color_helper';
 import { Parameters } from '../../../common/parameters';
 import { ParameterBox } from '../../../common/parameterbox';
-import { ParameterData } from '../../../../utility/models';
+import { ParameterBaseData, ParameterData } from '../../../../utility/models';
 
 // interface
 
@@ -31,6 +31,8 @@ export interface ChartSettingsProps extends TimeChartProp {
 
 //
 export const ChartSettings = (props: ChartSettingsProps) => {
+    const [parameter, setParameter] = useState<ParameterBaseData | undefined>();
+
     const wrapperStyles: React.CSSProperties = {
         position: 'relative',
     };
@@ -83,9 +85,18 @@ export const ChartSettings = (props: ChartSettingsProps) => {
                                 verticalAlign: 'center',
                                 alignItems: 'center',
                             })}>
-                            <Text align="center">Parameters</Text>
+                            <Text align="center">
+                                {parameter === undefined
+                                    ? 'Select A Parameter'
+                                    : parameter.ShowName}
+                            </Text>
                         </Box>
-                        <ParameterBox parameters={props.parameters} />{' '}
+                        <ParameterBox
+                            handleChangeDefault={(id, param) => {
+                                setParameter(param);
+                            }}
+                            parameters={props.parameters}
+                        />{' '}
                     </Grid>
                 </Grid>
             </Stack>

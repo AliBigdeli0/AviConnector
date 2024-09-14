@@ -4,6 +4,7 @@ import { Chart, ScatterDataPoint } from 'chart.js';
 // local
 import {
     AlertMsg,
+    ParameterBaseData,
     ParameterData,
     ServerLiveModel,
     ServerLiveModelResponse,
@@ -44,3 +45,8 @@ export type TimeChartType = Chart<
 
 export type ColorBoxChangeEvent = (color: string) => void;
 export type ColorBoxColors = Record<string, string>;
+
+export type ParameterBoxChangeEvent = (
+    id: string,
+    parameter: ParameterBaseData
+) => void;
