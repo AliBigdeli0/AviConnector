@@ -14,10 +14,7 @@ import org.bson.BsonDocument;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class DbManager implements Closeable {
 	MongoClient client = null;
@@ -52,10 +49,10 @@ public class DbManager implements Closeable {
 	}
 
 	public List<String> readAllWellsTimeCollection(String wellId) {
-		var retList = new ArrayList<String>();
-
+		var retList = new LinkedList<String>();
+		var wellStartNameTemplate = "c_" + wellId + "_";
 		for (var coll : db.listCollectionNames()) {
-			if (coll.startsWith(String.format("c_%s_", wellId))) retList.add(coll);
+			if (coll.startsWith(wellStartNameTemplate)) retList.add(coll);
 		}
 
 		return retList;

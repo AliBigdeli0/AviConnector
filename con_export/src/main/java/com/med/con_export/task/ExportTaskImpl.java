@@ -28,13 +28,13 @@ public class ExportTaskImpl implements ExportTask {
 	final UUID fakeUUID = UUID.randomUUID();
 
 	public List<String> readCollectionNames(String wellId) throws IOException {
-		try (final var dbMan = new DbManager()) {
+		try (var dbMan = new DbManager()) {
 			return dbMan.readAllWellsTimeCollection(wellId);
 		}
 	}
 
 	public List<DbTime> readColData(String colName) throws Exception {
-		try (final var dbMan = new DbManager()) {
+		try (var dbMan = new DbManager()) {
 			return dbMan.readAllCollection(colName);
 		}
 	}
@@ -44,28 +44,13 @@ public class ExportTaskImpl implements ExportTask {
 		try {
 			ConsoleHelper.successNewLine("the task has been created!!");
 			var collectionNames = readCollectionNames(wellId);
-			final var lenCollections = collectionNames.size();
+			var lenCollections = collectionNames.size();
 
 			log.info("number of collections in '{}':{}", wellName, lenCollections);
 			log.info("going to start task on well : {}", wellName);
 
 			try {
-				for (var i = 0; i < lenCollections; i++) {
-					final var colName = collectionNames.get(i);
-					ConsoleHelper.drawProgressBar(i, lenCollections);
-
-					var colDataList = readColData(colName);
-
-					final var tempXmlFile = new File(String.format("./exports/%s/%s.xml", wellName, colName));
-
-					FileHelper.createPathIfNotExist(tempXmlFile.getParentFile());
-
-					if (!dbTimeToWitsmlFile(tempXmlFile, colDataList, wellName))
-						log.error("collection with name '{}' has problem", colName);
-
-					colDataList = null;
-					System.gc();
-				}
+				fetchDataFromCollections(wellName, lenCollections, collectionNames);
 			} catch (Exception ex) {
 				log.error(ex.getMessage());
 			} finally {
@@ -79,7 +64,26 @@ public class ExportTaskImpl implements ExportTask {
 		}
 	}
 
-	private boolean dbTimeToWitsmlFile(File fileName, List<DbTime> colDataList, String wellName) {
+	void fetchDataFromCollections(String wellName, int lenCollections, List<String> collectionNames) throws Exception {
+		for (var i = 0; i < lenCollections; i++) {
+			final var colName = collectionNames.get(i);
+			ConsoleHelper.drawProgressBar(i, lenCollections);
+
+			var colDataList = readColData(colName);
+
+			var tempXmlFile = new File(String.format("./exports/%s/%s.xml", wellName, colName));
+
+			FileHelper.createPathIfNotExist(tempXmlFile.getParentFile());
+
+			if (!dbTimeToWitsml(tempXmlFile, colDataList, wellName))
+				log.error("collection with name '{}' has problem", colName);
+
+			colDataList = null;
+			System.gc();
+		}
+	}
+
+	private boolean dbTimeToWitsml(final File fileName, final List<DbTime> colDataList, final String wellName) {
 		LogWrapper logWrapper = null;
 		String objectToWrite = "";
 		try {
