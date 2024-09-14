@@ -50,7 +50,10 @@ export const UnitBox = (props: UnitBoxProps) => {
         const id = param.ID;
         props.units.forEach((category) => {
             category.details.forEach((detail) => {
-                if (detail.codes.includes(id)) setSelectedUnit(category);
+                if (detail.codes.includes(id)) {
+                    setSelectedUnit(category);
+                    props.handleChange(detail);
+                }
             });
         });
     };
