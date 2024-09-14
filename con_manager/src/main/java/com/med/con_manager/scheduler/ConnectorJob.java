@@ -2,8 +2,8 @@ package com.med.con_manager.scheduler;
 
 import com.med.con_common.model.DbWell;
 import com.med.con_common.utility.CommonEnvironmentVariables;
-import com.med.con_common.utility.Constants;
 import com.med.con_common.utility.ConsoleHelper;
+import com.med.con_common.utility.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.jobrunr.jobs.context.JobContext;
 
@@ -62,6 +62,7 @@ public class ConnectorJob {
 		var retList = new ArrayList<String>();
 		retList.add(Constants.getJavaPath());
 
+		retList.add("-server");
 		retList.add("-Xmx4g");
 
 		retList.add("--add-opens=java.base/jdk.internal.access=ALL-UNNAMED");
