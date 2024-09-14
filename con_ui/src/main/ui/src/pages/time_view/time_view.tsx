@@ -4,21 +4,14 @@ import '@atlaskit/css-reset';
 // icons
 
 //
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { token } from '@atlaskit/tokens';
-import { Box, Inline, Text, xcss } from '@atlaskit/primitives';
-import { HeadType, RowType } from '@atlaskit/dynamic-table/types';
-import Tabs, { Tab, TabList, TabPanel } from '@atlaskit/tabs';
-import Button, { IconButton } from '@atlaskit/button/new';
-import DynamicTable from '@atlaskit/dynamic-table';
-import Tooltip from '@atlaskit/tooltip';
-import Textfield from '@atlaskit/textfield';
+import { Box, xcss } from '@atlaskit/primitives';
 
 //
 import { CommonProps } from '../../utility/common_props';
 import { MsgType, AlertMsgType, ThemeType } from '../../utility/types';
-import { ServerLiveModel, Timelayouts, WellData } from '../../utility/models';
+import { PageConfigureData, Timelayouts, WellData } from '../../utility/models';
 import { ThemeHelper } from '../../utility/theme_helper';
 import { SignalrService } from '../../utility/signalr_service';
 import { InitTheme } from '../../header/theme';
@@ -35,6 +28,9 @@ const TimeView = (props: TimeViewProps) => {
     const [updateParent, setUpdateParent] = useState(false);
     const [count, setCount] = useState(0);
     const [well, setWell] = useState<WellData>();
+    const [pageConfigure, setPageConfigure] = useState<
+        PageConfigureData | undefined
+    >();
     const [alertMsg, setAlertMsg] = useState<AlertMsgType>([]);
     const [theme, setTheme] = useState<ThemeType>(ThemeHelper.getTheme());
     const [pathItems, setPathItems] = useState<string[]>([]);
@@ -42,7 +38,7 @@ const TimeView = (props: TimeViewProps) => {
     useEffect(() => {
         props.signalRService.callbacks(
             async () => {
-                await loadWell();
+                await loadPageInitData();
                 setShowSpinner('');
             },
             async () => {
@@ -58,7 +54,7 @@ const TimeView = (props: TimeViewProps) => {
             },
             async () => {
                 setShowSpinner('');
-                await loadWell();
+                await loadPageInitData();
             },
             (err) => {
                 console.error(err);
@@ -71,6 +67,22 @@ const TimeView = (props: TimeViewProps) => {
 
         asyncStart();
     }, []);
+
+    useEffect(() => {
+        loadPageConfigure();
+    }, [well]);
+
+    const loadPageInitData = async () => {
+        await loadWell();
+    };
+
+    const loadPageConfigure = async () => {
+        if (props.signalRService.connected()) {
+            if (well === undefined) return;
+            const pageConfig = await props.signalRService.pageConfig(well.ID);
+            setPageConfigure(pageConfig);
+        }
+    };
 
     const loadWell = async () => {
         if (props.signalRService.connected()) {

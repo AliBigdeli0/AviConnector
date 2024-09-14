@@ -23,6 +23,19 @@ export interface WellData {
     LiveData: ServerLiveModelResponse | undefined;
 }
 
+export interface PageConfigureData {
+    IsComposite: boolean;
+    ShowName: string;
+    Elements: PageConfigureBaseData[];
+}
+
+export interface PageConfigureBaseData {
+    ID: string;
+    ShowName: string;
+    IsComposite: boolean;
+    Elements: PageConfigureBaseData[];
+}
+
 export interface ServerLiveModel {
     well_id: string;
     times: { [key: string]: string };

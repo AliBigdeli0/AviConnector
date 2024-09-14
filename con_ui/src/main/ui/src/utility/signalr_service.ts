@@ -1,12 +1,18 @@
 import { CookieHelper } from './cookie_helper';
 
 import * as signalR from '@microsoft/signalr';
-import { ServerLiveModel, ServerLiveModelResponse, WellData } from './models';
+import {
+    PageConfigureData,
+    ServerLiveModel,
+    ServerLiveModelResponse,
+    WellData,
+} from './models';
 import {
     SignalROnBulkLiveCallback,
     SignalROnClose,
     SignalROnError,
     SignalROnErrorCallback,
+    SignalROnPageConfigCallback,
     SignalROnReconnecting,
     SignalROnReconnectted,
     SignalROnRestart as SignalROnStarted,
@@ -26,6 +32,8 @@ export class SignalrService {
     private onErrorCallback: SignalROnErrorCallback | undefined = undefined;
     private onWellsCallback: SignalROnWellsCallback | undefined = undefined;
     private OnBulkLiveCallback: SignalROnBulkLiveCallback | undefined =
+        undefined;
+    private onPageConfigCallback: SignalROnPageConfigCallback | undefined =
         undefined;
 
     async start() {
@@ -55,6 +63,11 @@ export class SignalrService {
 
         this.con?.on('wells_callback', (list) => {
             if (this.onWellsCallback !== undefined) this.onWellsCallback(list);
+        });
+
+        this.con?.on('page_configure_callback', (data) => {
+            if (this.onPageConfigCallback !== undefined)
+                this.onPageConfigCallback(data);
         });
     }
 
@@ -108,6 +121,16 @@ export class SignalrService {
                 res(retList);
             };
             await this.con?.invoke('wells');
+        });
+    }
+
+    async pageConfig(wellID: string): Promise<PageConfigureData> {
+        return new Promise(async (res, err) => {
+            this.onPageConfigCallback = (data: any) => {
+                const deserializedData = JSON.parse(data);
+                res(JSON.parse(deserializedData.json_parser));
+            };
+            await this.con?.invoke('page_configure', wellID);
         });
     }
 

@@ -17,6 +17,10 @@
         -   [ ] Lines Properties
         -   [ ] Parameters
         -   [ ] Total Properties
+    -   [ ] Read Parameters
+        -   [ ] read parameters
+        -   [ ] read units
+        -   [ ] save current page configurations to server
 -   [ ] Chart Online Data
 -   [ ] Chart View Points
 -   [ ] Numeric Part
