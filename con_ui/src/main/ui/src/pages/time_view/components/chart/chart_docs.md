@@ -18,7 +18,7 @@
         -   [ ] Parameters
         -   [ ] Total Properties
     -   [ ] Read Parameters
-        -   [ ] read parameters
+        -   [x] read parameters
         -   [ ] read units
         -   [ ] save current page configurations to server
 -   [ ] Chart Online Data
