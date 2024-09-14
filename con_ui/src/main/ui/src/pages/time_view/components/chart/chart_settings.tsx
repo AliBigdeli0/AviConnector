@@ -14,6 +14,8 @@ import { ColorBoxChangeEvent, ReactSetter } from '../../../../utility/types';
 import { ColorBox } from '../../../common/colorbox';
 import { ColorHelper } from '../../../../utility/color_helper';
 import { Parameters } from '../../../common/parameters';
+import { ParameterBox } from '../../../common/parameterbox';
+import { ParameterData } from '../../../../utility/models';
 
 // interface
 
@@ -23,6 +25,8 @@ export interface ChartSettingsProps extends TimeChartProp {
 
     stringsColor: string;
     handleStringsColor: ColorBoxChangeEvent;
+
+    parameters: ParameterData | undefined;
 }
 
 //
@@ -72,6 +76,17 @@ export const ChartSettings = (props: ChartSettingsProps) => {
                             colors={ColorHelper.getAllColors()}
                         />{' '}
                     </Grid>
+                    <Grid templateColumns="1fr 3fr">
+                        <Box
+                            xcss={xcss({
+                                alignContent: 'center',
+                                verticalAlign: 'center',
+                                alignItems: 'center',
+                            })}>
+                            <Text align="center">Parameters</Text>
+                        </Box>
+                        <ParameterBox parameters={props.parameters} />{' '}
+                    </Grid>
                 </Grid>
             </Stack>
         );
@@ -81,12 +96,10 @@ export const ChartSettings = (props: ChartSettingsProps) => {
         return (
             <Tabs id="chart_settings_id">
                 <TabList>
-                    <Tab>Lines</Tab>
                     <Tab>Parameters</Tab>
                     <Tab>Others</Tab>
                 </TabList>
 
-                <TabPanel>lines</TabPanel>
                 <TabPanel>{parameters()}</TabPanel>
                 <TabPanel>{others()}</TabPanel>
             </Tabs>

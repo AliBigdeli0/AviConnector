@@ -23,17 +23,17 @@ export interface WellData {
     LiveData: ServerLiveModelResponse | undefined;
 }
 
-export interface PageConfigureData {
+export interface ParameterData {
     IsComposite: boolean;
     ShowName: string;
-    Elements: PageConfigureBaseData[];
+    Elements: ParameterBaseData[];
 }
 
-export interface PageConfigureBaseData {
+export interface ParameterBaseData {
     ID: string;
     ShowName: string;
     IsComposite: boolean;
-    Elements: PageConfigureBaseData[];
+    Elements: ParameterBaseData[];
 }
 
 export interface UnitStatisCategories {

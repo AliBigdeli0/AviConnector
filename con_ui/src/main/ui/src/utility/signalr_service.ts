@@ -2,7 +2,7 @@ import { CookieHelper } from './cookie_helper';
 
 import * as signalR from '@microsoft/signalr';
 import {
-    PageConfigureData,
+    ParameterData,
     ServerLiveModel,
     ServerLiveModelResponse,
     UnitStatisCategories,
@@ -134,7 +134,7 @@ export class SignalrService {
         });
     }
 
-    async pageConfig(wellID: string): Promise<PageConfigureData> {
+    async pageConfig(wellID: string): Promise<ParameterData> {
         return new Promise(async (res, err) => {
             this.onPageConfigCallback = (data: any) => {
                 const deserializedData = JSON.parse(data);

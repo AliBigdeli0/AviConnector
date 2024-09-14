@@ -8,11 +8,11 @@ import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Box, xcss } from '@atlaskit/primitives';
 
-//
+// local
 import { CommonProps } from '../../utility/common_props';
 import { MsgType, AlertMsgType, ThemeType } from '../../utility/types';
 import {
-    PageConfigureData,
+    ParameterData,
     Timelayouts,
     UnitStatisCategories,
     WellData,
@@ -33,8 +33,8 @@ const TimeView = (props: TimeViewProps) => {
     const [updateParent, setUpdateParent] = useState(false);
     const [count, setCount] = useState(0);
     const [well, setWell] = useState<WellData>();
-    const [pageConfigure, setPageConfigure] = useState<
-        PageConfigureData | undefined
+    const [parameterData, setParameterData] = useState<
+        ParameterData | undefined
     >();
     const [units, setUnits] = useState<UnitStatisCategories[] | undefined>();
     const [alertMsg, setAlertMsg] = useState<AlertMsgType>([]);
@@ -80,7 +80,7 @@ const TimeView = (props: TimeViewProps) => {
 
     useEffect(() => {
         loadUnits();
-    }, [pageConfigure]);
+    }, [parameterData]);
 
     const loadPageInitData = async () => {
         await loadWell();
@@ -97,7 +97,7 @@ const TimeView = (props: TimeViewProps) => {
         if (props.signalRService.connected()) {
             if (well === undefined) return;
             const pageConfig = await props.signalRService.pageConfig(well.ID);
-            setPageConfigure(pageConfig);
+            setParameterData(pageConfig);
         }
     };
 
@@ -124,7 +124,7 @@ const TimeView = (props: TimeViewProps) => {
     const mainLayout = (layout: Timelayouts) => {
         switch (layout) {
             case Timelayouts.OnChartLayout:
-                return <OneChartLayout {...props} />;
+                return <OneChartLayout parameters={parameterData} {...props} />;
             case Timelayouts.TwoChartLayout:
                 return <></>;
             default:

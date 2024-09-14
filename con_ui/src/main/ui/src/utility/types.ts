@@ -4,7 +4,7 @@ import { Chart, ScatterDataPoint } from 'chart.js';
 // local
 import {
     AlertMsg,
-    PageConfigureData,
+    ParameterData,
     ServerLiveModel,
     ServerLiveModelResponse,
     UnitStatisCategories,

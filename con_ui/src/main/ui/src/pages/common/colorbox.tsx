@@ -1,20 +1,14 @@
 // icons
-import EditorBackgroundColorIcon from '@atlaskit/icon/glyph/editor/background-color';
 import EditorTextColorIcon from '@atlaskit/icon/glyph/editor/text-color';
 import ChevronDownIcon from '@atlaskit/icon/glyph/chevron-down';
 
 // react
-import React, { Fragment, useEffect, useRef, useState } from 'react';
-import { css, jsx } from '@emotion/react';
-import Select, { PopupSelect } from '@atlaskit/select';
+import React from 'react';
 
 // atlassian
-import { Stack, Box, xcss, Inline, Grid, Text } from '@atlaskit/primitives';
+import { Box, xcss, Inline, Text } from '@atlaskit/primitives';
 import Button from '@atlaskit/button/new';
-import DropdownMenu, {
-    DropdownItem,
-    DropdownItemGroup,
-} from '@atlaskit/dropdown-menu';
+import { PopupSelect } from '@atlaskit/select';
 
 // local
 import { ColorBoxChangeEvent, ColorBoxColors } from '../../utility/types';
