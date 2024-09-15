@@ -15,13 +15,11 @@ import { ColorBox } from '../../../common/colorbox';
 import { ColorHelper } from '../../../../utility/color_helper';
 import { Parameters } from '../../../common/parameters';
 import { ParameterBox } from '../../../common/parameterbox';
-import {
-    ParameterBaseData,
-    ParameterData,
-    UnitStaticDetails,
-    UnitStatisCategories,
-} from '../../../../utility/models';
 import { UnitBox } from '../../../common/unitbox';
+import { ParameterData } from '../../../../models/parameters/parameter_data';
+import { UnitStaticCategories } from '../../../../models/units/unit-static-category';
+import { ParameterBaseData } from '../../../../models/parameters/parameter_base_data';
+import { UnitStaticDetails } from '../../../../models/units/unit-static-details';
 
 // interface
 
@@ -34,7 +32,7 @@ export interface ChartSettingsProps extends TimeChartProp {
 
     parameters: ParameterData | undefined;
 
-    units: UnitStatisCategories[] | undefined;
+    units: UnitStaticCategories[] | undefined;
 }
 
 //

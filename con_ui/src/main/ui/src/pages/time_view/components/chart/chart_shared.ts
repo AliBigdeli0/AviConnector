@@ -1,7 +1,7 @@
 import { ChartEvent } from 'chart.js';
 
 // local
-import { ChartLastEventPoint } from '../../../../utility/models';
+import { ChartLastEventPoint } from '../../../../models/chart/chart_last_event_point';
 
 let chartLastEvent: ChartLastEventPoint = {
     x: null,

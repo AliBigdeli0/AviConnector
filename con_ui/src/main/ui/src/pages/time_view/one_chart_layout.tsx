@@ -10,12 +10,13 @@ import { Box, Inline, Text, xcss } from '@atlaskit/primitives';
 // internal
 import { BaseLayoutProps } from './base_layout_props';
 import { TimeChart } from './components/chart/time_charts';
-import { ParameterData, UnitStatisCategories } from '../../utility/models';
+import { ParameterData } from '../../models/parameters/parameter_data';
+import { UnitStaticCategories } from '../../models/units/unit-static-category';
 
 // props
 export interface OneChartLayoutProps extends BaseLayoutProps {
     parameters: ParameterData | undefined;
-    units: UnitStatisCategories[] | undefined;
+    units: UnitStaticCategories[] | undefined;
 }
 
 //

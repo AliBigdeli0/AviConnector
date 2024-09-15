@@ -11,12 +11,6 @@ import { Box, xcss } from '@atlaskit/primitives';
 // local
 import { CommonProps } from '../../utility/common_props';
 import { MsgType, AlertMsgType, ThemeType } from '../../utility/types';
-import {
-    ParameterData,
-    Timelayouts,
-    UnitStatisCategories,
-    WellData,
-} from '../../utility/models';
 import { ThemeHelper } from '../../utility/theme_helper';
 import { SignalrService } from '../../utility/signalr_service';
 import { InitTheme } from '../../header/theme';
@@ -24,6 +18,10 @@ import { Constant } from '../../utility/constants';
 import { TimeHelper } from '../../utility/time_helper';
 import { QueryParametersHelper } from '../../utility/params_helper';
 import { OneChartLayout } from './one_chart_layout';
+import { WellData } from '../../models/welldata';
+import { UnitStaticCategories } from '../../models/units/unit-static-category';
+import { ParameterData } from '../../models/parameters/parameter_data';
+import { Timelayouts } from '../../models/time-layouts';
 
 export interface TimeViewProps extends CommonProps {}
 
@@ -36,7 +34,7 @@ const TimeView = (props: TimeViewProps) => {
     const [parameterData, setParameterData] = useState<
         ParameterData | undefined
     >();
-    const [units, setUnits] = useState<UnitStatisCategories[] | undefined>();
+    const [units, setUnits] = useState<UnitStaticCategories[] | undefined>();
     const [alertMsg, setAlertMsg] = useState<AlertMsgType>([]);
     const [theme, setTheme] = useState<ThemeType>(ThemeHelper.getTheme());
     const [pathItems, setPathItems] = useState<string[]>([]);

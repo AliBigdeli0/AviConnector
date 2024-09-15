@@ -124,8 +124,8 @@ export const Parameters = (props: ParametersProps) => {
                 description={
                     <Stack as="div">
                         <Text>Mappted To: 0102</Text>
-                        <Text>Current Unit: klb/pre</Text>
-                        <Text>WITSML ID: 33093984-39843930-23439349</Text>
+                        <Text>Unit: klb/pre</Text>
+                        <Text>ID: 33093984-39843930-23439349</Text>
                     </Stack>
                 }
                 id="parameter code"

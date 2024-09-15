@@ -30,10 +30,11 @@ import { CommonProps } from '../../utility/common_props';
 import { MsgType, AlertMsgType, ThemeType } from '../../utility/types';
 import { Constant } from '../../utility/constants';
 import { SignalrService } from '../../utility/signalr_service';
-import { ServerLiveModel, WellData } from '../../utility/models';
 import { TimeHelper } from '../../utility/time_helper';
 import { StringHelper } from '../../utility/string_helper';
 import { ThemeHelper } from '../../utility/theme_helper';
+import { ServerLiveModel } from '../../models/server-live-model';
+import { WellData } from '../../models/welldata';
 
 //
 export interface HomeProps extends CommonProps {}

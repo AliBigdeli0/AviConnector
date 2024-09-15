@@ -1,13 +1,7 @@
 import { CookieHelper } from './cookie_helper';
 
 import * as signalR from '@microsoft/signalr';
-import {
-    ParameterData,
-    ServerLiveModel,
-    ServerLiveModelResponse,
-    UnitStatisCategories,
-    WellData,
-} from './models';
+
 import {
     SignalROnBulkLiveCallback,
     SignalROnClose,
@@ -20,7 +14,11 @@ import {
     SignalROnStaticUnitsCallback,
     SignalROnWellsCallback,
 } from './types';
-import { TimeHelper } from './time_helper';
+import { ServerLiveModelResponse } from '../models/server_live_response';
+import { WellData } from '../models/welldata';
+import { ParameterData } from '../models/parameters/parameter_data';
+import { UnitStaticCategories } from '../models/units/unit-static-category';
+import { ServerLiveModel } from '../models/server-live-model';
 
 export class SignalrService {
     con: signalR.HubConnection | undefined = undefined;
@@ -144,7 +142,7 @@ export class SignalrService {
         });
     }
 
-    async loadUnits(): Promise<UnitStatisCategories[]> {
+    async loadUnits(): Promise<UnitStaticCategories[]> {
         return new Promise(async (res, err) => {
             this.onStaticUnitCallback = (data) => {
                 res(data);

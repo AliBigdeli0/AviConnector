@@ -22,18 +22,16 @@ import { getChartOption } from './chart_options';
 import * as ChartPlugins from './chart_plugins';
 import { getChartLines } from './chart_lines';
 import { getChartDataReceiver } from './chart_data';
-import {
-    ChartDataType,
-    ParameterData,
-    UnitStatisCategories,
-} from '../../../../utility/models';
 import { ColorBoxChangeEvent, TimeChartType } from '../../../../utility/types';
 import { ChartSettings } from './chart_settings';
+import { ChartDataType } from '../../../../models/chart/chart_datatype';
+import { ParameterData } from '../../../../models/parameters/parameter_data';
+import { UnitStaticCategories } from '../../../../models/units/unit-static-category';
 
 // props
 export interface TimeChartProp extends BaseLayoutProps {
     parameters: ParameterData | undefined;
-    units: UnitStatisCategories[] | undefined;
+    units: UnitStaticCategories[] | undefined;
 
     settings_id: string;
 }

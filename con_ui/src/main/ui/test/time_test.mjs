@@ -15,7 +15,6 @@ async function open_parameters() {
         const editButton = await driver.findElement(By.xpath('//*[@data-testid="parameters-list-test-edit"]'));
         editButton.click();
         
-
         await driver.sleep(0xfffff);
     }
     finally { 

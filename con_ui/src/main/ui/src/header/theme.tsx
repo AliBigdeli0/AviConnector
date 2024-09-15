@@ -3,9 +3,11 @@ import SuccessIcon from '@atlaskit/icon/glyph/check-circle';
 import DangerIcon from '@atlaskit/icon/glyph/select-clear';
 import InfoIcon from '@atlaskit/icon/glyph/warning';
 
-// imports
+// react
+import React from 'react';
+
+// atlassian
 import { token } from '@atlaskit/tokens';
-import { AlertMsg } from '../utility/models';
 import { MainBody } from './mainbody';
 import { Stack, xcss } from '@atlaskit/primitives';
 import {
@@ -16,11 +18,13 @@ import {
 } from '../utility/types';
 import { AutoDismissFlag, FlagGroup } from '@atlaskit/flag';
 
-import React from 'react';
 import Spinner from '@atlaskit/spinner';
 import Lozenge from '@atlaskit/lozenge';
 import Blanket from '@atlaskit/blanket';
 import ThemeProvider from '@atlaskit/app-provider';
+
+// local
+import { AlertMsg } from '../models/alertmsg';
 
 export interface ThemeProps {
     showSpinner: MsgType;

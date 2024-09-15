@@ -1,4 +1,4 @@
-import { ChartPoint } from './models';
+import { ChartPoint } from '../models/chart/chart_point';
 
 export class NumHelper {
     static getRandomInRange(min: number, max: number): number {

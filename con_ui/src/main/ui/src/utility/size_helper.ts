@@ -1,4 +1,4 @@
-import { WinSize } from './models';
+import { WinSize } from '../models/winsize';
 
 export class SizeHelper {
     static getElementSize(elementId: string): WinSize | undefined {

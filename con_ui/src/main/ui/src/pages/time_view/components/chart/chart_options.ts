@@ -2,9 +2,9 @@
 import { Chart, ChartEvent, ChartOptions } from 'chart.js';
 
 // local
-import { ChartPoint } from '../../../../utility/models';
 import { TimeHelper } from '../../../../utility/time_helper';
 import { setLastEvent } from './chart_shared';
+import { ChartPoint } from '../../../../models/chart/chart_point';
 
 export interface ChartOptionProps {
     gridLinesColor: string;

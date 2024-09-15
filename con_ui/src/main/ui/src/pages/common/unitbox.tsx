@@ -18,13 +18,14 @@ import Button from '@atlaskit/button/new';
 import { PopupSelect } from '@atlaskit/select';
 
 // local
-import { ParameterBaseData, UnitStatisCategories } from '../../utility/models';
 import { ReactSetter, UnitBoxChangeEvent } from '../../utility/types';
+import { ParameterBaseData } from '../../models/parameters/parameter_base_data';
+import { UnitStaticCategories } from '../../models/units/unit-static-category';
 
 //
 export interface UnitBoxProps {
     selectedParameter: ParameterBaseData | undefined;
-    units: UnitStatisCategories[] | undefined;
+    units: UnitStaticCategories[] | undefined;
 
     handleChange: UnitBoxChangeEvent;
 }
@@ -32,7 +33,7 @@ export interface UnitBoxProps {
 //
 export const UnitBox = (props: UnitBoxProps) => {
     const [selectedUnit, setSelectedUnit] = useState<
-        UnitStatisCategories | undefined
+        UnitStaticCategories | undefined
     >();
 
     useEffect(() => {

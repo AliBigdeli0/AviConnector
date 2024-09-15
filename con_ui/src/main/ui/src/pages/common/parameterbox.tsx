@@ -18,8 +18,10 @@ import Button from '@atlaskit/button/new';
 import { PopupSelect } from '@atlaskit/select';
 
 // local
-import { ParameterBaseData, ParameterData } from '../../utility/models';
+
 import { ParameterBoxChangeEvent } from '../../utility/types';
+import { ParameterData } from '../../models/parameters/parameter_data';
+import { ParameterBaseData } from '../../models/parameters/parameter_base_data';
 
 //
 export interface ParameterBoxProps {
