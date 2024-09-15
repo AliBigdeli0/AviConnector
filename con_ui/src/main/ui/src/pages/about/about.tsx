@@ -18,10 +18,11 @@ import SectionMessage from '@atlaskit/section-message';
 import { createRoot } from 'react-dom/client';
 import { InitTheme } from '../../header/theme';
 import { CommonProps } from '../../utility/common_props';
-import { MsgType, AlertMsgType, ThemeType } from '../../utility/types';
 import { SignalrService } from '../../utility/signalr_service';
 import { ThemeHelper } from '../../utility/theme_helper';
 import { Constant } from '../../utility/constants';
+import { AlertMsgType, MsgType } from '../../types/msg';
+import { ThemeType } from '../../types/theme-type';
 
 export interface AboutProps extends CommonProps {}
 

@@ -10,7 +10,6 @@ import { Box, xcss } from '@atlaskit/primitives';
 
 // local
 import { CommonProps } from '../../utility/common_props';
-import { MsgType, AlertMsgType, ThemeType } from '../../utility/types';
 import { ThemeHelper } from '../../utility/theme_helper';
 import { SignalrService } from '../../utility/signalr_service';
 import { InitTheme } from '../../header/theme';
@@ -22,6 +21,8 @@ import { WellData } from '../../models/welldata';
 import { UnitStaticCategories } from '../../models/units/unit-static-category';
 import { ParameterData } from '../../models/parameters/parameter_data';
 import { Timelayouts } from '../../models/time-layouts';
+import { AlertMsgType, MsgType } from '../../types/msg';
+import { ThemeType } from '../../types/theme-type';
 
 export interface TimeViewProps extends CommonProps {}
 

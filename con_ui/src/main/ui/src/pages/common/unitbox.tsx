@@ -18,9 +18,10 @@ import Button from '@atlaskit/button/new';
 import { PopupSelect } from '@atlaskit/select';
 
 // local
-import { ReactSetter, UnitBoxChangeEvent } from '../../utility/types';
+
 import { ParameterBaseData } from '../../models/parameters/parameter_base_data';
 import { UnitStaticCategories } from '../../models/units/unit-static-category';
+import { UnitBoxChangeEvent } from '../../types/unitbox';
 
 //
 export interface UnitBoxProps {

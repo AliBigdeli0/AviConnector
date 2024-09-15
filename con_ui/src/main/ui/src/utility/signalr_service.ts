@@ -2,6 +2,11 @@ import { CookieHelper } from './cookie_helper';
 
 import * as signalR from '@microsoft/signalr';
 
+import { ServerLiveModelResponse } from '../models/server_live_response';
+import { WellData } from '../models/welldata';
+import { ParameterData } from '../models/parameters/parameter_data';
+import { UnitStaticCategories } from '../models/units/unit-static-category';
+import { ServerLiveModel } from '../models/server-live-model';
 import {
     SignalROnBulkLiveCallback,
     SignalROnClose,
@@ -10,15 +15,10 @@ import {
     SignalROnPageConfigCallback,
     SignalROnReconnecting,
     SignalROnReconnectted,
-    SignalROnRestart as SignalROnStarted,
     SignalROnStaticUnitsCallback,
     SignalROnWellsCallback,
-} from './types';
-import { ServerLiveModelResponse } from '../models/server_live_response';
-import { WellData } from '../models/welldata';
-import { ParameterData } from '../models/parameters/parameter_data';
-import { UnitStaticCategories } from '../models/units/unit-static-category';
-import { ServerLiveModel } from '../models/server-live-model';
+    SignalROnRestart as SignalROnStarted,
+} from '../types/signalr';
 
 export class SignalrService {
     con: signalR.HubConnection | undefined = undefined;

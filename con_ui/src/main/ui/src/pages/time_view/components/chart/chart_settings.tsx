@@ -10,7 +10,6 @@ import { Stack, Box, xcss, Inline, Grid, Text } from '@atlaskit/primitives';
 
 // local
 import { TimeChartProp } from './time_charts';
-import { ColorBoxChangeEvent, ReactSetter } from '../../../../utility/types';
 import { ColorBox } from '../../../common/colorbox';
 import { ColorHelper } from '../../../../utility/color_helper';
 import { Parameters } from '../../../common/parameters';
@@ -20,6 +19,8 @@ import { ParameterData } from '../../../../models/parameters/parameter_data';
 import { UnitStaticCategories } from '../../../../models/units/unit-static-category';
 import { ParameterBaseData } from '../../../../models/parameters/parameter_base_data';
 import { UnitStaticDetails } from '../../../../models/units/unit-static-details';
+import { ColorBoxChangeEvent } from '../../../../types/colorbox';
+import { ReactSetter } from '../../../../types/setter';
 
 // interface
 

@@ -1,4 +1,4 @@
-import { ThemeType } from './types';
+import { ThemeType } from '../types/theme-type';
 
 export class ThemeHelper {
     static changeTheme(type: ThemeType) {

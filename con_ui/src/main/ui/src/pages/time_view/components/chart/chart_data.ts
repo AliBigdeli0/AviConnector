@@ -4,10 +4,10 @@ import { Chart, ScatterDataPoint } from 'chart.js';
 // Local
 
 import { NumHelper } from '../../../../utility/number_helper';
-import { TimeChartType } from '../../../../utility/types';
 import { ChartData } from '../../../../models/chart/chart_data';
 import { ChartPoint } from '../../../../models/chart/chart_point';
 import { ChartDataType } from '../../../../models/chart/chart_datatype';
+import { TimeChartType } from '../../../../types/time-chart-type';
 
 // interfaces
 

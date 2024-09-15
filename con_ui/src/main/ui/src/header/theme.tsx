@@ -10,12 +10,6 @@ import React from 'react';
 import { token } from '@atlaskit/tokens';
 import { MainBody } from './mainbody';
 import { Stack, xcss } from '@atlaskit/primitives';
-import {
-    AlertMsgType,
-    MsgType,
-    ReactSetter,
-    ThemeType,
-} from '../utility/types';
 import { AutoDismissFlag, FlagGroup } from '@atlaskit/flag';
 
 import Spinner from '@atlaskit/spinner';
@@ -25,6 +19,9 @@ import ThemeProvider from '@atlaskit/app-provider';
 
 // local
 import { AlertMsg } from '../models/alertmsg';
+import { AlertMsgType, MsgType } from '../types/msg';
+import { ReactSetter } from '../types/setter';
+import { ThemeType } from '../types/theme-type';
 
 export interface ThemeProps {
     showSpinner: MsgType;

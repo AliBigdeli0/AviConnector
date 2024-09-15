@@ -3,8 +3,7 @@ import { Chart, ChartData, Plugin } from 'chart.js';
 
 // local
 import { TimeHelper } from '../../../../utility/time_helper';
-
-import { ColorBoxChangeEvent } from '../../../../utility/types';
+import { ColorBoxChangeEvent } from '../../../../types/colorbox';
 
 //
 

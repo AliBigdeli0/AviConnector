@@ -11,7 +11,7 @@ import Button from '@atlaskit/button/new';
 import { PopupSelect } from '@atlaskit/select';
 
 // local
-import { ColorBoxChangeEvent, ColorBoxColors } from '../../utility/types';
+import { ColorBoxChangeEvent, ColorBoxColors } from '../../types/colorbox';
 
 //
 export interface ColorBoxProps {

@@ -27,7 +27,6 @@ import Textfield from '@atlaskit/textfield';
 //
 import { InitTheme } from '../../header/theme';
 import { CommonProps } from '../../utility/common_props';
-import { MsgType, AlertMsgType, ThemeType } from '../../utility/types';
 import { Constant } from '../../utility/constants';
 import { SignalrService } from '../../utility/signalr_service';
 import { TimeHelper } from '../../utility/time_helper';
@@ -35,6 +34,8 @@ import { StringHelper } from '../../utility/string_helper';
 import { ThemeHelper } from '../../utility/theme_helper';
 import { ServerLiveModel } from '../../models/server-live-model';
 import { WellData } from '../../models/welldata';
+import { AlertMsgType, MsgType } from '../../types/msg';
+import { ThemeType } from '../../types/theme-type';
 
 //
 export interface HomeProps extends CommonProps {}

@@ -19,9 +19,9 @@ import { PopupSelect } from '@atlaskit/select';
 
 // local
 
-import { ParameterBoxChangeEvent } from '../../utility/types';
 import { ParameterData } from '../../models/parameters/parameter_data';
 import { ParameterBaseData } from '../../models/parameters/parameter_base_data';
+import { ParameterBoxChangeEvent } from '../../types/parameterbox';
 
 //
 export interface ParameterBoxProps {
