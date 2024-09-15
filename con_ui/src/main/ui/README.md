@@ -131,3 +131,14 @@ before anything pull docker protoc image with following command :
 ```shell
 docker pull znly/protoc
 ```
+
+## Tests In Atlassian
+
+Every element in attlasian has an array to test with name `testid`. to fetch the `testid` in selenimum following code can be used:
+
+```js
+const editButton = await driver.findElement(
+    By.xpath('//*[@data-testid="parameters-list-test-edit"]')
+);
+editButton.click();
+```
