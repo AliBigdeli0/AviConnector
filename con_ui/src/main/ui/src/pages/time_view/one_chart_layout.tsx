@@ -99,7 +99,7 @@ export const OneChartLayout = (props: OneChartLayoutProps) => {
                     height: '100%',
                     padding: 'space.025',
                 })}>
-                <TimeChart {...props} />
+                <TimeChart settings_id="layer1_chart_1_settings" {...props} />
             </Box>
         );
     };

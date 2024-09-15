@@ -115,6 +115,7 @@ export const Parameters = (props: ParametersProps) => {
             </Box>
 
             <Flag
+                testId="parameters-list-test"
                 appearance="info"
                 icon={<CheckIcon label="success" />}
                 title={
@@ -131,6 +132,7 @@ export const Parameters = (props: ParametersProps) => {
                 actions={[
                     {
                         content: 'edit',
+                        testId: 'parameters-list-test-edit',
                         onClick: () => {
                             openModal();
                         },

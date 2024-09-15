@@ -89,6 +89,7 @@ const TimeView = (props: TimeViewProps) => {
     const loadUnits = async () => {
         if (props.signalRService.connected()) {
             const u = await props.signalRService.loadUnits();
+            console.log(u);
             setUnits(u);
         }
     };

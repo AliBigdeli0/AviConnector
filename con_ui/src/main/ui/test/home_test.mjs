@@ -2,7 +2,7 @@
 import { open_browser } from './browser.mjs';
 
 async function run_home() {
-    const driver = await open_browser();
+    const driver = await open_browser("");
     try { 
         await driver.sleep(0xfffff);
     }

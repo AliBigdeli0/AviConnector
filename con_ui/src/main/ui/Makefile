@@ -9,7 +9,7 @@ os:: open_selenimum
 
 
 open_selenimum:: compile
-	@npx node ./test/home_test.mjs
+	@npx node ./test/time_test.mjs
 
 compile:: compile_webpack
 
@@ -18,9 +18,6 @@ compile_webpack::
 	@rm -rf $(STATIC_PATH)/**/*
 	@mkdir -p $(STATIC_PATH)/
 	@cp -r $(PWD)/../resources/static/* $(STATIC_PATH)/
-
-run_browser::
-	@echo nothing
 
 proto_compile::	
 	@docker run --rm -v ./:/work znly/protoc \

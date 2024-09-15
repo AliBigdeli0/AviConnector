@@ -34,6 +34,8 @@ import { ChartSettings } from './chart_settings';
 export interface TimeChartProp extends BaseLayoutProps {
     parameters: ParameterData | undefined;
     units: UnitStatisCategories[] | undefined;
+
+    settings_id: string;
 }
 
 const chartScale = 3600_000;
@@ -110,6 +112,7 @@ export const TimeChart = (props: TimeChartProp) => {
                     zIndex: 'layer',
                 })}>
                 <IconButton
+                    id={props.settings_id}
                     appearance="subtle"
                     icon={SettingsIcon}
                     label=""
