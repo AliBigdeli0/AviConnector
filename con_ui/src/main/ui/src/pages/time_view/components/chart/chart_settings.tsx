@@ -21,6 +21,8 @@ import { ParameterBaseData } from '../../../../models/parameters/parameter_base_
 import { UnitStaticDetails } from '../../../../models/units/unit-static-details';
 import { ColorBoxChangeEvent } from '../../../../types/colorbox';
 import { ReactSetter } from '../../../../types/setter';
+import { ChartComponentParameters } from '../../../../models/parameters/chart-component-parameter';
+import { NumHelper } from '../../../../utility/number_helper';
 
 // interface
 
@@ -40,6 +42,36 @@ export interface ChartSettingsProps extends TimeChartProp {
 export const ChartSettings = (props: ChartSettingsProps) => {
     const [parameter, setParameter] = useState<ParameterBaseData | undefined>();
     const [unit, setUnit] = useState<UnitStaticDetails | undefined>();
+    const components: ChartComponentParameters = {
+        max: 8,
+        id: props.settings_id + '_components',
+        elements: [
+            {
+                id: NumHelper.generateUUID(),
+                showName: 'Weight On Bit',
+                dbCode: '0111',
+                unitCategoryID: 3,
+                unitID: 2,
+                unitOriginalID: 2,
+                color: 'red',
+                max: 0,
+                min: 594,
+                stroke: 1,
+            },
+            {
+                id: NumHelper.generateUUID(),
+                showName: 'Hook Position',
+                dbCode: '0112',
+                unitCategoryID: 2,
+                unitID: 3,
+                unitOriginalID: 1,
+                color: 'blue',
+                max: 0,
+                min: 10000,
+                stroke: 1,
+            },
+        ],
+    };
 
     const wrapperStyles: React.CSSProperties = {
         position: 'relative',
@@ -64,7 +96,13 @@ export const ChartSettings = (props: ChartSettingsProps) => {
     };
 
     const parameters = () => {
-        return <Parameters max={16} />;
+        return (
+            <Parameters
+                components={components}
+                parameters={props.parameters}
+                units={props.units}
+            />
+        );
     };
 
     const others = () => {

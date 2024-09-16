@@ -8,11 +8,11 @@ async function open_parameters() {
         await button.click();
 
         await driver.sleep(0xff);
-        const  toggleButton = await driver.findElement(By.xpath('//*[@data-testid="parameters-list-test-toggle"]'));
+        const  toggleButton = await driver.findElement(By.xpath('//*[@data-testid="parameters-list-test-0-toggle"]'));
         toggleButton.click();
 
         await driver.sleep(0xff);
-        const editButton = await driver.findElement(By.xpath('//*[@data-testid="parameters-list-test-edit"]'));
+        const editButton = await driver.findElement(By.xpath('//*[@data-testid="parameters-list-test-0-edit"]'));
         editButton.click();
         
         await driver.sleep(0xfffff);

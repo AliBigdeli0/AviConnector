@@ -28,22 +28,27 @@ import noop from '@atlaskit/ds-lib/noop';
 import Flag, { FlagGroup } from '@atlaskit/flag';
 
 // local
+import { ReactSetter } from '../../types/setter';
+import { ComponentParameters } from '../../models/parameters/component-parameters';
+import { ParameterUIBaseData } from '../../models/parameters/parameter-ui-base-data';
+import { ParameterData } from '../../models/parameters/parameter_data';
+import { UnitStaticCategories } from '../../models/units/unit-static-category';
+import { UnitHelper } from '../../utility/unit_helper';
+
+const gridStyles = xcss({
+    width: '100%',
+    paddingBottom: 'space.100',
+});
 
 //
-export interface ParametersProps {
-    max: number;
+export interface ParametersModalProps {
+    openDialog: boolean;
+    setOpenDialog: ReactSetter<boolean>;
 }
 
 //
-export const Parameters = (props: ParametersProps) => {
-    const [openDialog, setOpenDialog] = useState(false);
-    const openModal = useCallback(() => setOpenDialog(true), []);
-    const closeModal = useCallback(() => setOpenDialog(false), []);
-
-    const gridStyles = xcss({
-        width: '100%',
-        paddingBottom: 'space.100',
-    });
+export const ParametersModal = (props: ParametersModalProps) => {
+    const closeModal = useCallback(() => props.setOpenDialog(false), []);
 
     const closeContainerStyles = xcss({
         gridArea: 'close',
@@ -53,51 +58,69 @@ export const Parameters = (props: ParametersProps) => {
         gridArea: 'title',
     });
 
+    return (
+        <Fragment>
+            <ModalTransition>
+                {props.openDialog && (
+                    <Modal onClose={closeModal}>
+                        <ModalHeader>
+                            <Grid
+                                gap="space.200"
+                                templateAreas={['title close']}
+                                xcss={gridStyles}>
+                                <Flex
+                                    xcss={closeContainerStyles}
+                                    justifyContent="end">
+                                    <IconButton
+                                        appearance="subtle"
+                                        icon={CrossIcon}
+                                        label="Close Modal"
+                                        onClick={closeModal}
+                                    />
+                                </Flex>
+
+                                <Flex
+                                    xcss={titleContainerStyles}
+                                    justifyContent="start">
+                                    <ModalTitle>Parameter View</ModalTitle>
+                                </Flex>
+                            </Grid>
+                        </ModalHeader>
+                        <ModalBody>
+                            <span>here is the parameter code</span>
+                            <span>My codes are here</span>
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button appearance="subtle" onClick={closeModal}>
+                                Cancel
+                            </Button>
+                            <Button appearance="primary">Apply</Button>
+                        </ModalFooter>
+                    </Modal>
+                )}
+            </ModalTransition>
+        </Fragment>
+    );
+};
+
+//
+export interface ParametersProps {
+    components: ComponentParameters<ParameterUIBaseData>;
+    parameters: ParameterData | undefined;
+    units: UnitStaticCategories[] | undefined;
+}
+
+//
+export const Parameters = (props: ParametersProps) => {
+    const [openDialog, setOpenDialog] = useState(false);
+    const openModal = useCallback(() => setOpenDialog(true), []);
+
     const modal = () => {
         return (
-            <Fragment>
-                <ModalTransition>
-                    {openDialog && (
-                        <Modal onClose={closeModal}>
-                            <ModalHeader>
-                                <Grid
-                                    gap="space.200"
-                                    templateAreas={['title close']}
-                                    xcss={gridStyles}>
-                                    <Flex
-                                        xcss={closeContainerStyles}
-                                        justifyContent="end">
-                                        <IconButton
-                                            appearance="subtle"
-                                            icon={CrossIcon}
-                                            label="Close Modal"
-                                            onClick={closeModal}
-                                        />
-                                    </Flex>
-
-                                    <Flex
-                                        xcss={titleContainerStyles}
-                                        justifyContent="start">
-                                        <ModalTitle>Parameter View</ModalTitle>
-                                    </Flex>
-                                </Grid>
-                            </ModalHeader>
-                            <ModalBody>
-                                <span>here is the parameter code</span>
-                                <span>My codes are here</span>
-                            </ModalBody>
-                            <ModalFooter>
-                                <Button
-                                    appearance="subtle"
-                                    onClick={closeModal}>
-                                    Cancel
-                                </Button>
-                                <Button appearance="primary">Apply</Button>
-                            </ModalFooter>
-                        </Modal>
-                    )}
-                </ModalTransition>
-            </Fragment>
+            <ParametersModal
+                openDialog={openDialog}
+                setOpenDialog={setOpenDialog}
+            />
         );
     };
 
@@ -114,32 +137,52 @@ export const Parameters = (props: ParametersProps) => {
                 </Flex>
             </Box>
 
-            <Flag
-                testId="parameters-list-test"
-                appearance="info"
-                icon={<CheckIcon label="success" />}
-                title={
-                    <Text color="color.text.accent.green">Weight On Bit</Text>
-                }
-                description={
-                    <Stack as="div">
-                        <Text>Mappted To: 0102</Text>
-                        <Text>Unit: klb/pre</Text>
-                        <Text>ID: 33093984-39843930-23439349</Text>
-                    </Stack>
-                }
-                id="parameter code"
-                actions={[
-                    {
-                        content: 'edit',
-                        testId: 'parameters-list-test-edit',
-                        onClick: () => {
-                            openModal();
-                        },
-                    },
-                    { content: 'remove', onClick: noop },
-                ]}
-            />
+            {props.components.elements.map((element, index) => {
+                return (
+                    <Flag
+                        testId={`parameters-list-test-${index}`}
+                        appearance="info"
+                        icon={<CheckIcon label="success" />}
+                        title={
+                            <Text color="color.text.accent.green">
+                                {element.showName}
+                            </Text>
+                        }
+                        description={
+                            <Stack as="div">
+                                <Text>Mappted To: {element.dbCode}</Text>
+                                <Text>
+                                    Unit Category:{' '}
+                                    {UnitHelper.getCategoryName(
+                                        element.unitCategoryID,
+                                        props.units
+                                    )}
+                                </Text>
+                                <Text>
+                                    Unit:{' '}
+                                    {UnitHelper.getUnitName(
+                                        element.unitID,
+                                        element.unitCategoryID,
+                                        props.units
+                                    )}
+                                </Text>
+                                <Text>ID: {element.id}</Text>
+                            </Stack>
+                        }
+                        id="parameter code"
+                        actions={[
+                            {
+                                content: 'edit',
+                                testId: `parameters-list-test-${index}-edit`,
+                                onClick: () => {
+                                    openModal();
+                                },
+                            },
+                            { content: 'remove', onClick: noop },
+                        ]}
+                    />
+                );
+            })}
         </Stack>
     );
 };

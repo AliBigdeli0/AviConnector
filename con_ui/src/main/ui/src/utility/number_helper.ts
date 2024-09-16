@@ -16,4 +16,22 @@ export class NumHelper {
             };
         });
     }
+
+    static generateUUID(): string {
+        const template = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
+        const randomChar = (char: string): string => {
+            const random = Math.floor(Math.random() * 16);
+            if (char === 'x') {
+                return random.toString(16);
+            } else if (char === 'y') {
+                return ((random % 4) + 8).toString(16);
+            }
+            return char;
+        };
+
+        return template
+            .split('')
+            .map((char) => randomChar(char))
+            .join('');
+    }
 }

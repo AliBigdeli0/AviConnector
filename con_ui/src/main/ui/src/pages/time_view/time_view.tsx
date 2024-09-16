@@ -73,6 +73,10 @@ const TimeView = (props: TimeViewProps) => {
         asyncStart();
     }, []);
 
+    const loadPageInitData = async () => {
+        await loadWell();
+    };
+
     useEffect(() => {
         loadPageConfigure();
     }, [well]);
@@ -80,10 +84,6 @@ const TimeView = (props: TimeViewProps) => {
     useEffect(() => {
         loadUnits();
     }, [parameterData]);
-
-    const loadPageInitData = async () => {
-        await loadWell();
-    };
 
     const loadUnits = async () => {
         if (props.signalRService.connected()) {
