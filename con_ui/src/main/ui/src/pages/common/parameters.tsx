@@ -112,6 +112,7 @@ export const ParametersModal = (props: ParametersModalProps) => {
             <ModalTransition>
                 {props.openDialog && (
                     <Modal
+                        width="small"
                         onClose={closeModal}
                         shouldCloseOnOverlayClick={false}
                         shouldCloseOnEscapePress={false}>
@@ -169,7 +170,7 @@ export const ParametersModal = (props: ParametersModalProps) => {
                         <ModalBody>{body()}</ModalBody>
                         <ModalFooter>
                             <Button appearance="primary" onClick={closeModal}>
-                                Close
+                                Apply
                             </Button>
                         </ModalFooter>
                     </Modal>
