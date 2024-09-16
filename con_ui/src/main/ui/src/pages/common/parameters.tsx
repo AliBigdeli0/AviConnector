@@ -24,9 +24,13 @@ import Modal, {
     ModalTitle,
     ModalTransition,
 } from '@atlaskit/modal-dialog';
+
 import Button, { IconButton } from '@atlaskit/button/new';
 import noop from '@atlaskit/ds-lib/noop';
 import Flag, { FlagGroup } from '@atlaskit/flag';
+import InlineEdit from '@atlaskit/inline-edit';
+import Textfield from '@atlaskit/textfield';
+import { token } from '@atlaskit/tokens';
 
 // local
 import { ReactSetter } from '../../types/setter';
@@ -49,8 +53,32 @@ export interface ParametersModalProps {
 }
 
 //
+const fontSize = token('font.body');
+
+const readViewContainerStyles = xcss({
+    display: 'flex',
+    maxWidth: '100%',
+    paddingBlock: 'space.100',
+    paddingInline: 'space.075',
+    fontSize: `${fontSize}px`,
+    wordBreak: 'break-word',
+});
+
 export const ParametersModal = (props: ParametersModalProps) => {
     const closeModal = useCallback(() => props.setOpenDialog(false), []);
+    const initialName = props.component?.showName;
+    const [editName, setEditName] = useState(props.component?.showName);
+
+    useEffect(() => {
+        if (props.component === undefined) return;
+        setEditName(props.component.showName);
+    }, [props.component]);
+
+    useEffect(() => {
+        if (props.component === undefined) return;
+        if (editName === undefined) return;
+        props.component.showName = editName;
+    }, [editName]);
 
     const closeContainerStyles = xcss({
         gridArea: 'close',
@@ -62,7 +90,22 @@ export const ParametersModal = (props: ParametersModalProps) => {
 
     const body = () => {
         if (props.component === undefined) return <>component is empty</>;
-        return <></>;
+        return (
+            <Stack xcss={xcss({ width: '100%', paddingTop: 'space.100' })}>
+                <Grid>
+                    <Grid templateColumns="1fr 3fr">
+                        <Box
+                            xcss={xcss({
+                                alignContent: 'center',
+                                verticalAlign: 'center',
+                                alignItems: 'center',
+                            })}>
+                            <Text align="center">Name </Text>
+                        </Box>
+                    </Grid>
+                </Grid>
+            </Stack>
+        );
     };
     return (
         <Fragment>
@@ -92,7 +135,33 @@ export const ParametersModal = (props: ParametersModalProps) => {
                                     xcss={titleContainerStyles}
                                     justifyContent="start">
                                     <ModalTitle>
-                                        {props.component?.showName}
+                                        <InlineEdit
+                                            defaultValue={initialName}
+                                            editButtonLabel={
+                                                editName || initialName
+                                            }
+                                            editView={({
+                                                errorMessage,
+                                                ...fieldProps
+                                            }) => (
+                                                <Textfield
+                                                    {...fieldProps}
+                                                    autoFocus
+                                                />
+                                            )}
+                                            readView={() => (
+                                                <Box
+                                                    xcss={
+                                                        readViewContainerStyles
+                                                    }
+                                                    testId="read-view">
+                                                    {editName || initialName}
+                                                </Box>
+                                            )}
+                                            onConfirm={(value) =>
+                                                setEditName(value)
+                                            }
+                                        />
                                     </ModalTitle>
                                 </Flex>
                             </Grid>

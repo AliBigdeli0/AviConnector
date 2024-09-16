@@ -52,6 +52,7 @@
     "@atlaskit/dynamic-table": "^14.20.2",
     "@atlaskit/flag": "^15.8.2",
     "@atlaskit/heading": "^2.4.5",
+    "@atlaskit/inline-edit": "^13.7.2",
     "@atlaskit/logo": "^14.2.1",
     "@atlaskit/lozenge": "^11.10.1",
     "@atlaskit/modal-dialog": "^12.15.2",
