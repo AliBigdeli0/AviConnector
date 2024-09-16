@@ -2,9 +2,10 @@
 import CheckIcon from '@atlaskit/icon/glyph/check';
 import CrossIcon from '@atlaskit/icon/glyph/cross';
 import AddIcon from '@atlaskit/icon/glyph/add';
+import EditorTextColorIcon from '@atlaskit/icon/glyph/editor/text-color';
 
 // react
-import React, { Fragment, useState, useCallback } from 'react';
+import React, { Fragment, useState, useCallback, useEffect } from 'react';
 
 // atlassian
 import {
@@ -44,6 +45,7 @@ const gridStyles = xcss({
 export interface ParametersModalProps {
     openDialog: boolean;
     setOpenDialog: ReactSetter<boolean>;
+    component: ParameterUIBaseData | undefined;
 }
 
 //
@@ -58,11 +60,18 @@ export const ParametersModal = (props: ParametersModalProps) => {
         gridArea: 'title',
     });
 
+    const body = () => {
+        if (props.component === undefined) return <>component is empty</>;
+        return <></>;
+    };
     return (
         <Fragment>
             <ModalTransition>
                 {props.openDialog && (
-                    <Modal onClose={closeModal}>
+                    <Modal
+                        onClose={closeModal}
+                        shouldCloseOnOverlayClick={false}
+                        shouldCloseOnEscapePress={false}>
                         <ModalHeader>
                             <Grid
                                 gap="space.200"
@@ -82,19 +91,17 @@ export const ParametersModal = (props: ParametersModalProps) => {
                                 <Flex
                                     xcss={titleContainerStyles}
                                     justifyContent="start">
-                                    <ModalTitle>Parameter View</ModalTitle>
+                                    <ModalTitle>
+                                        {props.component?.showName}
+                                    </ModalTitle>
                                 </Flex>
                             </Grid>
                         </ModalHeader>
-                        <ModalBody>
-                            <span>here is the parameter code</span>
-                            <span>My codes are here</span>
-                        </ModalBody>
+                        <ModalBody>{body()}</ModalBody>
                         <ModalFooter>
-                            <Button appearance="subtle" onClick={closeModal}>
-                                Cancel
+                            <Button appearance="primary" onClick={closeModal}>
+                                Close
                             </Button>
-                            <Button appearance="primary">Apply</Button>
                         </ModalFooter>
                     </Modal>
                 )}
@@ -112,16 +119,48 @@ export interface ParametersProps {
 
 //
 export const Parameters = (props: ParametersProps) => {
+    const [update, setUpdate] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
-    const openModal = useCallback(() => setOpenDialog(true), []);
+    const [component, setComponent] = useState<
+        ParameterUIBaseData | undefined
+    >();
+
+    useEffect(() => {
+        openModal();
+    }, [update]);
+
+    const openModal = () => {
+        if (component !== undefined) {
+            setOpenDialog(true);
+        }
+    };
 
     const modal = () => {
         return (
             <ParametersModal
                 openDialog={openDialog}
                 setOpenDialog={setOpenDialog}
+                component={component}
             />
         );
+    };
+
+    const showColorbox = (element: ParameterUIBaseData) => {
+        if ('color' in element) {
+            return (
+                <Box
+                    xcss={xcss({
+                        marginTop: 'space.0',
+                    })}>
+                    <EditorTextColorIcon
+                        label=""
+                        primaryColor={element.color as any}
+                    />
+                </Box>
+            );
+        }
+
+        return <></>;
     };
 
     return (
@@ -139,48 +178,60 @@ export const Parameters = (props: ParametersProps) => {
 
             {props.components.elements.map((element, index) => {
                 return (
-                    <Flag
-                        testId={`parameters-list-test-${index}`}
-                        appearance="info"
-                        icon={<CheckIcon label="success" />}
-                        title={
-                            <Text color="color.text.accent.green">
-                                {element.showName}
-                            </Text>
-                        }
-                        description={
-                            <Stack as="div">
-                                <Text>Mappted To: {element.dbCode}</Text>
-                                <Text>
-                                    Unit Category:{' '}
-                                    {UnitHelper.getCategoryName(
-                                        element.unitCategoryID,
-                                        props.units
-                                    )}
-                                </Text>
-                                <Text>
-                                    Unit:{' '}
-                                    {UnitHelper.getUnitName(
-                                        element.unitID,
-                                        element.unitCategoryID,
-                                        props.units
-                                    )}
-                                </Text>
-                                <Text>ID: {element.id}</Text>
-                            </Stack>
-                        }
-                        id="parameter code"
-                        actions={[
-                            {
-                                content: 'edit',
-                                testId: `parameters-list-test-${index}-edit`,
-                                onClick: () => {
-                                    openModal();
+                    <Box
+                        key={'parameters_box_' + index}
+                        xcss={xcss({ margin: 'space.025' })}>
+                        <Flag
+                            key={`parameters_box_flag_${index}`}
+                            testId={`parameters-list-test-${index}`}
+                            appearance="info"
+                            icon={<CheckIcon label="success" />}
+                            title={
+                                <Flex justifyContent="start">
+                                    {showColorbox(element)}
+                                    <Box
+                                        xcss={xcss({ marginTop: 'space.050' })}>
+                                        {element.showName}
+                                    </Box>
+                                </Flex>
+                            }
+                            description={
+                                <Stack as="div">
+                                    <Text>WitsML ID: {element.id}</Text>
+                                    <Text>Mappted To: {element.dbCode}</Text>
+                                    <Text>
+                                        Unit Category:{' '}
+                                        {UnitHelper.getCategoryName(
+                                            element.unitCategoryID,
+                                            props.units
+                                        )}
+                                    </Text>
+                                    <Text>
+                                        Unit:{' '}
+                                        {UnitHelper.getUnitName(
+                                            element.unitID,
+                                            element.unitCategoryID,
+                                            props.units
+                                        )}
+                                    </Text>
+                                </Stack>
+                            }
+                            id="parameter code"
+                            actions={[
+                                {
+                                    content: 'edit',
+                                    testId: `parameters-list-test-${index}-edit`,
+                                    onClick: () => {
+                                        setComponent(element);
+                                        setTimeout(() => {
+                                            setUpdate(!update);
+                                        }, 500);
+                                    },
                                 },
-                            },
-                            { content: 'remove', onClick: noop },
-                        ]}
-                    />
+                                { content: 'remove', onClick: noop },
+                            ]}
+                        />
+                    </Box>
                 );
             })}
         </Stack>
