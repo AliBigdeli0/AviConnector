@@ -39,6 +39,7 @@ import { ParameterUIBaseData } from '../../models/parameters/parameter-ui-base-d
 import { ParameterData } from '../../models/parameters/parameter_data';
 import { UnitStaticCategories } from '../../models/units/unit-static-category';
 import { UnitHelper } from '../../utility/unit_helper';
+import { ParameterBox } from './parameterbox';
 
 const gridStyles = xcss({
     width: '100%',
@@ -50,6 +51,8 @@ export interface ParametersModalProps {
     openDialog: boolean;
     setOpenDialog: ReactSetter<boolean>;
     component: ParameterUIBaseData | undefined;
+    parameters: ParameterData | undefined;
+    units: UnitStaticCategories[] | undefined;
 }
 
 //
@@ -66,19 +69,27 @@ const readViewContainerStyles = xcss({
 
 export const ParametersModal = (props: ParametersModalProps) => {
     const closeModal = useCallback(() => props.setOpenDialog(false), []);
-    const initialName = props.component?.showName;
-    const [editName, setEditName] = useState(props.component?.showName);
+    // const initialName = props.component?.showName;
+    const [name, setName] = useState(props.component?.showName);
+    const [paramCode, setParamCode] = useState(props.component?.dbCode);
 
     useEffect(() => {
         if (props.component === undefined) return;
-        setEditName(props.component.showName);
+        setName(props.component.showName);
+        setParamCode(props.component.dbCode);
     }, [props.component]);
 
     useEffect(() => {
         if (props.component === undefined) return;
-        if (editName === undefined) return;
-        props.component.showName = editName;
-    }, [editName]);
+        if (name === undefined) return;
+        props.component.showName = name;
+    }, [name]);
+
+    useEffect(() => {
+        if (props.component === undefined) return;
+        if (paramCode === undefined) return;
+        props.component.dbCode = paramCode;
+    }, [paramCode]);
 
     const closeContainerStyles = xcss({
         gridArea: 'close',
@@ -93,15 +104,26 @@ export const ParametersModal = (props: ParametersModalProps) => {
         return (
             <Stack xcss={xcss({ width: '100%', paddingTop: 'space.100' })}>
                 <Grid>
-                    <Grid templateColumns="1fr 3fr">
-                        <Box
+                    <Grid templateColumns="3fr 1fr">
+                        <Flex
                             xcss={xcss({
                                 alignContent: 'center',
                                 verticalAlign: 'center',
                                 alignItems: 'center',
                             })}>
-                            <Text align="center">Name </Text>
-                        </Box>
+                            <Text align="center" weight="bold">
+                                Mapped To: {name}({paramCode})
+                            </Text>
+                        </Flex>
+                        <Flex>
+                            <ParameterBox
+                                handleChangeDefault={(id, param) => {
+                                    setParamCode(param.ID);
+                                    setName(param.ShowName);
+                                }}
+                                parameters={props.parameters}
+                            />
+                        </Flex>
                     </Grid>
                 </Grid>
             </Stack>
@@ -112,7 +134,6 @@ export const ParametersModal = (props: ParametersModalProps) => {
             <ModalTransition>
                 {props.openDialog && (
                     <Modal
-                        width="small"
                         onClose={closeModal}
                         shouldCloseOnOverlayClick={false}
                         shouldCloseOnEscapePress={false}>
@@ -137,10 +158,8 @@ export const ParametersModal = (props: ParametersModalProps) => {
                                     justifyContent="start">
                                     <ModalTitle>
                                         <InlineEdit
-                                            defaultValue={initialName}
-                                            editButtonLabel={
-                                                editName || initialName
-                                            }
+                                            defaultValue={name}
+                                            editButtonLabel={name}
                                             editView={({
                                                 errorMessage,
                                                 ...fieldProps
@@ -148,6 +167,13 @@ export const ParametersModal = (props: ParametersModalProps) => {
                                                 <Textfield
                                                     {...fieldProps}
                                                     autoFocus
+                                                    value={name}
+                                                    onChange={(e) => {
+                                                        setName(
+                                                            e.currentTarget
+                                                                .value
+                                                        );
+                                                    }}
                                                 />
                                             )}
                                             readView={() => (
@@ -156,11 +182,11 @@ export const ParametersModal = (props: ParametersModalProps) => {
                                                         readViewContainerStyles
                                                     }
                                                     testId="read-view">
-                                                    {editName || initialName}
+                                                    {name}
                                                 </Box>
                                             )}
                                             onConfirm={(value) =>
-                                                setEditName(value)
+                                                setName(value)
                                             }
                                         />
                                     </ModalTitle>
@@ -211,6 +237,7 @@ export const Parameters = (props: ParametersProps) => {
                 openDialog={openDialog}
                 setOpenDialog={setOpenDialog}
                 component={component}
+                {...props}
             />
         );
     };
