@@ -5,15 +5,7 @@ import ChevronDownIcon from '@atlaskit/icon/glyph/chevron-down';
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 
 // atlassian
-import {
-    Stack,
-    Box,
-    xcss,
-    Inline,
-    Grid,
-    Text,
-    Flex,
-} from '@atlaskit/primitives';
+import { Box, xcss } from '@atlaskit/primitives';
 import Button from '@atlaskit/button/new';
 import { PopupSelect } from '@atlaskit/select';
 
@@ -22,19 +14,26 @@ import { PopupSelect } from '@atlaskit/select';
 import { ParameterBaseData } from '../../models/parameters/parameter_base_data';
 import { UnitStaticCategories } from '../../models/units/unit-static-category';
 import { UnitBoxChangeEvent } from '../../types/unitbox';
+import { UnitStaticDetails } from '../../models/units/unit-static-details';
 
 //
 export interface UnitBoxProps {
     selectedParameter: ParameterBaseData | undefined;
+
     units: UnitStaticCategories[] | undefined;
 
     handleChange: UnitBoxChangeEvent;
+    handleParameterChange: UnitBoxChangeEvent;
 }
 
 //
 export const UnitBox = (props: UnitBoxProps) => {
-    const [selectedUnit, setSelectedUnit] = useState<
+    const [unitCategory, setUnitCategory] = useState<
         UnitStaticCategories | undefined
+    >();
+
+    const [unitDefault, setUnitDefault] = useState<
+        UnitStaticDetails | undefined
     >();
 
     useEffect(() => {
@@ -53,8 +52,9 @@ export const UnitBox = (props: UnitBoxProps) => {
         props.units.forEach((category) => {
             category.details.forEach((detail) => {
                 if (detail.codes.includes(id)) {
-                    setSelectedUnit(category);
-                    props.handleChange(detail);
+                    setUnitCategory(category);
+                    setUnitDefault(detail);
+                    props.handleParameterChange(detail, category, detail);
                 }
             });
         });
@@ -68,7 +68,7 @@ export const UnitBox = (props: UnitBoxProps) => {
                         width: '100%',
                     })}>
                     <Button shouldFitContainer appearance="subtle">
-                        Parameter Is Empty
+                        Empty
                     </Button>
                 </Box>
             );
@@ -78,8 +78,10 @@ export const UnitBox = (props: UnitBoxProps) => {
                 onChange={(item) => {
                     if (item === null) return;
                     if (item === undefined) return;
+                    if (unitCategory === undefined) return;
+                    if (unitDefault === undefined) return;
 
-                    props.handleChange(item.value);
+                    props.handleChange(item.value, unitCategory, unitDefault);
                 }}
                 target={({ isOpen, ...triggerprops }) => (
                     <Button
@@ -89,7 +91,7 @@ export const UnitBox = (props: UnitBoxProps) => {
                         ...
                     </Button>
                 )}
-                options={selectedUnit?.details.map((unit) => {
+                options={unitCategory?.details.map((unit) => {
                     return {
                         label: unit.name,
                         value: unit,

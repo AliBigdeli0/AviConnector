@@ -40,6 +40,9 @@ import { ParameterData } from '../../models/parameters/parameter_data';
 import { UnitStaticCategories } from '../../models/units/unit-static-category';
 import { UnitHelper } from '../../utility/unit_helper';
 import { ParameterBox } from './parameterbox';
+import { UnitBox } from './unitbox';
+import { ParameterBaseData } from '../../models/parameters/parameter_base_data';
+import { ParameterHelper } from '../../utility/parameter-helper';
 
 const gridStyles = xcss({
     width: '100%',
@@ -69,27 +72,62 @@ const readViewContainerStyles = xcss({
 
 export const ParametersModal = (props: ParametersModalProps) => {
     const closeModal = useCallback(() => props.setOpenDialog(false), []);
-    // const initialName = props.component?.showName;
     const [name, setName] = useState(props.component?.showName);
     const [paramCode, setParamCode] = useState(props.component?.dbCode);
+    const [unitCatetoryId, setUnitCategoryId] = useState<number | undefined>();
+    const [unitId, setUnitId] = useState<number | undefined>();
+    const [unitDefaultId, setUnitDefaultId] = useState<number | undefined>();
+    const [parameter, setParameter] = useState<ParameterBaseData | undefined>();
 
     useEffect(() => {
         if (props.component === undefined) return;
         setName(props.component.showName);
         setParamCode(props.component.dbCode);
+        setParameter(
+            ParameterHelper.getWithParameterCode(
+                props.parameters,
+                props.component.dbCode
+            )
+        );
+        setUnitCategoryId(props.component.unitCategoryID);
+        setUnitId(props.component.unitID);
+        setUnitDefaultId(props.component.unitDefaultID);
     }, [props.component]);
 
     useEffect(() => {
         if (props.component === undefined) return;
         if (name === undefined) return;
+
         props.component.showName = name;
     }, [name]);
 
     useEffect(() => {
         if (props.component === undefined) return;
         if (paramCode === undefined) return;
+
         props.component.dbCode = paramCode;
     }, [paramCode]);
+
+    useEffect(() => {
+        if (props.component === undefined) return;
+        if (unitCatetoryId === undefined) return;
+
+        props.component.unitCategoryID = unitCatetoryId;
+    }, [unitCatetoryId]);
+
+    useEffect(() => {
+        if (props.component === undefined) return;
+        if (unitId === undefined) return;
+
+        props.component.unitID = unitId;
+    }, [unitId]);
+
+    useEffect(() => {
+        if (props.component === undefined) return;
+        if (unitDefaultId === undefined) return;
+
+        props.component.unitDefaultID = unitDefaultId;
+    }, [unitDefaultId]);
 
     const closeContainerStyles = xcss({
         gridArea: 'close',
@@ -99,32 +137,101 @@ export const ParametersModal = (props: ParametersModalProps) => {
         gridArea: 'title',
     });
 
+    const showParameters = () => {
+        return (
+            <Grid templateColumns="2fr 1fr">
+                <Flex
+                    xcss={xcss({
+                        alignContent: 'center',
+                        verticalAlign: 'center',
+                        alignItems: 'center',
+                    })}>
+                    <Text align="center" weight="bold">
+                        Mapped To: {name}({paramCode})
+                    </Text>
+                </Flex>
+                <Flex>
+                    <ParameterBox
+                        handleChangeDefault={(id, param) => {
+                            setParamCode(param.ID);
+                            setName(param.ShowName);
+                            setParameter(
+                                ParameterHelper.getWithParameterCode(
+                                    props.parameters,
+                                    param.ID
+                                )
+                            );
+                        }}
+                        parameters={props.parameters}
+                    />
+                </Flex>
+            </Grid>
+        );
+    };
+
+    const showUnits = () => {
+        return (
+            <Grid
+                templateColumns="2fr 1fr"
+                xcss={xcss({ marginTop: 'space.025' })}>
+                <Flex
+                    xcss={xcss({
+                        alignContent: 'center',
+                        verticalAlign: 'center',
+                        alignItems: 'center',
+                    })}>
+                    {parameter !== undefined ? (
+                        <Text align="center">
+                            {UnitHelper.getCategoryName(
+                                unitCatetoryId,
+                                props.units
+                            )}{' '}
+                            {'> '}
+                            {UnitHelper.getUnitName(
+                                unitCatetoryId,
+                                unitId,
+                                props.units
+                            )}
+                        </Text>
+                    ) : (
+                        <Text weight="bold">Select A Parameter</Text>
+                    )}
+                </Flex>
+                <Flex>
+                    {parameter !== undefined ? (
+                        <UnitBox
+                            units={props.units}
+                            selectedParameter={parameter}
+                            handleChange={(unit, category, defaultUnit) => {
+                                setUnitCategoryId(category.id);
+                                setUnitId(unit.id);
+                                setUnitDefaultId(defaultUnit.id);
+                            }}
+                            handleParameterChange={(
+                                unit,
+                                category,
+                                defaultUnit
+                            ) => {
+                                setUnitCategoryId(category.id);
+                                setUnitId(unit.id);
+                                setUnitDefaultId(defaultUnit.id);
+                            }}
+                        />
+                    ) : (
+                        <></>
+                    )}
+                </Flex>
+            </Grid>
+        );
+    };
+
     const body = () => {
         if (props.component === undefined) return <>component is empty</>;
         return (
             <Stack xcss={xcss({ width: '100%', paddingTop: 'space.100' })}>
                 <Grid>
-                    <Grid templateColumns="3fr 1fr">
-                        <Flex
-                            xcss={xcss({
-                                alignContent: 'center',
-                                verticalAlign: 'center',
-                                alignItems: 'center',
-                            })}>
-                            <Text align="center" weight="bold">
-                                Mapped To: {name}({paramCode})
-                            </Text>
-                        </Flex>
-                        <Flex>
-                            <ParameterBox
-                                handleChangeDefault={(id, param) => {
-                                    setParamCode(param.ID);
-                                    setName(param.ShowName);
-                                }}
-                                parameters={props.parameters}
-                            />
-                        </Flex>
-                    </Grid>
+                    {showParameters()}
+                    {showUnits()}
                 </Grid>
             </Stack>
         );
@@ -306,8 +413,8 @@ export const Parameters = (props: ParametersProps) => {
                                     <Text>
                                         Unit:{' '}
                                         {UnitHelper.getUnitName(
-                                            element.unitID,
                                             element.unitCategoryID,
+                                            element.unitID,
                                             props.units
                                         )}
                                     </Text>

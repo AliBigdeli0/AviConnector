@@ -30,19 +30,22 @@ export class UnitHelper {
     }
 
     static getCategoryName(
-        categoryId: number,
+        categoryId: number | undefined,
         categories: UnitStaticCategories[] | undefined
     ): string {
+        if (categoryId === undefined) return 'Not Found';
         const category = this.getCategory(categoryId, categories);
         if (category === 'Not Found') return 'Not Found';
         return category.name;
     }
 
     static getUnitName(
-        categoryId: number,
-        unitId: number,
+        categoryId: number | undefined,
+        unitId: number | undefined,
         categories: UnitStaticCategories[] | undefined
     ): string {
+        if (categoryId === undefined) return 'Not Found';
+        if (unitId === undefined) return 'Not Found';
         const unit = this.getUnit(categoryId, unitId, categories);
         if (unit === 'Not Found') return 'Not Found';
         return unit.name;

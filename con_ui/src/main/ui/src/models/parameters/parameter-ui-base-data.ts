@@ -3,6 +3,6 @@ export interface ParameterUIBaseData {
     dbCode: string;
     unitID: number;
     unitCategoryID: number;
-    unitOriginalID: number;
+    unitDefaultID: number;
     showName: string;
 }

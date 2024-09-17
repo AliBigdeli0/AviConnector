@@ -40,8 +40,6 @@ export interface ChartSettingsProps extends TimeChartProp {
 
 //
 export const ChartSettings = (props: ChartSettingsProps) => {
-    const [parameter, setParameter] = useState<ParameterBaseData | undefined>();
-    const [unit, setUnit] = useState<UnitStaticDetails | undefined>();
     const components: ChartComponentParameters = {
         max: 8,
         id: props.settings_id + '_components',
@@ -52,7 +50,7 @@ export const ChartSettings = (props: ChartSettingsProps) => {
                 dbCode: '0111',
                 unitCategoryID: 3,
                 unitID: 2,
-                unitOriginalID: 2,
+                unitDefaultID: 2,
                 color: 'red',
                 max: 0,
                 min: 594,
@@ -64,7 +62,7 @@ export const ChartSettings = (props: ChartSettingsProps) => {
                 dbCode: '0112',
                 unitCategoryID: 2,
                 unitID: 3,
-                unitOriginalID: 1,
+                unitDefaultID: 1,
                 color: 'blue',
                 max: 0,
                 min: 10000,
@@ -122,47 +120,6 @@ export const ChartSettings = (props: ChartSettingsProps) => {
                             current={props.stringsColor}
                             handleCurrentChange={props.handleStringsColor}
                             colors={ColorHelper.getAllColors()}
-                        />
-                    </Grid>
-                    <Grid templateColumns="1fr 3fr">
-                        <Box
-                            xcss={xcss({
-                                alignContent: 'center',
-                                verticalAlign: 'center',
-                                alignItems: 'center',
-                            })}>
-                            <Text align="center">
-                                {parameter === undefined
-                                    ? 'Select A Parameter'
-                                    : parameter.ShowName}
-                            </Text>
-                        </Box>
-                        <ParameterBox
-                            handleChangeDefault={(id, param) => {
-                                setParameter(param);
-                            }}
-                            parameters={props.parameters}
-                        />
-                    </Grid>
-                    <Grid templateColumns="1fr 3fr">
-                        <Box
-                            xcss={xcss({
-                                alignContent: 'center',
-                                verticalAlign: 'center',
-                                alignItems: 'center',
-                            })}>
-                            <Text align="center">
-                                {unit === undefined
-                                    ? 'Select The Unit'
-                                    : unit.name}
-                            </Text>
-                        </Box>
-                        <UnitBox
-                            selectedParameter={parameter}
-                            handleChange={(u) => {
-                                setUnit(u);
-                            }}
-                            {...props}
                         />
                     </Grid>
                 </Grid>
