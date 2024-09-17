@@ -29,7 +29,7 @@ import Button, { IconButton } from '@atlaskit/button/new';
 import noop from '@atlaskit/ds-lib/noop';
 import Flag, { FlagGroup } from '@atlaskit/flag';
 import InlineEdit from '@atlaskit/inline-edit';
-import Textfield from '@atlaskit/textfield';
+import TextField from '@atlaskit/textfield';
 import { token } from '@atlaskit/tokens';
 
 // local
@@ -43,6 +43,8 @@ import { ParameterBox } from './parameterbox';
 import { UnitBox } from './unitbox';
 import { ParameterBaseData } from '../../models/parameters/parameter_base_data';
 import { ParameterHelper } from '../../utility/parameter-helper';
+import { ColorBox } from './colorbox';
+import { ColorHelper } from '../../utility/color_helper';
 
 const gridStyles = xcss({
     width: '100%',
@@ -78,6 +80,9 @@ export const ParametersModal = (props: ParametersModalProps) => {
     const [unitId, setUnitId] = useState<number | undefined>();
     const [unitDefaultId, setUnitDefaultId] = useState<number | undefined>();
     const [parameter, setParameter] = useState<ParameterBaseData | undefined>();
+    const [color, setColor] = useState<string>('');
+    const [min, setMin] = useState<number>(0);
+    const [max, setMax] = useState<number>(100);
 
     useEffect(() => {
         if (props.component === undefined) return;
@@ -92,6 +97,18 @@ export const ParametersModal = (props: ParametersModalProps) => {
         setUnitCategoryId(props.component.unitCategoryID);
         setUnitId(props.component.unitID);
         setUnitDefaultId(props.component.unitDefaultID);
+
+        if ('color' in props.component) {
+            setColor(props.component.color as string);
+        }
+
+        if ('min' in props.component) {
+            setMin(props.component.min as number);
+        }
+
+        if ('max' in props.component) {
+            setMax(props.component.max as number);
+        }
     }, [props.component]);
 
     useEffect(() => {
@@ -128,6 +145,28 @@ export const ParametersModal = (props: ParametersModalProps) => {
 
         props.component.unitDefaultID = unitDefaultId;
     }, [unitDefaultId]);
+
+    useEffect(() => {
+        if (props.component === undefined) return;
+        if (color === undefined) return;
+        if (!('color' in props.component)) return;
+
+        props.component.color = color;
+    }, [color]);
+
+    useEffect(() => {
+        if (props.component === undefined) return;
+        if (!('min' in props.component)) return;
+
+        props.component.min = min;
+    }, [min]);
+
+    useEffect(() => {
+        if (props.component === undefined) return;
+        if (!('max' in props.component)) return;
+
+        props.component.max = max;
+    }, [max]);
 
     const closeContainerStyles = xcss({
         gridArea: 'close',
@@ -225,6 +264,93 @@ export const ParametersModal = (props: ParametersModalProps) => {
         );
     };
 
+    const showColors = () => {
+        if (props.component === undefined) return <></>;
+        if ('color' in props.component)
+            return (
+                <Grid
+                    templateColumns="2fr 1fr"
+                    xcss={xcss({ marginTop: 'space.025' })}>
+                    <Flex
+                        xcss={xcss({
+                            alignContent: 'center',
+                            verticalAlign: 'center',
+                            alignItems: 'center',
+                        })}>
+                        Parameter Color
+                    </Flex>
+                    <Flex>
+                        <ColorBox
+                            current={color}
+                            colors={ColorHelper.getAllColors()}
+                            handleCurrentChange={(c) => {
+                                setColor(c);
+                            }}
+                        />
+                    </Flex>
+                </Grid>
+            );
+        return <></>;
+    };
+
+    const showMin = () => {
+        if (props.component === undefined) return <></>;
+        if (!('min' in props.component)) return <></>;
+
+        return (
+            <Grid
+                templateColumns="2fr 1fr"
+                xcss={xcss({ marginTop: 'space.025' })}>
+                <Flex
+                    xcss={xcss({
+                        alignContent: 'center',
+                        verticalAlign: 'center',
+                        alignItems: 'center',
+                    })}>
+                    Parameter Minimum Value
+                </Flex>
+                <Flex>
+                    <TextField
+                        type="number"
+                        value={min}
+                        onChange={(event) => {
+                            setMin(parseFloat(event.currentTarget.value));
+                        }}
+                    />
+                </Flex>
+            </Grid>
+        );
+    };
+
+    const showMax = () => {
+        if (props.component === undefined) return <></>;
+        if (!('max' in props.component)) return <></>;
+
+        return (
+            <Grid
+                templateColumns="2fr 1fr"
+                xcss={xcss({ marginTop: 'space.025' })}>
+                <Flex
+                    xcss={xcss({
+                        alignContent: 'center',
+                        verticalAlign: 'center',
+                        alignItems: 'center',
+                    })}>
+                    Parameter Maximum Value
+                </Flex>
+                <Flex>
+                    <TextField
+                        type="number"
+                        value={max}
+                        onChange={(event) => {
+                            setMax(parseFloat(event.currentTarget.value));
+                        }}
+                    />
+                </Flex>
+            </Grid>
+        );
+    };
+
     const body = () => {
         if (props.component === undefined) return <>component is empty</>;
         return (
@@ -232,6 +358,9 @@ export const ParametersModal = (props: ParametersModalProps) => {
                 <Grid>
                     {showParameters()}
                     {showUnits()}
+                    {showColors()}
+                    {showMin()}
+                    {showMax()}
                 </Grid>
             </Stack>
         );
@@ -271,7 +400,7 @@ export const ParametersModal = (props: ParametersModalProps) => {
                                                 errorMessage,
                                                 ...fieldProps
                                             }) => (
-                                                <Textfield
+                                                <TextField
                                                     {...fieldProps}
                                                     autoFocus
                                                     value={name}
