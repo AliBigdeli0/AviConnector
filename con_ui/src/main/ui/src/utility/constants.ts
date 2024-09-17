@@ -1,5 +1,7 @@
 //
 
+import { EmptyErrorType } from '../types/error';
+
 //
 export class Constant {
     static get FiveMinutes(): number {
@@ -24,5 +26,9 @@ export class Constant {
 
     static get AppName() {
         return 'Well Monitor';
+    }
+
+    static get EmptyError(): EmptyErrorType {
+        return '';
     }
 }

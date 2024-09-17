@@ -3,6 +3,7 @@ import CheckIcon from '@atlaskit/icon/glyph/check';
 import CrossIcon from '@atlaskit/icon/glyph/cross';
 import AddIcon from '@atlaskit/icon/glyph/add';
 import EditorTextColorIcon from '@atlaskit/icon/glyph/editor/text-color';
+import ErrorIcon from '@atlaskit/icon/glyph/error';
 
 // react
 import React, { Fragment, useState, useCallback, useEffect } from 'react';
@@ -31,6 +32,7 @@ import Flag, { FlagGroup } from '@atlaskit/flag';
 import InlineEdit from '@atlaskit/inline-edit';
 import TextField from '@atlaskit/textfield';
 import { token } from '@atlaskit/tokens';
+import Banner from '@atlaskit/banner';
 
 // local
 import { ReactSetter } from '../../types/setter';
@@ -45,6 +47,8 @@ import { ParameterBaseData } from '../../models/parameters/parameter_base_data';
 import { ParameterHelper } from '../../utility/parameter-helper';
 import { ColorBox } from './colorbox';
 import { ColorHelper } from '../../utility/color_helper';
+import { Constant } from '../../utility/constants';
+import { EmptyErrorType } from '../../types/error';
 
 const gridStyles = xcss({
     width: '100%',
@@ -73,7 +77,9 @@ const readViewContainerStyles = xcss({
 });
 
 export const ParametersModal = (props: ParametersModalProps) => {
-    const closeModal = useCallback(() => props.setOpenDialog(false), []);
+    const [error, setError] = useState<string | EmptyErrorType>(
+        Constant.EmptyError
+    );
     const [name, setName] = useState(props.component?.showName);
     const [paramCode, setParamCode] = useState(props.component?.dbCode);
     const [unitCatetoryId, setUnitCategoryId] = useState<number | undefined>();
@@ -168,6 +174,41 @@ export const ParametersModal = (props: ParametersModalProps) => {
         props.component.max = max;
     }, [max]);
 
+    const closeModal = () => {
+        if (beforeCloseCheck()) {
+            props.setOpenDialog(false);
+        }
+    };
+
+    const beforeCloseCheck = () => {
+        setError(Constant.EmptyError);
+
+        if (name === undefined) {
+            setError('name can not be undefined!');
+            return false;
+        }
+
+        if (name.trim() === '') {
+            setError('name can not be empty!');
+            return false;
+        }
+
+        if (min > max) {
+            setError('minimum value can not be grather than maximum');
+            return false;
+        }
+
+        if (
+            paramCode === undefined ||
+            (paramCode !== undefined && paramCode.trim() === '')
+        ) {
+            setError('you should select a parameter');
+            return false;
+        }
+
+        return true;
+    };
+
     const closeContainerStyles = xcss({
         gridArea: 'close',
     });
@@ -175,6 +216,18 @@ export const ParametersModal = (props: ParametersModalProps) => {
     const titleContainerStyles = xcss({
         gridArea: 'title',
     });
+
+    const showError = () => {
+        if (error === Constant.EmptyError) return <></>;
+
+        return (
+            <Banner
+                appearance="error"
+                icon={<ErrorIcon label="Error" secondaryColor="inherit" />}>
+                {error}
+            </Banner>
+        );
+    };
 
     const showParameters = () => {
         return (
@@ -356,6 +409,7 @@ export const ParametersModal = (props: ParametersModalProps) => {
         return (
             <Stack xcss={xcss({ width: '100%', paddingTop: 'space.100' })}>
                 <Grid>
+                    {showError()}
                     {showParameters()}
                     {showUnits()}
                     {showColors()}
