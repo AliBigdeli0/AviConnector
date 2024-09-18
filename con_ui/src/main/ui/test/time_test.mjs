@@ -24,4 +24,5 @@ async function open_parameters(elementName) {
 
 // edit button : parameters-list-test-0-edit
 // delete button : parameters-list-test-0-delete
-open_parameters("parameters-list-test-0-delete");
+// add button : parameters-list-add
+open_parameters("parameters-list-add");

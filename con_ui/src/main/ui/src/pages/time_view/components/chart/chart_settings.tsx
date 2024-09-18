@@ -1,6 +1,5 @@
 // react
 import React, { Fragment, useEffect, useRef, useState } from 'react';
-import { css, jsx } from '@emotion/react';
 
 // atlassian
 import Drawer from '@atlaskit/drawer';
@@ -13,16 +12,13 @@ import { TimeChartProp } from './time_charts';
 import { ColorBox } from '../../../common/colorbox';
 import { ColorHelper } from '../../../../utility/color_helper';
 import { Parameters } from '../../../common/parameters';
-import { ParameterBox } from '../../../common/parameterbox';
-import { UnitBox } from '../../../common/unitbox';
 import { ParameterData } from '../../../../models/parameters/parameter_data';
 import { UnitStaticCategories } from '../../../../models/units/unit-static-category';
-import { ParameterBaseData } from '../../../../models/parameters/parameter_base_data';
-import { UnitStaticDetails } from '../../../../models/units/unit-static-details';
 import { ColorBoxChangeEvent } from '../../../../types/colorbox';
 import { ReactSetter } from '../../../../types/setter';
 import { ChartComponentParameters } from '../../../../models/parameters/chart-component-parameter';
 import { NumHelper } from '../../../../utility/number_helper';
+import { ParameterHelper } from '../../../../utility/parameter-helper';
 
 // interface
 
@@ -99,6 +95,7 @@ export const ChartSettings = (props: ChartSettingsProps) => {
                 components={components}
                 parameters={props.parameters}
                 units={props.units}
+                defaultComponent={ParameterHelper.getDefaultChartParameter()}
             />
         );
     };

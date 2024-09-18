@@ -558,14 +558,18 @@ export interface ParametersProps {
     components: ComponentParameters<ParameterUIBaseData>;
     parameters: ParameterData | undefined;
     units: UnitStaticCategories[] | undefined;
+    defaultComponent: ParameterUIBaseData;
 }
 
 //
 export const Parameters = (props: ParametersProps) => {
     const [update, setUpdate] = useState(false);
+    const [updateParameterModal, setUpdateParameterModal] = useState(false);
     const [updateYesNoModal, setUpdateYesNoModal] = useState(false);
+
     const [openParameterDialog, setOpenParameterDialog] = useState(false);
     const [openYesNoDialog, setOpenYesNoDialog] = useState(false);
+
     const [indexToDelete, setIndexToDelete] = useState<number | undefined>();
 
     const [component, setComponent] = useState<
@@ -574,7 +578,7 @@ export const Parameters = (props: ParametersProps) => {
 
     useEffect(() => {
         openModal();
-    }, [update]);
+    }, [updateParameterModal]);
 
     useEffect(() => {
         if (indexToDelete === undefined) return;
@@ -582,9 +586,8 @@ export const Parameters = (props: ParametersProps) => {
     }, [updateYesNoModal]);
 
     const openModal = () => {
-        if (component !== undefined) {
-            setOpenParameterDialog(true);
-        }
+        if (component === undefined) return;
+        setOpenParameterDialog(true);
     };
 
     const parameterModal = () => {
@@ -647,6 +650,13 @@ export const Parameters = (props: ParametersProps) => {
                         appearance="primary"
                         icon={AddIcon}
                         label="Add Parameters"
+                        testId="parameters-list-add"
+                        onClick={() => {
+                            props.components.elements.push({
+                                ...props.defaultComponent,
+                            });
+                            setUpdate(!update);
+                        }}
                     />
                 </Flex>
             </Box>
@@ -699,7 +709,9 @@ export const Parameters = (props: ParametersProps) => {
                                     onClick: () => {
                                         setComponent(element);
                                         setTimeout(() => {
-                                            setUpdate(!update);
+                                            setUpdateParameterModal(
+                                                !updateParameterModal
+                                            );
                                         }, 500);
                                     },
                                 },
