@@ -20,6 +20,8 @@
     -   [ ] Read Parameters
         -   [x] read parameters
         -   [x] read units
+        -   [x] show parameters in chart
+        -   [ ] update parameters in chart after add/delete/update actions in chart setttings
         -   [ ] save current page configurations to server
 -   [ ] Chart Online Data
 -   [ ] Chart View Points
