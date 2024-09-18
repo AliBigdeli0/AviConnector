@@ -60,6 +60,12 @@ export const UnitBox = (props: UnitBoxProps) => {
         });
     };
 
+    const defaultString = (unit: UnitStaticDetails) => {
+        if (unitDefault === undefined) return '';
+        if (unit.id === unitDefault.id) return ' (default)';
+        return '';
+    };
+
     const showBox = () => {
         if (props.selectedParameter === undefined)
             return (
@@ -93,7 +99,7 @@ export const UnitBox = (props: UnitBoxProps) => {
                 )}
                 options={unitCategory?.details.map((unit) => {
                     return {
-                        label: unit.name,
+                        label: unit.name + defaultString(unit),
                         value: unit,
                     };
                 })}
