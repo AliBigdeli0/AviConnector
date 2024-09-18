@@ -20,7 +20,6 @@ import Modal, {
 } from '@atlaskit/modal-dialog';
 
 import Button, { IconButton } from '@atlaskit/button/new';
-import noop from '@atlaskit/ds-lib/noop';
 import Flag from '@atlaskit/flag';
 import InlineEdit from '@atlaskit/inline-edit';
 import TextField from '@atlaskit/textfield';
@@ -44,6 +43,7 @@ import { ColorHelper } from '../../utility/color_helper';
 import { Constant } from '../../utility/constants';
 import { EmptyErrorType } from '../../types/error';
 import { StrokeType } from '../../types/parameter';
+import { MessageBoxYesNo } from './messagebox';
 
 //
 const gridStyles = xcss({
@@ -73,6 +73,14 @@ const readViewContainerStyles = xcss({
     paddingInline: 'space.075',
     fontSize: `${fontSize}px`,
     wordBreak: 'break-word',
+});
+
+const closeContainerStyles = xcss({
+    gridArea: 'close',
+});
+
+const titleContainerStyles = xcss({
+    gridArea: 'title',
 });
 
 export const ParametersModal = (props: ParametersModalProps) => {
@@ -219,14 +227,6 @@ export const ParametersModal = (props: ParametersModalProps) => {
 
         return true;
     };
-
-    const closeContainerStyles = xcss({
-        gridArea: 'close',
-    });
-
-    const titleContainerStyles = xcss({
-        gridArea: 'title',
-    });
 
     const showError = () => {
         if (error === Constant.EmptyError) return <></>;
@@ -563,7 +563,11 @@ export interface ParametersProps {
 //
 export const Parameters = (props: ParametersProps) => {
     const [update, setUpdate] = useState(false);
-    const [openDialog, setOpenDialog] = useState(false);
+    const [updateYesNoModal, setUpdateYesNoModal] = useState(false);
+    const [openParameterDialog, setOpenParameterDialog] = useState(false);
+    const [openYesNoDialog, setOpenYesNoDialog] = useState(false);
+    const [indexToDelete, setIndexToDelete] = useState<number | undefined>();
+
     const [component, setComponent] = useState<
         ParameterUIBaseData | undefined
     >();
@@ -572,17 +576,22 @@ export const Parameters = (props: ParametersProps) => {
         openModal();
     }, [update]);
 
+    useEffect(() => {
+        if (indexToDelete === undefined) return;
+        setOpenYesNoDialog(true);
+    }, [updateYesNoModal]);
+
     const openModal = () => {
         if (component !== undefined) {
-            setOpenDialog(true);
+            setOpenParameterDialog(true);
         }
     };
 
-    const modal = () => {
+    const parameterModal = () => {
         return (
             <ParametersModal
-                openDialog={openDialog}
-                setOpenDialog={setOpenDialog}
+                openDialog={openParameterDialog}
+                setOpenDialog={setOpenParameterDialog}
                 component={component}
                 {...props}
             />
@@ -607,9 +616,31 @@ export const Parameters = (props: ParametersProps) => {
         return <></>;
     };
 
+    const yesNoModal = () => {
+        if (!openYesNoDialog) return <></>;
+        return (
+            <MessageBoxYesNo
+                title="Delete Parameter"
+                message="Do you want to delete this parameter?"
+                openDialog={openYesNoDialog}
+                setOpenDialog={setOpenYesNoDialog}
+                yes={() => {
+                    setOpenYesNoDialog(false);
+
+                    if (indexToDelete === undefined) return;
+                    props.components.elements.splice(indexToDelete, 1);
+                }}
+                no={() => {
+                    setOpenYesNoDialog(false);
+                }}
+            />
+        );
+    };
+
     return (
         <Stack xcss={xcss({ width: '100%', paddingTop: 'space.100' })}>
-            {modal()}
+            {yesNoModal()}
+            {parameterModal()}
             <Box xcss={gridStyles}>
                 <Flex justifyContent="end">
                     <IconButton
@@ -672,7 +703,14 @@ export const Parameters = (props: ParametersProps) => {
                                         }, 500);
                                     },
                                 },
-                                { content: 'remove', onClick: noop },
+                                {
+                                    content: 'remove',
+                                    testId: `parameters-list-test-${index}-delete`,
+                                    onClick: () => {
+                                        setIndexToDelete(index);
+                                        setUpdateYesNoModal(!updateYesNoModal);
+                                    },
+                                },
                             ]}
                         />
                     </Box>
