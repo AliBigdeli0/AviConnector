@@ -4,20 +4,13 @@ import CrossIcon from '@atlaskit/icon/glyph/cross';
 import AddIcon from '@atlaskit/icon/glyph/add';
 import EditorTextColorIcon from '@atlaskit/icon/glyph/editor/text-color';
 import ErrorIcon from '@atlaskit/icon/glyph/error';
+import ChevronDownIcon from '@atlaskit/icon/glyph/chevron-down';
 
 // react
-import React, { Fragment, useState, useCallback, useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 
 // atlassian
-import {
-    Stack,
-    Box,
-    xcss,
-    Inline,
-    Grid,
-    Text,
-    Flex,
-} from '@atlaskit/primitives';
+import { Stack, Box, xcss, Grid, Text, Flex } from '@atlaskit/primitives';
 import Modal, {
     ModalBody,
     ModalFooter,
@@ -28,11 +21,12 @@ import Modal, {
 
 import Button, { IconButton } from '@atlaskit/button/new';
 import noop from '@atlaskit/ds-lib/noop';
-import Flag, { FlagGroup } from '@atlaskit/flag';
+import Flag from '@atlaskit/flag';
 import InlineEdit from '@atlaskit/inline-edit';
 import TextField from '@atlaskit/textfield';
 import { token } from '@atlaskit/tokens';
 import Banner from '@atlaskit/banner';
+import { PopupSelect } from '@atlaskit/select';
 
 // local
 import { ReactSetter } from '../../types/setter';
@@ -49,11 +43,16 @@ import { ColorBox } from './colorbox';
 import { ColorHelper } from '../../utility/color_helper';
 import { Constant } from '../../utility/constants';
 import { EmptyErrorType } from '../../types/error';
+import { StrokeType } from '../../types/parameter';
 
+//
 const gridStyles = xcss({
     width: '100%',
     paddingBottom: 'space.100',
 });
+
+//
+const allStrokes = ParameterHelper.getAllStrokes();
 
 //
 export interface ParametersModalProps {
@@ -89,6 +88,7 @@ export const ParametersModal = (props: ParametersModalProps) => {
     const [color, setColor] = useState<string>('');
     const [min, setMin] = useState<number>(0);
     const [max, setMax] = useState<number>(100);
+    const [stroke, setStroke] = useState<StrokeType>(1);
 
     useEffect(() => {
         if (props.component === undefined) return;
@@ -114,6 +114,10 @@ export const ParametersModal = (props: ParametersModalProps) => {
 
         if ('max' in props.component) {
             setMax(props.component.max as number);
+        }
+
+        if ('stroke' in props.component) {
+            setStroke(props.component.stroke as StrokeType);
         }
     }, [props.component]);
 
@@ -173,6 +177,13 @@ export const ParametersModal = (props: ParametersModalProps) => {
 
         props.component.max = max;
     }, [max]);
+
+    useEffect(() => {
+        if (props.component === undefined) return;
+        if (!('stroke' in props.component)) return;
+
+        props.component.stroke = stroke;
+    }, [stroke]);
 
     const closeModal = () => {
         if (beforeCloseCheck()) {
@@ -404,6 +415,51 @@ export const ParametersModal = (props: ParametersModalProps) => {
         );
     };
 
+    const showStroke = () => {
+        if (props.component === undefined) return <></>;
+        if (!('stroke' in props.component)) return <></>;
+
+        return (
+            <Grid
+                templateColumns="2fr 1fr"
+                xcss={xcss({ marginTop: 'space.025' })}>
+                <Flex
+                    xcss={xcss({
+                        alignContent: 'center',
+                        verticalAlign: 'center',
+                        alignItems: 'center',
+                    })}>
+                    Line Stroke
+                </Flex>
+                <Flex>
+                    <PopupSelect
+                        options={Object.keys(allStrokes).map((key: string) => {
+                            const keyNum = parseInt(key, 10);
+                            return { label: allStrokes[keyNum], value: keyNum };
+                        })}
+                        value={{
+                            label: ParameterHelper.getStrokeById(stroke),
+                            value: stroke as StrokeType,
+                        }}
+                        target={({ isOpen, ...triggerprops }) => (
+                            <Button
+                                shouldFitContainer
+                                {...triggerprops}
+                                iconAfter={ChevronDownIcon}>
+                                {ParameterHelper.getStrokeById(stroke)}
+                            </Button>
+                        )}
+                        onChange={(elem) => {
+                            if (elem === undefined) return;
+                            if (elem === null) return;
+                            setStroke(elem.value as StrokeType);
+                        }}
+                    />
+                </Flex>
+            </Grid>
+        );
+    };
+
     const body = () => {
         if (props.component === undefined) return <>component is empty</>;
         return (
@@ -415,6 +471,7 @@ export const ParametersModal = (props: ParametersModalProps) => {
                     {showColors()}
                     {showMin()}
                     {showMax()}
+                    {showStroke()}
                 </Grid>
             </Stack>
         );
