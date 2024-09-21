@@ -42,7 +42,7 @@ import { ColorBox } from './colorbox';
 import { ColorHelper } from '../../utility/color_helper';
 import { Constant } from '../../utility/constants';
 import { EmptyErrorType } from '../../types/error';
-import { StrokeType } from '../../types/parameter';
+import { ParameterOnChangeEvent, StrokeType } from '../../types/parameter';
 import { MessageBoxYesNo } from './messagebox';
 
 //
@@ -559,6 +559,7 @@ export interface ParametersProps {
     parameters: ParameterData | undefined;
     units: UnitStaticCategories[] | undefined;
     defaultComponent: ParameterUIBaseData;
+    onChange: ParameterOnChangeEvent;
 }
 
 //
@@ -584,6 +585,13 @@ export const Parameters = (props: ParametersProps) => {
         if (indexToDelete === undefined) return;
         setOpenYesNoDialog(true);
     }, [updateYesNoModal]);
+
+    useEffect(() => {
+        if (component === undefined) return;
+        if (openParameterDialog === true) return;
+
+        props.onChange('update', component);
+    }, [openParameterDialog]);
 
     const openModal = () => {
         if (component === undefined) return;
@@ -631,7 +639,13 @@ export const Parameters = (props: ParametersProps) => {
                     setOpenYesNoDialog(false);
 
                     if (indexToDelete === undefined) return;
-                    props.components.elements.splice(indexToDelete, 1);
+                    const deletedItem = props.components.elements.splice(
+                        indexToDelete,
+                        1
+                    );
+
+                    if (deletedItem !== undefined && deletedItem.length > 0)
+                        props.onChange('delete', deletedItem[0]);
                 }}
                 no={() => {
                     setOpenYesNoDialog(false);
@@ -656,6 +670,7 @@ export const Parameters = (props: ParametersProps) => {
                                 ...props.defaultComponent,
                             });
                             setUpdate(!update);
+                            props.onChange('add', props.defaultComponent);
                         }}
                     />
                 </Flex>

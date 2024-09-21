@@ -17,8 +17,8 @@ import { UnitStaticCategories } from '../../../../models/units/unit-static-categ
 import { ColorBoxChangeEvent } from '../../../../types/colorbox';
 import { ReactSetter } from '../../../../types/setter';
 import { ChartComponentParameters } from '../../../../models/parameters/chart-component-parameter';
-import { NumHelper } from '../../../../utility/number_helper';
 import { ParameterHelper } from '../../../../utility/parameter-helper';
+import { ParameterUIChartData } from '../../../../models/parameters/parameter-ui-chart-data';
 
 // interface
 
@@ -29,6 +29,9 @@ export interface ChartSettingsProps extends TimeChartProp {
     stringsColor: string;
     handleStringsColor: ColorBoxChangeEvent;
 
+    components: ChartComponentParameters;
+    setComponents: ReactSetter<ChartComponentParameters>;
+
     parameters: ParameterData | undefined;
 
     units: UnitStaticCategories[] | undefined;
@@ -36,37 +39,6 @@ export interface ChartSettingsProps extends TimeChartProp {
 
 //
 export const ChartSettings = (props: ChartSettingsProps) => {
-    const components: ChartComponentParameters = {
-        max: 8,
-        id: props.settings_id + '_components',
-        elements: [
-            {
-                id: NumHelper.generateUUID(),
-                showName: 'Weight On Bit',
-                dbCode: '0111',
-                unitCategoryID: 3,
-                unitID: 2,
-                unitDefaultID: 2,
-                color: 'red',
-                max: 100,
-                min: 1,
-                stroke: 1,
-            },
-            {
-                id: NumHelper.generateUUID(),
-                showName: 'Hook Position',
-                dbCode: '0112',
-                unitCategoryID: 2,
-                unitID: 3,
-                unitDefaultID: 1,
-                color: 'blue',
-                max: 500,
-                min: 100,
-                stroke: 1,
-            },
-        ],
-    };
-
     const wrapperStyles: React.CSSProperties = {
         position: 'relative',
     };
@@ -92,10 +64,25 @@ export const ChartSettings = (props: ChartSettingsProps) => {
     const parameters = () => {
         return (
             <Parameters
-                components={components}
+                components={props.components}
                 parameters={props.parameters}
                 units={props.units}
                 defaultComponent={ParameterHelper.getDefaultChartParameter()}
+                onChange={(type, param) => {
+                    switch (type) {
+                        case 'add':
+                        case 'delete':
+                        case 'update':
+                            props.setComponents(props.components);
+                            props.setUpdateLayout(!props.updateLayout);
+                            break;
+                        default:
+                            throw new Error(
+                                `invalid type in change parameter, (${type})`
+                            );
+                            break;
+                    }
+                }}
             />
         );
     };

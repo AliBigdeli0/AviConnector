@@ -28,6 +28,8 @@ import { ParameterData } from '../../../../models/parameters/parameter_data';
 import { UnitStaticCategories } from '../../../../models/units/unit-static-category';
 import { ColorBoxChangeEvent } from '../../../../types/colorbox';
 import { TimeChartType } from '../../../../types/time-chart-type';
+import { NumHelper } from '../../../../utility/number_helper';
+import { ChartComponentParameters } from '../../../../models/parameters/chart-component-parameter';
 
 // props
 export interface TimeChartProp extends BaseLayoutProps {
@@ -47,10 +49,40 @@ export const TimeChart = (props: TimeChartProp) => {
     const gridLinesColor = '#9FADBC1F';
     const [textColor, setTextColor] = useState(colors.DN400);
     const tooltipLineHoverColor = textColor;
-    const borderColor = textColor;
     const textFontSize = 12;
 
     let chart: TimeChartType | undefined = undefined;
+
+    const [components, setComponents] = useState<ChartComponentParameters>({
+        max: 8,
+        id: props.settings_id + '_components',
+        elements: [
+            {
+                id: NumHelper.generateUUID(),
+                showName: 'Weight On Bit',
+                dbCode: '0111',
+                unitCategoryID: 3,
+                unitID: 2,
+                unitDefaultID: 2,
+                color: 'red',
+                max: 100,
+                min: 1,
+                stroke: 1,
+            },
+            {
+                id: NumHelper.generateUUID(),
+                showName: 'Hook Position',
+                dbCode: '0112',
+                unitCategoryID: 2,
+                unitID: 3,
+                unitDefaultID: 1,
+                color: 'blue',
+                max: 500,
+                min: 100,
+                stroke: 1,
+            },
+        ],
+    });
 
     // effects
     useEffect(() => {
@@ -69,6 +101,11 @@ export const TimeChart = (props: TimeChartProp) => {
             clearInterval(timerID);
         };
     }, []);
+
+    useEffect(() => {
+        if (chart === undefined) return;
+        chart.data = getChartLines({ components });
+    }, [props.updateLayout]);
 
     const handleTextColor: ColorBoxChangeEvent = (color) => {
         setTextColor(color);
@@ -92,7 +129,7 @@ export const TimeChart = (props: TimeChartProp) => {
 
             const c: TimeChartType = new Chart(ctx, {
                 type: 'line',
-                data: getChartLines({}),
+                data: getChartLines({ components }),
                 options: getChartOption({ chartScale, gridLinesColor }),
                 plugins: ChartPlugins.createPlugins(),
             });
@@ -124,6 +161,8 @@ export const TimeChart = (props: TimeChartProp) => {
                     setOpen={setOpenSettings}
                     stringsColor={textColor}
                     handleStringsColor={handleTextColor}
+                    components={components}
+                    setComponents={setComponents}
                     {...props}
                 />
             </Box>

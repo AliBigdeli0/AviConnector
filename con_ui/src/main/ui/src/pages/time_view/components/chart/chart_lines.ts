@@ -5,33 +5,27 @@ import { colors } from '@atlaskit/theme';
 import { ChartData } from 'chart.js';
 
 // local
+import { ChartComponentParameters } from '../../../../models/parameters/chart-component-parameter';
 
 //
-export interface ChartLinesOption {}
+export interface ChartLinesOption {
+    components: ChartComponentParameters;
+}
 
 //
 export const getChartLines = (props: ChartLinesOption): ChartData<'line'> => {
     return {
         labels: [],
-        datasets: [
-            {
-                label: 'Parameter 1',
+        datasets: props.components.elements.map((element) => {
+            return {
+                label: element.showName,
                 data: [],
                 fill: false,
-                backgroundColor: colors.R500,
-                borderColor: colors.R500,
-                pointRadius: 1,
+                backgroundColor: element.color,
+                borderColor: element.color,
                 tension: 0.1,
-            },
-            {
-                label: 'Parameter 2',
-                data: [],
-                fill: false,
-                backgroundColor: colors.G500,
-                borderColor: colors.G500,
-                pointRadius: 1,
-                tension: 0.1,
-            },
-        ],
+                pointRadius: element.stroke,
+            };
+        }),
     };
 };

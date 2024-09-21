@@ -30,6 +30,7 @@ export interface TimeViewProps extends CommonProps {}
 const TimeView = (props: TimeViewProps) => {
     const [showSpinner, setShowSpinner] = useState<MsgType>('');
     const [updateParent, setUpdateParent] = useState(false);
+    const [updateLayout, setUpdateLayout] = useState(false);
     const [count, setCount] = useState(0);
     const [well, setWell] = useState<WellData>();
     const [parameterData, setParameterData] = useState<
@@ -128,6 +129,8 @@ const TimeView = (props: TimeViewProps) => {
                     <OneChartLayout
                         units={units}
                         parameters={parameterData}
+                        updateLayout={updateLayout}
+                        setUpdateLayout={setUpdateLayout}
                         {...props}
                     />
                 );
