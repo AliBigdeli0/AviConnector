@@ -5,7 +5,7 @@ import SettingsIcon from '@atlaskit/icon/glyph/settings';
 import React, { useEffect, useRef, useState } from 'react';
 
 // atlassian
-import { Box, Stack, xcss } from '@atlaskit/primitives';
+import { Box, Flex, Stack, xcss } from '@atlaskit/primitives';
 import { colors } from '@atlaskit/theme';
 import { IconButton } from '@atlaskit/button/new';
 import { token } from '@atlaskit/tokens';
@@ -41,10 +41,6 @@ export interface TimeChartProp extends BaseLayoutProps {
 
 const chartScale = 3600_000;
 
-let timerID: string | undefined = undefined;
-
-let chart: TimeChartType | undefined = undefined;
-
 // TimeChart
 export const TimeChart = (props: TimeChartProp) => {
     const [openSettings, setOpenSettings] = useState(false);
@@ -54,6 +50,8 @@ export const TimeChart = (props: TimeChartProp) => {
     const [textColor, setTextColor] = useState(colors.DN400);
     const tooltipLineHoverColor = textColor;
     const textFontSize = 12;
+    const [chart, setChart] = useState<TimeChartType | undefined>(undefined);
+    const [timerID, setTimerID] = useState<string | undefined>(undefined);
 
     const [components, setComponents] = useState<ChartComponentParameters>({
         max: 8,
@@ -90,19 +88,27 @@ export const TimeChart = (props: TimeChartProp) => {
     useEffect(() => {
         destroyChart();
 
-        chart = createChart();
+        setChart(createChart());
+    }, []);
 
+    useEffect(() => {
         if (chart === undefined) return;
 
-        timerID = getChartDataReceiver(
-            { chart, refreshRate: 1000 },
-            ChartDataType.Fake
-        ).startTimer();
+        if (timerID !== undefined) clearInterval(timerID);
 
+        setTimerID(
+            getChartDataReceiver(
+                { chart, refreshRate: 1000 },
+                ChartDataType.Fake
+            ).startTimer()
+        );
+    }, [chart]);
+
+    useEffect(() => {
         return () => {
             clearInterval(timerID);
         };
-    }, []);
+    }, [timerID]);
 
     useEffect(() => {
         if (chart === undefined) return;
@@ -112,16 +118,12 @@ export const TimeChart = (props: TimeChartProp) => {
             components,
         });
 
-        if (timerID !== undefined) clearInterval(timerID);
-
-        timerID = getChartDataReceiver(
-            { chart, refreshRate: 1000 },
-            ChartDataType.Fake
-        ).startTimer();
-
-        return () => {
-            clearInterval(timerID);
-        };
+        setTimerID(
+            getChartDataReceiver(
+                { chart, refreshRate: 1000 },
+                ChartDataType.Fake
+            ).startTimer()
+        );
     }, [props.updateLayout]);
 
     const handleTextColor: ColorBoxChangeEvent = (color) => {
@@ -131,7 +133,7 @@ export const TimeChart = (props: TimeChartProp) => {
 
     const destroyChart = () => {
         chart?.destroy();
-        chart = undefined;
+        setChart(undefined);
     };
 
     const createChart = (): TimeChartType | undefined => {
@@ -157,11 +159,10 @@ export const TimeChart = (props: TimeChartProp) => {
 
     const settingsItems = () => {
         return (
-            <Box
+            <Flex
                 xcss={xcss({
-                    position: 'absolute',
                     right: '0',
-
+                    alignItems: 'end',
                     zIndex: 'layer',
                 })}>
                 <IconButton
@@ -182,7 +183,7 @@ export const TimeChart = (props: TimeChartProp) => {
                     setComponents={setComponents}
                     {...props}
                 />
-            </Box>
+            </Flex>
         );
     };
 
@@ -196,34 +197,45 @@ export const TimeChart = (props: TimeChartProp) => {
                     borderWidth: '1px',
                     borderStyle: 'solid',
 
-                    position: 'relative',
                     borderBottomWidth: '0px',
+                    display: 'block',
+                    position: 'relative',
+                    overflowY: 'auto',
                 })}>
-                <Box
+                {settingsItems()}
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map(
+                    (i) => {
+                        return (
+                            <Box
+                                xcss={xcss({
+                                    borderBottomColor: 'red',
+                                    borderBottomWidth: '3px',
+                                    borderBottomStyle: 'solid',
+
+                                    width: '100%',
+                                    alignItems: 'center',
+                                })}>
+                                {'Numeric' + i}
+                            </Box>
+                        );
+                    }
+                )}
+                {/* <Box
                     xcss={xcss({
                         backgroundColor: 'color.background.neutral',
                         margin: 'space.050',
                         height: '100%',
-
-                        overflow: 'hidden',
-                    })}>
-                    {settingsItems()}
-                    <Box xcss={xcss({})}>Numerics1</Box>
-                    <Box xcss={xcss({})}>Numerics1</Box>
-                    <Box xcss={xcss({})}>Numerics1</Box>
-                    <Box xcss={xcss({})}>Numerics1</Box>
-                    <Box xcss={xcss({})}>Numerics1</Box>
-                    <Box xcss={xcss({})}>Numerics1</Box>
-                    <Box xcss={xcss({})}>Numerics1</Box>
-                    <Box xcss={xcss({})}>Numerics1</Box>
-                </Box>
+                    })}></Box> */}
             </Box>
         );
     };
 
     // return
     return (
-        <>
+        <Box
+            xcss={xcss({
+                height: '100%',
+            })}>
             {numericPart()}
             <Box
                 xcss={xcss({
@@ -249,6 +261,6 @@ export const TimeChart = (props: TimeChartProp) => {
                     }}
                 />
             </Box>
-        </>
+        </Box>
     );
 };

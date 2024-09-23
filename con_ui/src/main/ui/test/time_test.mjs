@@ -22,7 +22,19 @@ async function open_parameters(elementName) {
     }
 }
 
+async function open_normal() {
+    const driver = await open_browser("time_view?well_id=2345415781"); 
+    try { 
+        await driver.sleep(0xfffff);
+    }
+    finally { 
+        await driver.quit();
+    }
+}
+
 // edit button : parameters-list-test-0-edit
 // delete button : parameters-list-test-0-delete
 // add button : parameters-list-add
-open_parameters("parameters-list-add");
+// open_parameters("parameters-list-add");
+
+open_normal();

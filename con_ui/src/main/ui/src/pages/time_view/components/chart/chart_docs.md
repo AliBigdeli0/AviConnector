@@ -14,14 +14,14 @@
     -   [x] Line Over Text
     -   [ ] Create Properties Box
         -   [x] Open its modal
-        -   [ ] Lines Properties
-        -   [ ] Parameters
+        -   [x] Lines Properties
+        -   [x] Parameters
         -   [ ] Total Properties
     -   [ ] Read Parameters
         -   [x] read parameters
         -   [x] read units
         -   [x] show parameters in chart
-        -   [ ] update parameters in chart after add/delete/update actions in chart setttings
+        -   [x] update parameters in chart after add/delete/update actions in chart setttings
         -   [ ] save current page configurations to server
 -   [ ] Chart Online Data
 -   [ ] Chart View Points
