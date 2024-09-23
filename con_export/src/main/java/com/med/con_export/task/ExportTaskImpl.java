@@ -67,12 +67,6 @@ public class ExportTaskImpl implements ExportTask {
 			ConsoleHelper.error(String.format("\nthe well '%s(%s):%d'  has finished \n", wellName, wellId, lenCollections));
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
-		} finally {
-//			try {
-//				dbMan.close();
-//			} catch (Exception ex) {
-//				log.error(ex.getMessage());
-//			}
 		}
 	}
 
