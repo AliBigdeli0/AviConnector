@@ -20,7 +20,7 @@ import ChartStreaming from 'chartjs-plugin-streaming';
 import { BaseLayoutProps } from '../../base_layout_props';
 import { getChartOption } from './chart_options';
 import * as ChartPlugins from './chart_plugins';
-import { getChartLines } from './chart_lines';
+import { getChartLines, updateChartLines } from './chart_lines';
 import { getChartDataReceiver } from './chart_data';
 import { ChartSettings } from './chart_settings';
 import { ChartDataType } from '../../../../models/chart/chart_datatype';
@@ -41,6 +41,10 @@ export interface TimeChartProp extends BaseLayoutProps {
 
 const chartScale = 3600_000;
 
+let timerID: string | undefined = undefined;
+
+let chart: TimeChartType | undefined = undefined;
+
 // TimeChart
 export const TimeChart = (props: TimeChartProp) => {
     const [openSettings, setOpenSettings] = useState(false);
@@ -50,8 +54,6 @@ export const TimeChart = (props: TimeChartProp) => {
     const [textColor, setTextColor] = useState(colors.DN400);
     const tooltipLineHoverColor = textColor;
     const textFontSize = 12;
-
-    let chart: TimeChartType | undefined = undefined;
 
     const [components, setComponents] = useState<ChartComponentParameters>({
         max: 8,
@@ -92,7 +94,7 @@ export const TimeChart = (props: TimeChartProp) => {
 
         if (chart === undefined) return;
 
-        const timerID = getChartDataReceiver(
+        timerID = getChartDataReceiver(
             { chart, refreshRate: 1000 },
             ChartDataType.Fake
         ).startTimer();
@@ -104,7 +106,22 @@ export const TimeChart = (props: TimeChartProp) => {
 
     useEffect(() => {
         if (chart === undefined) return;
-        chart.data = getChartLines({ components });
+
+        updateChartLines({
+            chart,
+            components,
+        });
+
+        if (timerID !== undefined) clearInterval(timerID);
+
+        timerID = getChartDataReceiver(
+            { chart, refreshRate: 1000 },
+            ChartDataType.Fake
+        ).startTimer();
+
+        return () => {
+            clearInterval(timerID);
+        };
     }, [props.updateLayout]);
 
     const handleTextColor: ColorBoxChangeEvent = (color) => {
@@ -129,7 +146,7 @@ export const TimeChart = (props: TimeChartProp) => {
 
             const c: TimeChartType = new Chart(ctx, {
                 type: 'line',
-                data: getChartLines({ components }),
+                data: getChartLines({ components, chart: undefined }),
                 options: getChartOption({ chartScale, gridLinesColor }),
                 plugins: ChartPlugins.createPlugins(),
             });
