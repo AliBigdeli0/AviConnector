@@ -47,13 +47,13 @@ public class LogWrapper {
 
 		if (firstNotEmptyList == null) throw new Exception("all objects in GetAllDbData is empty");
 
-		var header = separateHeader(firstNotEmptyList, jsonWitsArray);
+		var header = separateHeader(jsonWitsArray);
 
 		var channelSet = new ChannelSet() {{
 			setTimeDepth("Time");
 			setStartIndex(new TimeIndexValue());
 			setChannelState("realtime");
-			getChannel().addAll(convertFirstElementToChannel(firstNotEmptyList, header));
+			getChannel().addAll(convertFirstElementToChannel(header));
 			getIndex().add(new ChannelIndex() {{
 				setUom("UnitOfMeasure.nohm");
 				setDirection("IndexDirection.increasing");
@@ -79,7 +79,7 @@ public class LogWrapper {
 			var dbTime = data.get(i);
 			var headerCounter = 0;
 
-			strBuilder.append("[[").append(i).append("],").append("[");
+			strBuilder.append("[[").append(dbTime.Date).append("],").append("[");
 			for (var header : headers.entrySet()) {
 				if (dbTime.GetAllDbData.containsKey(header.getKey())) {
 					var value = dbTime.GetAllDbData.get(header.getKey());
@@ -98,18 +98,16 @@ public class LogWrapper {
 		return strBuilder.toString();
 	}
 
-	private Map<String, String> separateHeader(DbTime firstNonEmptyElement, JsonWitsArray jsonWitsArray) {
+	private Map<String, String> separateHeader(JsonWitsArray jsonWitsArray) {
 		final var retMap = new HashMap<String, String>();
-		firstNonEmptyElement.GetAllDbData.forEach((key, value) -> {
-			var witsElement = jsonWitsArray.getRecord(key);
-			if (witsElement == null) return;
-			if (retMap.containsKey(key)) return;
-			retMap.put(key, witsElement.getDescription());
-		});
+		for (var witsJson : jsonWitsArray.WitsJson) {
+			if (retMap.containsKey(witsJson.getRecordString())) continue;
+			retMap.put(witsJson.getRecordString(), witsJson.getDescription());
+		}
 		return retMap;
 	}
 
-	private List<Channel> convertFirstElementToChannel(DbTime firstNonEmptyElement, Map<String, String> headers) {
+	private List<Channel> convertFirstElementToChannel(Map<String, String> headers) {
 		final var retList = new ArrayList<Channel>();
 		for (var entry : headers.entrySet()) {
 

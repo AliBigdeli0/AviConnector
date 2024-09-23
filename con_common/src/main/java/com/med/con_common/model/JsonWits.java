@@ -91,4 +91,8 @@ public class JsonWits {
 	public void setWitsTrigger(Integer witsTrigger) {
 		this.WitsTrigger = witsTrigger;
 	}
+
+	public String getRecordString() {
+		return String.format("%02d%02d", this.getRecord(), this.getItem());
+	}
 }

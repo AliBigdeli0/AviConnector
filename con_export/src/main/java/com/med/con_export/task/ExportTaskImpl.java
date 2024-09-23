@@ -27,16 +27,21 @@ public class ExportTaskImpl implements ExportTask {
 
 	final UUID fakeUUID = UUID.randomUUID();
 
-	public List<String> readCollectionNames(String wellId) throws IOException {
-		try (var dbMan = new DbManager()) {
-			return dbMan.readAllWellsTimeCollection(wellId);
+	static DbManager dbMan;
+
+	public static synchronized DbManager getDbManInstance() {
+		if(dbMan == null) {
+			dbMan = new DbManager();
 		}
+		return dbMan;
+	}
+
+	public List<String> readCollectionNames(String wellId) throws IOException {
+		return getDbManInstance().readAllWellsTimeCollection(wellId);
 	}
 
 	public List<DbTime> readColData(String colName) throws Exception {
-		try (var dbMan = new DbManager()) {
-			return dbMan.readAllCollection(colName);
-		}
+			return getDbManInstance().readAllCollection(colName);
 	}
 
 	@Override
@@ -57,16 +62,23 @@ public class ExportTaskImpl implements ExportTask {
 				collectionNames = null;
 				System.gc();
 			}
+
 			log.info("the well '{}({}): {}' has finished!", wellName, wellId, lenCollections);
-			ConsoleHelper.error("\nthe task finished!\n");
+			ConsoleHelper.error(String.format("\nthe well '%s(%s):%d'  has finished \n", wellName, wellId, lenCollections));
 		} catch (Exception ex) {
 			log.error(ex.getMessage());
+		} finally {
+//			try {
+//				dbMan.close();
+//			} catch (Exception ex) {
+//				log.error(ex.getMessage());
+//			}
 		}
 	}
 
 	void fetchDataFromCollections(String wellName, int lenCollections, List<String> collectionNames) throws Exception {
 		for (var i = 0; i < lenCollections; i++) {
-			final var colName = collectionNames.get(i);
+			var colName = collectionNames.get(i);
 			ConsoleHelper.drawProgressBar(i, lenCollections);
 
 			var colDataList = readColData(colName);

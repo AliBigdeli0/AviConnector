@@ -59,10 +59,9 @@ public class DbManager implements Closeable {
 	}
 
 	public List<DbTime> readAllCollection(String colName) throws Exception {
-		final var timeCol = db.getCollection(colName, BsonDocument.class);
-		final var retList = new ArrayList<DbTime>();
+		var retList = new ArrayList<DbTime>();
 
-		for (var doc : timeCol.find()) {
+		for (var doc : db.getCollection(colName, BsonDocument.class).find()) {
 			retList.add(DbTime.toDbTime(doc));
 		}
 
@@ -70,7 +69,7 @@ public class DbManager implements Closeable {
 	}
 
 	public void insertComment(DbComment comment) throws IOException {
-		final var commentCol = db.getCollection(comment.generateCollectionName(), BsonDocument.class);
+		var commentCol = db.getCollection(comment.generateCollectionName(), BsonDocument.class);
 		commentCol.insertOne(comment.toBsonDocument());
 	}
 
@@ -89,8 +88,8 @@ public class DbManager implements Closeable {
 
 	private static void separateTimeDbByColName(List<DbTime> timeData, HashMap<String, List<BsonDocument>> bulkToInsert) throws IOException {
 		for (var timeDb : timeData) {
-			final var collectionName = timeDb.collectionName();
-			final var bsonDocument = timeDb.toBsonDocument();
+			var collectionName = timeDb.collectionName();
+			var bsonDocument = timeDb.toBsonDocument();
 
 			if (!bulkToInsert.containsKey(collectionName)) {
 				bulkToInsert.put(collectionName, new ArrayList<>());
@@ -101,8 +100,8 @@ public class DbManager implements Closeable {
 	}
 
 	public void insertDepth(DbDepth dbDepth) throws IOException {
-		final var colName = dbDepth.collectionName();
-		final var col = db.getCollection(colName, BsonDocument.class);
+		var colName = dbDepth.collectionName();
+		var col = db.getCollection(colName, BsonDocument.class);
 		col.insertOne(dbDepth.toBsonDocument());
 	}
 
