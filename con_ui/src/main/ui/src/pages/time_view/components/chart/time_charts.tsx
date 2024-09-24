@@ -164,6 +164,7 @@ export const TimeChart = (props: TimeChartProp) => {
                     right: '0',
                     alignItems: 'end',
                     zIndex: 'layer',
+                    position: 'absolute',
                 })}>
                 <IconButton
                     id={props.settings_id}
@@ -190,23 +191,18 @@ export const TimeChart = (props: TimeChartProp) => {
     const numericPart = () => {
         return (
             <Box
+                as="div"
                 xcss={xcss({
-                    width: '100%',
-                    height: '20%',
-                    borderColor: 'color.border.accent.gray',
-                    borderWidth: '1px',
-                    borderStyle: 'solid',
-
-                    borderBottomWidth: '0px',
                     display: 'block',
                     position: 'relative',
                     overflowY: 'auto',
                 })}>
                 {settingsItems()}
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map(
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(
                     (i) => {
                         return (
                             <Box
+                                as="p"
                                 xcss={xcss({
                                     borderBottomColor: 'red',
                                     borderBottomWidth: '3px',
@@ -232,15 +228,33 @@ export const TimeChart = (props: TimeChartProp) => {
 
     // return
     return (
-        <Box
+        <Stack
             xcss={xcss({
                 height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
             })}>
-            {numericPart()}
+            <Box
+                as="div"
+                xcss={xcss({
+                    width: '100%',
+
+                    borderColor: 'color.border.accent.gray',
+                    borderWidth: '1px',
+                    borderStyle: 'solid',
+
+                    borderBottomWidth: '0px',
+
+                    height: '200px',
+                    position: 'relative',
+                    overflowY: 'auto',
+                })}>
+                {numericPart()}
+            </Box>
             <Box
                 xcss={xcss({
                     width: '100%',
-                    height: '80%',
+                    flex: '1',
                     padding: 'space.0',
 
                     overflow: 'hidden',
@@ -261,6 +275,6 @@ export const TimeChart = (props: TimeChartProp) => {
                     }}
                 />
             </Box>
-        </Box>
+        </Stack>
     );
 };
