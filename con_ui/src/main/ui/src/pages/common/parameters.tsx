@@ -96,6 +96,8 @@ export const ParametersModal = (props: ParametersModalProps) => {
     const [color, setColor] = useState<string>('');
     const [min, setMin] = useState<number>(0);
     const [max, setMax] = useState<number>(100);
+    const [minStr, setMinStr] = useState('0');
+    const [maxStr, setMaxStr] = useState('100');
     const [stroke, setStroke] = useState<StrokeType>(1);
 
     useEffect(() => {
@@ -117,10 +119,12 @@ export const ParametersModal = (props: ParametersModalProps) => {
         }
 
         if ('min' in props.component) {
+            setMinStr(props.component.min as string);
             setMin(props.component.min as number);
         }
 
         if ('max' in props.component) {
+            setMaxStr(props.component.max as string);
             setMax(props.component.max as number);
         }
 
@@ -209,6 +213,11 @@ export const ParametersModal = (props: ParametersModalProps) => {
 
         if (name.trim() === '') {
             setError('name can not be empty!');
+            return false;
+        }
+
+        if (isNaN(min) || isNaN(max)) {
+            setError('minimum or maximum can not be empty.');
             return false;
         }
 
@@ -375,9 +384,10 @@ export const ParametersModal = (props: ParametersModalProps) => {
                 </Flex>
                 <Flex>
                     <TextField
-                        type="number"
-                        value={min}
+                        type="text"
+                        value={minStr}
                         onChange={(event) => {
+                            setMinStr(event.currentTarget.value);
                             setMin(parseFloat(event.currentTarget.value));
                         }}
                     />
@@ -404,9 +414,10 @@ export const ParametersModal = (props: ParametersModalProps) => {
                 </Flex>
                 <Flex>
                     <TextField
-                        type="number"
-                        value={max}
+                        type="text"
+                        value={maxStr}
                         onChange={(event) => {
+                            setMaxStr(event.currentTarget.value);
                             setMax(parseFloat(event.currentTarget.value));
                         }}
                     />

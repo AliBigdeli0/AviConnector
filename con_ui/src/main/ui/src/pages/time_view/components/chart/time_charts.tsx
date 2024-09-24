@@ -1,11 +1,13 @@
 // icons
 import SettingsIcon from '@atlaskit/icon/glyph/settings';
+import ArrowUpCircleIcon from '@atlaskit/icon/glyph/arrow-up-circle';
+import ArrowDownCircleIcon from '@atlaskit/icon/glyph/arrow-down-circle';
 
 // React
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 // atlassian
-import { Box, Flex, Stack, xcss } from '@atlaskit/primitives';
+import { Box, Flex, Inline, Stack, xcss, Text } from '@atlaskit/primitives';
 import { colors } from '@atlaskit/theme';
 import { IconButton } from '@atlaskit/button/new';
 import { token } from '@atlaskit/tokens';
@@ -52,6 +54,7 @@ export const TimeChart = (props: TimeChartProp) => {
     const textFontSize = 12;
     const [chart, setChart] = useState<TimeChartType | undefined>(undefined);
     const [timerID, setTimerID] = useState<string | undefined>(undefined);
+    const [showSettingsIcon, setShowSettings] = useState(false);
 
     const [components, setComponents] = useState<ChartComponentParameters>({
         max: 8,
@@ -158,34 +161,36 @@ export const TimeChart = (props: TimeChartProp) => {
     };
 
     const settingsItems = () => {
-        return (
-            <Flex
-                xcss={xcss({
-                    right: '0',
-                    alignItems: 'end',
-                    zIndex: 'layer',
-                    position: 'absolute',
-                })}>
-                <IconButton
-                    id={props.settings_id}
-                    appearance="subtle"
-                    icon={SettingsIcon}
-                    label=""
-                    onClick={() => {
-                        setOpenSettings(true);
-                    }}></IconButton>
+        if (showSettingsIcon)
+            return (
+                <Flex
+                    xcss={xcss({
+                        right: '0',
+                        alignItems: 'end',
+                        zIndex: 'layer',
+                        position: 'absolute',
+                    })}>
+                    <IconButton
+                        id={props.settings_id}
+                        appearance="primary"
+                        icon={SettingsIcon}
+                        label=""
+                        onClick={() => {
+                            setOpenSettings(true);
+                        }}></IconButton>
 
-                <ChartSettings
-                    open={openSettings}
-                    setOpen={setOpenSettings}
-                    stringsColor={textColor}
-                    handleStringsColor={handleTextColor}
-                    components={components}
-                    setComponents={setComponents}
-                    {...props}
-                />
-            </Flex>
-        );
+                    <ChartSettings
+                        open={openSettings}
+                        setOpen={setOpenSettings}
+                        stringsColor={textColor}
+                        handleStringsColor={handleTextColor}
+                        components={components}
+                        setComponents={setComponents}
+                        {...props}
+                    />
+                </Flex>
+            );
+        return <></>;
     };
 
     const numericPart = () => {
@@ -198,30 +203,51 @@ export const TimeChart = (props: TimeChartProp) => {
                     overflowY: 'auto',
                 })}>
                 {settingsItems()}
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(
-                    (i) => {
-                        return (
-                            <Box
-                                as="p"
-                                xcss={xcss({
-                                    borderBottomColor: 'red',
-                                    borderBottomWidth: '3px',
-                                    borderBottomStyle: 'solid',
+                {components.elements.map((c) => {
+                    return (
+                        <Inline
+                            alignInline="center"
+                            alignBlock="center"
+                            xcss={xcss({
+                                borderBottomColor: c.color,
+                                borderBottomWidth: '3px',
+                                borderBottomStyle: 'solid',
 
-                                    width: '100%',
-                                    alignItems: 'center',
+                                width: '100%',
+                                padding: 'space.025',
+                            })}>
+                            <Flex
+                                justifyContent="start"
+                                xcss={xcss({
+                                    flex: '0 1 20%',
                                 })}>
-                                {'Numeric' + i}
-                            </Box>
-                        );
-                    }
-                )}
-                {/* <Box
-                    xcss={xcss({
-                        backgroundColor: 'color.background.neutral',
-                        margin: 'space.050',
-                        height: '100%',
-                    })}></Box> */}
+                                <ArrowDownCircleIcon label="" />
+                                <Box xcss={xcss({ margin: 'space.025' })}>
+                                    {c.min}
+                                </Box>
+                            </Flex>
+                            <Flex
+                                justifyContent="center"
+                                xcss={xcss({
+                                    flex: '0 1 60%',
+                                })}>
+                                <Box xcss={xcss({ margin: 'space.025' })}>
+                                    {c.showName}
+                                </Box>
+                            </Flex>
+                            <Flex
+                                justifyContent="end"
+                                xcss={xcss({
+                                    flex: '0 1 20%',
+                                })}>
+                                <Box xcss={xcss({ margin: 'space.025' })}>
+                                    {c.max}
+                                </Box>
+                                <ArrowUpCircleIcon label="" />
+                            </Flex>
+                        </Inline>
+                    );
+                })}
             </Box>
         );
     };
@@ -235,6 +261,12 @@ export const TimeChart = (props: TimeChartProp) => {
                 flexDirection: 'column',
             })}>
             <Box
+                onMouseEnter={(e) => {
+                    setShowSettings(true);
+                }}
+                onMouseLeave={(e) => {
+                    setShowSettings(false);
+                }}
                 as="div"
                 xcss={xcss({
                     width: '100%',
