@@ -3,6 +3,7 @@ import CrossIcon from '@atlaskit/icon/glyph/cross';
 
 // react
 import React, { Fragment, useState, useEffect } from 'react';
+import { jsx } from '@emotion/react';
 
 // atlassian
 import { Stack, Box, xcss, Grid, Text, Flex } from '@atlaskit/primitives';
@@ -17,16 +18,37 @@ import Button, { IconButton } from '@atlaskit/button/new';
 
 // local
 import { ReactSetter } from '../../types/setter';
-import { MessageBoxNoEvent, MessageBoxYesEvent } from '../../types/messagebox';
+import {
+    MessageBoxApplyEvent,
+    MessageBoxCloseEvent,
+    MessageBoxNoEvent,
+    MessageBoxOkEvent,
+    MessageBoxTypes,
+    MessageBoxYesEvent,
+} from '../../types/messagebox';
 
 //
-export interface MessageBoxProps {
+interface MessageBoxBaseOriginalProps {
     openDialog: boolean;
     setOpenDialog: ReactSetter<boolean>;
 
     title: string;
     message: string;
+}
 
+interface MessageBoxBaseProps extends MessageBoxBaseOriginalProps {
+    footer: jsx.JSX.Element;
+    showType: MessageBoxTypes;
+    close: MessageBoxCloseEvent;
+    apply: MessageBoxApplyEvent;
+}
+
+interface MessageBoxOkProps extends MessageBoxBaseOriginalProps {
+    ok: MessageBoxOkEvent;
+    type: MessageBoxTypes;
+}
+
+interface MessageBoxYesNoProps extends MessageBoxBaseOriginalProps {
     yes: MessageBoxYesEvent;
     no: MessageBoxNoEvent;
 }
@@ -47,10 +69,11 @@ const titleContainerStyles = xcss({
 });
 
 //
-export const MessageBoxYesNo = (props: MessageBoxProps) => {
+const MessageBoxBase = (props: MessageBoxBaseProps) => {
     const closeModal = () => {
         props.setOpenDialog(false);
     };
+
     return (
         <Fragment>
             <ModalTransition>
@@ -73,7 +96,7 @@ export const MessageBoxYesNo = (props: MessageBoxProps) => {
                                         icon={CrossIcon}
                                         label="Close Modal"
                                         onClick={() => {
-                                            props.no();
+                                            props.close();
                                             closeModal();
                                         }}
                                     />
@@ -82,31 +105,67 @@ export const MessageBoxYesNo = (props: MessageBoxProps) => {
                                 <Flex
                                     xcss={titleContainerStyles}
                                     justifyContent="start">
-                                    <ModalTitle appearance="warning">
+                                    <ModalTitle appearance={props.showType}>
                                         {props.title}
                                     </ModalTitle>
                                 </Flex>
                             </Grid>
                         </ModalHeader>
                         <ModalBody>{props.message}</ModalBody>
-                        <ModalFooter>
-                            <Button
-                                onClick={() => {
-                                    props.no();
-                                }}>
-                                No
-                            </Button>
-                            <Button
-                                appearance="warning"
-                                onClick={() => {
-                                    props.yes();
-                                }}>
-                                Yes
-                            </Button>
-                        </ModalFooter>
+                        <ModalFooter>{props.footer}</ModalFooter>
                     </Modal>
                 )}
             </ModalTransition>
         </Fragment>
+    );
+};
+
+export const MessageBoxOk = (props: MessageBoxOkProps) => {
+    return (
+        <MessageBoxBase
+            footer={
+                <>
+                    <Button
+                        appearance={props.type}
+                        onClick={() => {
+                            props.ok();
+                        }}>
+                        Apply
+                    </Button>
+                </>
+            }
+            close={props.ok}
+            apply={props.ok}
+            showType={props.type}
+            {...props}
+        />
+    );
+};
+
+export const MessageBoxYesNo = (props: MessageBoxYesNoProps) => {
+    return (
+        <MessageBoxBase
+            footer={
+                <>
+                    <Button
+                        onClick={() => {
+                            props.no();
+                        }}>
+                        No
+                    </Button>
+                    <Button
+                        appearance="warning"
+                        onClick={() => {
+                            props.yes();
+                        }}>
+                        Yes
+                    </Button>
+                </>
+            }
+            close={props.no}
+            apply={props.yes}
+            showType="warning"
+            {...props}
+        />
     );
 };

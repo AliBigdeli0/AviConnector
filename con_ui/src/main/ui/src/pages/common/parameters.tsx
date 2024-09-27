@@ -43,7 +43,7 @@ import { ColorHelper } from '../../utility/color_helper';
 import { Constant } from '../../utility/constants';
 import { EmptyErrorType } from '../../types/error';
 import { ParameterOnChangeEvent, StrokeType } from '../../types/parameter';
-import { MessageBoxYesNo } from './messagebox';
+import { MessageBoxOk, MessageBoxYesNo } from './messagebox';
 
 //
 const gridStyles = xcss({
@@ -581,6 +581,7 @@ export const Parameters = (props: ParametersProps) => {
 
     const [openParameterDialog, setOpenParameterDialog] = useState(false);
     const [openYesNoDialog, setOpenYesNoDialog] = useState(false);
+    const [openOkDialog, setOpenOkDialog] = useState(false);
 
     const [indexToDelete, setIndexToDelete] = useState<number | undefined>();
 
@@ -665,8 +666,25 @@ export const Parameters = (props: ParametersProps) => {
         );
     };
 
+    const okModal = () => {
+        if (!openOkDialog) return <></>;
+        return (
+            <MessageBoxOk
+                title="Add Item Error"
+                message="Number of parameters exceded!"
+                openDialog={openOkDialog}
+                setOpenDialog={setOpenOkDialog}
+                ok={() => {
+                    setOpenOkDialog(false);
+                }}
+                type="danger"
+            />
+        );
+    };
+
     return (
         <Stack xcss={xcss({ width: '100%', paddingTop: 'space.100' })}>
+            {okModal()}
             {yesNoModal()}
             {parameterModal()}
             <Box xcss={gridStyles}>
@@ -677,6 +695,13 @@ export const Parameters = (props: ParametersProps) => {
                         label="Add Parameters"
                         testId="parameters-list-add"
                         onClick={() => {
+                            if (
+                                props.components.elements.length >
+                                props.components.max - 1
+                            ) {
+                                setOpenOkDialog(true);
+                                return;
+                            }
                             props.components.elements.push({
                                 ...props.defaultComponent,
                             });
