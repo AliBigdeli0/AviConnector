@@ -6,6 +6,7 @@ import Drawer from '@atlaskit/drawer';
 import { token } from '@atlaskit/tokens';
 import Tabs, { Tab, TabList, TabPanel } from '@atlaskit/tabs';
 import { Stack, Box, xcss, Inline, Grid, Text } from '@atlaskit/primitives';
+import { PopupSelect } from '@atlaskit/select';
 
 // local
 import { TimeChartProp } from './time_charts';
@@ -105,6 +106,23 @@ export const ChartSettings = (props: ChartSettingsProps) => {
                         />
                     </Grid>
                 </Grid>
+
+                <Grid xcss={xcss({ paddingBottom: 'space.050' })}>
+                    <Grid templateColumns="1fr 3fr">
+                        <Box
+                            xcss={xcss({
+                                alignContent: 'center',
+                                verticalAlign: 'center',
+                                alignItems: 'center',
+                            })}>
+                            <Text align="center">Chart Scale</Text>
+                        </Box>
+                        <Box
+                            xcss={xcss({
+                                width: '100%',
+                            })}></Box>
+                    </Grid>
+                </Grid>
             </Stack>
         );
     };
@@ -114,7 +132,7 @@ export const ChartSettings = (props: ChartSettingsProps) => {
             <Tabs id="chart_settings_id">
                 <TabList>
                     <Tab>Parameters</Tab>
-                    <Tab>Others</Tab>
+                    <Tab testId={props.settings_id + '_others'}>Others</Tab>
                 </TabList>
 
                 <TabPanel>{parameters()}</TabPanel>

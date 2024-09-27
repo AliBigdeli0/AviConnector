@@ -32,6 +32,7 @@ import { ColorBoxChangeEvent } from '../../../../types/colorbox';
 import { TimeChartType } from '../../../../types/time-chart-type';
 import { NumHelper } from '../../../../utility/number_helper';
 import { ChartComponentParameters } from '../../../../models/parameters/chart-component-parameter';
+import { UnitHelper } from '../../../../utility/unit_helper';
 
 // props
 export interface TimeChartProp extends BaseLayoutProps {
@@ -41,7 +42,7 @@ export interface TimeChartProp extends BaseLayoutProps {
     settings_id: string;
 }
 
-const chartScale = 3600_000;
+// const chartScale = 3600_000;
 
 // TimeChart
 export const TimeChart = (props: TimeChartProp) => {
@@ -59,6 +60,7 @@ export const TimeChart = (props: TimeChartProp) => {
         max: 8,
         id: props.settings_id + '_components',
         textColor: colors.DN400,
+        scale: 3600000,
         elements: [
             {
                 id: NumHelper.generateUUID(),
@@ -153,7 +155,10 @@ export const TimeChart = (props: TimeChartProp) => {
             const c: TimeChartType = new Chart(ctx, {
                 type: 'line',
                 data: getChartLines({ components, chart: undefined }),
-                options: getChartOption({ chartScale, gridLinesColor }),
+                options: getChartOption({
+                    chartScale: components.scale,
+                    gridLinesColor,
+                }),
                 plugins: ChartPlugins.createPlugins(),
             });
             return c;
@@ -232,7 +237,16 @@ export const TimeChart = (props: TimeChartProp) => {
                                     flex: '0 1 60%',
                                 })}>
                                 <Box xcss={xcss({ margin: 'space.025' })}>
-                                    {c.showName}
+                                    <Text size="medium">{c.showName}</Text>
+                                    <Text size="small">
+                                        {' ('}
+                                        {UnitHelper.getUnitName(
+                                            c.unitCategoryID,
+                                            c.unitID,
+                                            props.units
+                                        )}
+                                        {') '}
+                                    </Text>
                                 </Box>
                             </Flex>
                             <Flex
@@ -261,6 +275,7 @@ export const TimeChart = (props: TimeChartProp) => {
                 flexDirection: 'column',
             })}>
             <Box
+                testId={props.settings_id + '_numerics'}
                 onMouseEnter={(e) => {
                     setShowSettings(true);
                 }}
