@@ -45,12 +45,11 @@ const chartScale = 3600_000;
 
 // TimeChart
 export const TimeChart = (props: TimeChartProp) => {
+    const [update, setUpdate] = useState(false);
     const [openSettings, setOpenSettings] = useState(false);
-
     const canvasChartRef = useRef<HTMLCanvasElement>(null);
     const gridLinesColor = '#9FADBC1F';
-    const [textColor, setTextColor] = useState(colors.DN400);
-    const tooltipLineHoverColor = textColor;
+    const tooltipLineHoverColor = colors.DN400;
     const textFontSize = 12;
     const [chart, setChart] = useState<TimeChartType | undefined>(undefined);
     const [timerID, setTimerID] = useState<string | undefined>(undefined);
@@ -59,6 +58,7 @@ export const TimeChart = (props: TimeChartProp) => {
     const [components, setComponents] = useState<ChartComponentParameters>({
         max: 8,
         id: props.settings_id + '_components',
+        textColor: colors.DN400,
         elements: [
             {
                 id: NumHelper.generateUUID(),
@@ -130,8 +130,9 @@ export const TimeChart = (props: TimeChartProp) => {
     }, [props.updateLayout]);
 
     const handleTextColor: ColorBoxChangeEvent = (color) => {
-        setTextColor(color);
+        components.textColor = color;
         ChartPlugins.updateTextColor(color);
+        setUpdate(!update);
     };
 
     const destroyChart = () => {
@@ -145,7 +146,7 @@ export const TimeChart = (props: TimeChartProp) => {
             Chart.register(...registerables);
             Chart.register(ChartStreaming);
 
-            ChartPlugins.updateTextColor(textColor);
+            ChartPlugins.updateTextColor(components.textColor);
             ChartPlugins.updateTextFontSize(textFontSize);
             ChartPlugins.updateTooltipeLineHoverColor(tooltipLineHoverColor);
 
@@ -182,8 +183,7 @@ export const TimeChart = (props: TimeChartProp) => {
                     <ChartSettings
                         open={openSettings}
                         setOpen={setOpenSettings}
-                        stringsColor={textColor}
-                        handleStringsColor={handleTextColor}
+                        handleTextColor={handleTextColor}
                         components={components}
                         setComponents={setComponents}
                         {...props}

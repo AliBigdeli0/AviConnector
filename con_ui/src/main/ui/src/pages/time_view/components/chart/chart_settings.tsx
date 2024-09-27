@@ -18,7 +18,6 @@ import { ColorBoxChangeEvent } from '../../../../types/colorbox';
 import { ReactSetter } from '../../../../types/setter';
 import { ChartComponentParameters } from '../../../../models/parameters/chart-component-parameter';
 import { ParameterHelper } from '../../../../utility/parameter-helper';
-import { ParameterUIChartData } from '../../../../models/parameters/parameter-ui-chart-data';
 
 // interface
 
@@ -26,8 +25,7 @@ export interface ChartSettingsProps extends TimeChartProp {
     open: boolean;
     setOpen: ReactSetter<boolean>;
 
-    stringsColor: string;
-    handleStringsColor: ColorBoxChangeEvent;
+    handleTextColor: ColorBoxChangeEvent;
 
     components: ChartComponentParameters;
     setComponents: ReactSetter<ChartComponentParameters>;
@@ -101,8 +99,8 @@ export const ChartSettings = (props: ChartSettingsProps) => {
                             <Text align="center">Strings Color</Text>
                         </Box>
                         <ColorBox
-                            current={props.stringsColor}
-                            handleCurrentChange={props.handleStringsColor}
+                            current={props.components.textColor}
+                            handleCurrentChange={props.handleTextColor}
                             colors={ColorHelper.getAllColors()}
                         />
                     </Grid>
