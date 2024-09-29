@@ -18,6 +18,7 @@ async function open_parameters(elementName) {
     const driver = await get_driver(); 
     try { 
         await mouse_hover_numerics(driver);
+        await driver.sleep(0xff);
 
         let button = await driver.findElement(By.id("layer1_chart_1_settings"));
         await button.click();
@@ -26,7 +27,7 @@ async function open_parameters(elementName) {
         const  toggleButton = await driver.findElement();
         toggleButton.click();
         await driver.sleep(0xff);
-        
+
         const editButton = await driver.findElement(get_with_testId(elementName));
         editButton.click();
         
