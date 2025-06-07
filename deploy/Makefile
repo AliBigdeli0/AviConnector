@@ -110,6 +110,6 @@ docker_con_data_run:: copy_con_data_task_run
 	-e MED_LOG_NAME=test  													\
 	-e MED_WELL_ID=2345415781  												\
 	-e MED_QUEUE_NAME=A_MF_DATA_VALUE  										\
-	-e MED_QUEUE_ADDRESS=tcp://10.10.10.101:61616  							\
-	-e MED_AMQ_PUB_SUB_ADDRESS=tcp://10.10.10.101:61616 					\
+	-e MED_QUEUE_ADDRESS=tcp://192.168.8.100:61616  						\
+	-e MED_AMQ_PUB_SUB_ADDRESS=tcp://192.168.8.100:61616 					\
 	--name $(CONTAINER_NAME)_run $(CONTAINER_NAME)
