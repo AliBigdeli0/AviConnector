@@ -9,14 +9,11 @@ COPY . .
 
 RUN chmod +x gradlew
 
-# Prepare deployment directories
 RUN rm -rf con_manager/build/data && \
     mkdir -p con_manager/build/data/lib_data
 
-# Build the application
 RUN ./gradlew build jar --no-daemon
 
-# Package con_data and its dependencies
 RUN mkdir -p con_manager/build/data/lib_data && \
     cp con_data/build/libs/con_data-1.0.0-plain.jar \
        con_manager/build/data/ && \
