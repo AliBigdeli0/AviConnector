@@ -7,6 +7,7 @@
 ![ActiveMQ](https://img.shields.io/badge/Apache%20ActiveMQ-asynchronous%20messaging-blue)
 ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?logo=mongodb&logoColor=white)
 ![Gradle](https://img.shields.io/badge/Gradle-02303A?logo=gradle&logoColor=white)
+[![AviConnector CI](https://github.com/AliBigdeli0/AviConnector/actions/workflows/ci.yml/badge.svg)](https://github.com/AliBigdeli0/AviConnector/actions/workflows/ci.yml)
 
 ## Overview
 
